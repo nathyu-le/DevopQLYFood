@@ -2,13 +2,13 @@
 
 Đối chiếu ảnh yêu cầu “DEVOPS FINAL PROJECT — WEEK 1: Infrastructure Setup & Initial Deployment” do người dùng cung cấp. Các checkbox chỉ phản ánh đúng phần hiện có trong repository, không tự đánh điểm thay giảng viên.
 
-**Bản nộp tiến độ, cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Cần kiểm tra CRUD/đối chiếu DB, thu ảnh/video và xác minh phần server/network theo đề. Chưa đánh dấu hoàn tất Week 1 hoặc mặc định cần VPS. Xem [kế hoạch](DEPLOYMENT_PLAN.md).
+**Bản nộp tiến độ, cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Đã đối chiếu 3 ảnh thêm/sửa/SELECT cùng món ID 9; còn minh chứng server/network và sơ đồ hiện trạng. [Bộ ảnh và phạm vi kiểm chứng](../evidence/application/demo-2026-10-21.md). Chưa đánh dấu hoàn tất Week 1 hoặc mặc định cần VPS. Xem [kế hoạch](DEPLOYMENT_PLAN.md).
 
 | Tiêu chí | Điểm theo đề | Hiện có | Còn cần làm |
 |---|---:|---|---|
 | Kiến trúc đủ thành phần và luồng truy cập | 0,5 | PNG + mô tả phương án client/server/network/app/DB/storage | Đối chiếu và cập nhật theo môi trường thật |
 | Server setup/networking hoạt động và giải thích được | 0,5 | Hướng dẫn và mẫu thu thập cấu hình | Dựng server, cấu hình SSH/firewall/ports, lưu kết quả thật |
-| Ứng dụng + DB chạy, thao tác dữ liệu thành công | 0,7 | Source đã qua CI; người triển khai xác nhận website mở được trên cPanel | Demo từ client: thêm/tải lại/sửa và SELECT đúng bản ghi trên hosting |
+| Ứng dụng + DB chạy, thao tác dữ liệu thành công | 0,7 | Có ảnh thêm ID 9 giá 45.000đ, sửa 50.000đ và SELECT cùng ID/giá, trạng thái 0 | Bổ sung ảnh web thấy rõ trạng thái; tải lại/tìm kiếm hoặc video liền mạch để hoàn thiện kịch bản |
 | README, repository, phân công | 0,3 | README và phân công 3 thành viên đã cập nhật | Bổ sung kết quả và minh chứng hoạt động thật |
 | **Tổng** | **2,0** | **Bộ repo chuẩn bị** | **Chưa đủ bằng chứng hoàn tất Week 1** |
 
@@ -28,9 +28,10 @@
 - [ ] User/SSH và firewall/security group đã cấu hình.
 - [x] Người triển khai xác nhận website trên hosting cPanel đã truy cập được sau khi cấu hình admin (21/10/2026).
 - [x] Kiểm tra HTTP trên hosting: trang login trả 200; health trả 200 với status ok, xác nhận kết nối và đọc bảng theo endpoint source. [Log](../evidence/application/http-access-2026-10-21.md).
-- [ ] App và DB trên hosting qua kiểm tra ghi/đọc thực tế, có kết quả đối chiếu.
-- [ ] Truy cập từ máy khách và ghi/đọc một bản ghi thật.
-- [ ] Có ảnh/log/video chứng minh các mục trên.
+- [x] Có ảnh thêm và sửa món trên hosting, SELECT đối chiếu cùng bản ghi ID 9 trong DB. [Minh chứng](../evidence/application/demo-2026-10-21.md).
+- [x] Client hiển thị bản ghi đã thêm/sửa; SQL xác nhận tên/ID/giá và trạng thái 0.
+- [ ] Bổ sung ảnh web thấy rõ trạng thái của ID 9 và bước tải lại/tìm kiếm hoặc video liên tục.
+- [ ] Có ảnh/log hạ tầng OS/tài nguyên, user/SSH, firewall/ports và sơ đồ đúng môi trường thật.
 - [x] Có tên và phân công Week 1 của 3 thành viên trong `TEAM.md`.
 - [ ] Giảng viên truy cập được repo và các link minh chứng.
 

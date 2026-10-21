@@ -1,13 +1,14 @@
 # Minh chứng Week 1
 
-**Cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình admin trên hosting cPanel. Đây là xác nhận tiến độ; chưa có bộ ảnh/video/SELECT để đánh dấu demo thành công.
+**Cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình admin trên hosting cPanel. Đã có [3 ảnh thêm/sửa và SELECT đối chiếu](../application/demo-2026-10-21.md) cùng món ID 9. Bộ ảnh xác nhận phần ghi/đọc DB; chưa thay thế minh chứng hạ tầng hoặc toàn bộ kịch bản demo.
 
 | Hạng mục | Trạng thái |
 |---|---|
 | URL website | Người triển khai xác nhận truy cập được; kiểm tra độc lập trang đăng nhập HTTP 200 |
 | Health endpoint trên hosting | HTTP 200, `{"status":"ok"}` — xem [log truy cập](../application/http-access-2026-10-21.md) |
-| Đăng nhập, thêm món, tải lại và sửa giá | Chờ kiểm tra và lưu minh chứng |
-| SELECT cùng bản ghi trong DB hosting | Chờ thực hiện và lưu kết quả |
+| Thêm món và sửa giá | Có ảnh thêm ID 9 giá 45.000đ và sửa cùng ID thành 50.000đ |
+| Tải lại/tìm kiếm và trạng thái trên web | Cần bổ sung ảnh/bước liên tục; cột trạng thái đang ngoài phần ảnh chụp |
+| SELECT cùng bản ghi trong DB hosting | ID 9, tên Cơm gà Demo Week 1, price 50000, is_available 0 |
 | OS/tài nguyên, user/SSH, firewall/ports | Chờ thu thập, xác minh quyền của tài khoản hosting và đối chiếu đề |
 | Sơ đồ hiện trạng hosting | Chờ xác nhận đường dẫn, web server, PHP và DB thực tế |
 

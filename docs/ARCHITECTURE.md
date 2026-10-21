@@ -1,6 +1,19 @@
-# Kiến trúc triển khai dự kiến — Week 1
+# Kiến trúc Week 1: hosting đang dùng và phương án Ubuntu tham chiếu
 
 **Trạng thái ngày 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel. Phiên bản web server/PHP/DB, đường dẫn source/DocumentRoot và vị trí DB chưa được ghi nhận đầy đủ; chưa có sơ đồ hiện trạng được xác minh. Quyền cài Ubuntu, SSH và firewall vẫn cần đối chiếu đề.
+
+## Thông tin hiện trạng đã có
+
+| Thành phần | Đã xác nhận | Cần bổ sung |
+|---|---|---|
+| Client và đường truy cập | Website HTTPS tại `/DevopQLYFood/public/`; login và health trả HTTP 200 | Ảnh tải lại/tìm kiếm và trạng thái web đầy đủ |
+| App | Có ảnh thêm/sửa cùng món ID 9 trên hosting cPanel | Đường dẫn source/DocumentRoot và phiên bản PHP thật |
+| Database | SELECT cùng ID 9, giá 50000, is_available 0 trong phpMyAdmin | Engine/version, DB host/port và vị trí lưu dữ liệu thật |
+| Quản trị và mạng | Có tài khoản cPanel được dùng để triển khai/đối chiếu DB | OS/tài nguyên, quyền SSH, firewall/ports và phạm vi quyền của tài khoản |
+
+[Xem ảnh app/DB](../evidence/application/demo-2026-10-21.md) · [Log HTTP](../evidence/application/http-access-2026-10-21.md).
+
+## Phương án Ubuntu tham chiếu
 
 Sơ đồ PNG và phần thiết kế dưới đây là **phương án Ubuntu/VM/VPS tham chiếu**. Không dùng các giá trị Apache, loopback DB, `/var/www` hoặc `/var/lib/mysql` bên dưới để mô tả hosting cPanel khi chưa kiểm chứng.
 
@@ -36,9 +49,9 @@ Source dự kiến ở `/var/www/DevopQLYFood`, DocumentRoot chỉ đến `/var/
 
 `dishes` có khóa chính `id`, thông tin món, giá, tình trạng và timestamps. Các yêu cầu ghi dùng prepared statements. Tải lại trang chạy một truy vấn mới đến MySQL, không dùng mảng hoặc localStorage thay database.
 
-Trong Week 1, dữ liệu nằm trên ổ đĩa của MySQL cài trực tiếp. Docker volumes, backup/restore và monitoring sẽ được thiết kế ở checkpoint tương ứng; sơ đồ này chưa chứng minh các phần đó đã hoàn thành.
+Trong phương án Ubuntu tham chiếu, dữ liệu nằm trên ổ đĩa của MySQL cài trực tiếp. Với hosting đang dùng, engine/version, DB host và đường dẫn lưu trữ cần được nhà cung cấp hoặc công cụ quản trị xác nhận. Docker volumes, backup/restore và monitoring sẽ được thiết kế ở checkpoint tương ứng; sơ đồ này chưa chứng minh các phần đó đã hoàn thành.
 
-## Khi có server thật
+## Hoàn thiện thông tin môi trường thực tế
 
 1. Xác định loại môi trường thực tế (VM/VPS/hosting được giảng viên chấp nhận).
 2. Ghi OS, tài nguyên, IP/đường dẫn demo ở mức được phép công khai.

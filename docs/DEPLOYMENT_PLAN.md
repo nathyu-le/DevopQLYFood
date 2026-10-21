@@ -1,6 +1,6 @@
 # Kế hoạch hoàn thiện Week 1 từ hosting và tiếp tục Week 2
 
-**Cập nhật: 21/10/2026.** Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Tiếp theo là kiểm tra CRUD, SELECT đối chiếu và lưu minh chứng; đồng thời kiểm tra phần hạ tầng theo đề. Chưa có VPS, chưa quyết định phải thuê thêm và chưa đánh dấu hoàn tất Week 1.
+**Cập nhật: 21/10/2026.** Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Đã đối chiếu 3 ảnh thêm/sửa và SELECT cùng món ID 9. [Minh chứng app + DB](../evidence/application/demo-2026-10-21.md). Tiếp theo bổ sung ảnh web thấy rõ trạng thái, bước tải lại/tìm kiếm hoặc video liên tục, đồng thời thu thông tin hạ tầng theo đề. Chưa có VPS, chưa quyết định phải thuê thêm và chưa đánh dấu hoàn tất Week 1.
 
 ## Làm ngay trên hosting hiện có
 

@@ -2,7 +2,7 @@
 
 | Checkpoint | Nơi cập nhật | Trạng thái |
 |---|---|---|
-| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Website được báo truy cập được trên cPanel; chờ ảnh/video, CRUD/SELECT và cấu hình hạ tầng |
+| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Có log HTTP và ảnh thêm/sửa/SELECT trên hosting; còn hạ tầng và sơ đồ hiện trạng |
 | Week 2 | [week2/](week2/README.md) | Chưa có minh chứng Docker/CI/CD triển khai |
 | Week 3 | [week3/](week3/README.md) | Chưa có minh chứng monitoring/security/backup/restore |
 | Week 4 | [week4/](week4/README.md) | Chưa có demo tổng thể hoặc báo cáo cuối kỳ |
@@ -13,17 +13,17 @@ Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/
 
 ## Minh chứng Week 1
 
-**Chưa thu thập minh chứng triển khai thật.** Không có ảnh server, video hoặc logs triển khai được dựng giả trong thư mục này.
+**Đã có minh chứng app + DB trên hosting:** [3 ảnh gốc và đối chiếu ID 9](application/demo-2026-10-21.md). Thông tin/cấu hình hạ tầng và video demo liền mạch vẫn cần bổ sung.
 
 | Mã | Minh chứng cần có | Nơi lưu dự kiến | Trạng thái |
 |---|---|---|---|
 | E01 | OS, CPU, RAM, disk của server | `server/` | Chưa có |
 | E02 | User/SSH, port listening, firewall/security group | `server/` | Chưa có |
 | E03 | Web server/PHP và DB thực tế hoạt động | `server/` | Health HTTP 200/status ok; phiên bản/cấu hình dịch vụ chờ xác minh |
-| E04 | Client mở được URL ứng dụng | `application/` | Trang login HTTP 200; có [log truy cập](application/http-access-2026-10-21.md), chờ ảnh/video |
-| E05 | Thêm món và tải lại vẫn còn | `application/` | Chưa có |
-| E06 | SELECT xác nhận cùng bản ghi trong MySQL | `application/` | Chưa có |
-| E07 | Video demo hoặc bộ ảnh/log thay thế | Link video hoặc file trong `application/` | Chưa có |
+| E04 | Client mở được URL ứng dụng | `application/` | Trang login HTTP 200; có [log truy cập](application/http-access-2026-10-21.md) và ảnh app có món ID 9 |
+| E05 | Thêm món và tải lại vẫn còn | `application/` | Có ảnh thêm/sửa cùng ID 9; bước tải lại riêng chưa thể hiện trong ảnh |
+| E06 | SELECT xác nhận cùng bản ghi trong DB | `application/` | Có ảnh SELECT: ID 9, tên món khớp, price 50000, is_available 0 |
+| E07 | Video demo hoặc bộ ảnh/log thay thế | Link video hoặc file trong `application/` | Có bộ 3 ảnh app/DB và log HTTP; chưa có video |
 
 Khi thêm minh chứng, ghi ngày thực hiện, người thực hiện, môi trường, file/link thật và kết quả quan sát. Video để ngoài GitHub phải cấp quyền xem cho giảng viên. Không đưa credentials, private keys hoặc dữ liệu nhạy cảm vào ảnh/log/video.
 

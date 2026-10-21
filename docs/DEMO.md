@@ -1,6 +1,6 @@
-# Kịch bản demo Week 1 — thực hiện sau khi triển khai
+# Kịch bản demo Week 1
 
-**Trạng thái:** đây là hướng dẫn, chưa phải biên bản demo đã diễn ra.
+**Cập nhật 21/10/2026:** ứng dụng đang được nhóm dùng trên [hosting cPanel](https://thitruongmmo.com/DevopQLYFood/public/). Đã có [3 ảnh thêm/sửa và SELECT cùng bản ghi ID 9](../evidence/application/demo-2026-10-21.md). Tài liệu này hướng dẫn toàn bộ trình tự demo; ảnh hiện có chưa thể hiện mọi bước, nhất là tải lại/tìm kiếm và trạng thái trên web.
 
 ## Chuẩn bị
 
@@ -34,7 +34,7 @@ WHERE name = 'Cơm gà Demo Week 1';
 ## Nội dung giải thích
 
 - Trình duyệt gửi yêu cầu đến địa chỉ nào, qua cổng nào?
-- Apache/PHP và MySQL chạy ở đâu?
+- Web server/PHP và database chạy ở đâu? Ghi đúng loại dịch vụ thực tế của hosting; phương án Apache trên Ubuntu là tài liệu tham chiếu.
 - Vì sao trình duyệt không cần và không được kết nối trực tiếp MySQL?
 - Firewall cho phép dịch vụ nào, SSH dành cho ai?
 - Dữ liệu nằm trên ổ đĩa nào; tải lại trang lấy dữ liệu từ đâu?
@@ -42,4 +42,4 @@ WHERE name = 'Cơm gà Demo Week 1';
 
 ## Bằng chứng cần lưu
 
-Ảnh danh sách trước/sau thêm và sau tải lại; ảnh/trích kết quả SELECT; ảnh server/port/firewall; video ngắn ghi chuỗi thao tác. Gắn link hoặc tên file thật trong `evidence/README.md`. Ảnh giao diện dựng sẵn và kết quả CI không thay thế video trên server nhóm.
+Đề Week 1 cho phép video, ảnh hoặc log chạy app/database. Lưu ảnh trước/sau thêm, sau tải lại, kết quả SELECT và thông tin server/port/firewall; video ngắn liền mạch là một cách bổ sung rõ quá trình, không phải sản phẩm bắt buộc riêng nếu dùng ảnh/log theo đề. Gắn file/link thật trong `evidence/README.md`. Ảnh dựng sẵn và kết quả CI không thay cho minh chứng thao tác thật trên môi trường triển khai.

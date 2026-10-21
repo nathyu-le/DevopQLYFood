@@ -1,6 +1,6 @@
 # Triển khai app PHP/MySQL trên hosting cPanel
 
-**Trạng thái ngày 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Ghi nhận này chưa thay cho video/ảnh CRUD và minh chứng hạ tầng Week 1.
+**Trạng thái ngày 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Đã có [3 ảnh thêm/sửa và SELECT đối chiếu món ID 9](../evidence/application/demo-2026-10-21.md). Phần OS/tài nguyên, user/SSH, firewall/ports và sơ đồ hiện trạng vẫn cần bổ sung.
 
 ## Source và thư mục
 
@@ -27,7 +27,7 @@ URL đang dùng có dạng `/DevopQLYFood/public/`. Cần kiểm tra Domains và
 
 ## Kiểm tra và ghi minh chứng
 
-1. Mở HTTPS và `/health.php`, ghi kết quả thực tế; HTTP 200 với status ok xác nhận kết nối và đọc bảng, chưa chứng minh thao tác ghi.
+1. Mở HTTPS và `/DevopQLYFood/public/health.php`; [log ngày 21/10/2026](../evidence/application/http-access-2026-10-21.md) đã ghi HTTP 200/status ok. Health xác nhận kết nối và đọc bảng; ảnh thao tác app/SELECT được lưu riêng.
 2. Theo [DEMO.md](DEMO.md): đăng nhập, thêm món mới, tải lại/tìm kiếm, SELECT cùng bản ghi, sửa giá/trạng thái và đối chiếu lại DB.
 3. Lưu ảnh/video có URL, ID bản ghi và ngày; ghi người thực hiện tại [evidence/week1/](../evidence/week1/README.md).
 4. Thu OS/tài nguyên, web server/PHP/DB, DocumentRoot, quyền user/SSH và firewall trong [thông tin server](../evidence/server/README.md).
