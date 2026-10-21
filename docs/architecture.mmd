@@ -1,0 +1,11 @@
+flowchart TB
+    client["Client: trình duyệt"] --> network["Internet hoặc mạng VM"]
+    admin["Máy quản trị"] -->|"SSH 22 từ nguồn được phép"| firewall
+    network -->|"HTTP 80"| firewall
+    subgraph server["Ubuntu VM/VPS dự kiến — chưa triển khai"]
+        firewall["Firewall / security group"] --> apache["Apache: DocumentRoot public/"]
+        apache --> php["Ứng dụng PHP"]
+        php -->|"Loopback 127.0.0.1:3306"| mysql["MySQL: bảng dishes"]
+        mysql --> data["Ổ đĩa: dữ liệu MySQL"]
+        source["Ổ đĩa: source và config ngoài public"] -.-> php
+    end
