@@ -1,11 +1,12 @@
 flowchart TB
-    client["Client: trình duyệt"] --> network["Internet hoặc mạng VM"]
-    admin["Máy quản trị"] -->|"SSH 22 từ nguồn được phép"| firewall
-    network -->|"HTTP 80"| firewall
-    subgraph server["Ubuntu VM/VPS dự kiến — chưa triển khai"]
-        firewall["Firewall / security group"] --> apache["Apache: DocumentRoot public/"]
-        apache --> php["Ứng dụng PHP"]
-        php -->|"Loopback 127.0.0.1:3306"| mysql["MySQL: bảng dishes"]
-        mysql --> data["Ổ đĩa: dữ liệu MySQL"]
-        source["Ổ đĩa: source và config ngoài public"] -.-> php
+    client["Client: trình duyệt"] -->|"HTTPS 443"| web
+    admin["Người quản trị"] --> panel["cPanel / File Manager / phpMyAdmin"]
+    subgraph hosting["Hosting cp1 · Linux x86_64 · IP dùng chung 160.191.243.50"]
+        web["Web server: cPanel báo Apache 2.4.67"] --> app["PHP app: /DevopQLYFood/public/"]
+        source["Domain root /public_html; source trong tài khoản hosting"] -.-> app
+        app -->|"PDO · DB host/port chưa xác minh"| db["MariaDB 10.11.16: bảng dishes"]
+        db --> storage["Dữ liệu phía hosting: datadir chưa xác minh"]
+        panel -.-> source
+        panel -.-> db
     end
+    pending["Chưa xác minh: PHP version, quota, SSH/firewall; .htaccess chờ upload"] -.-> hosting

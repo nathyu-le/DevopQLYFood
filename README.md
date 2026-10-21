@@ -4,7 +4,7 @@
 
 Ứng dụng PHP/MySQL giúp người quản lý thêm món, xem thực đơn, sửa giá, đổi tình trạng còn/hết và xóa món. Tên hiển thị trong ứng dụng: **Bếp Nhà**.
 
-> **Trạng thái ngày 21/10/2026:** người triển khai xác nhận website tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình tài khoản admin trên hosting cPanel. Kiểm tra HTTP độc lập ngày 21/10/2026 xác nhận health endpoint trả 200 với status ok và trang đăng nhập trả 200. Đã có 3 ảnh thao tác thêm/sửa trên web và SELECT đối chiếu bản ghi ID 9 trên DB hosting. [Xem bộ minh chứng app + DB](evidence/application/demo-2026-10-21.md). Phần hạ tầng và sơ đồ hiện trạng vẫn cần hoàn thiện để kết luận đủ Week 1. [Log kiểm tra truy cập](evidence/application/http-access-2026-10-21.md). Sơ đồ PNG bên dưới vẫn là **phương án Ubuntu/VM/VPS tham chiếu**, chưa phải sơ đồ hiện trạng hosting.
+> **Trạng thái ngày 21/10/2026:** người triển khai xác nhận website tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình tài khoản admin trên hosting cPanel. Kiểm tra HTTP độc lập ngày 21/10/2026 xác nhận health endpoint trả 200 với status ok và trang đăng nhập trả 200. Đã có 3 ảnh thao tác thêm/sửa trên web và SELECT đối chiếu bản ghi ID 9 trên DB hosting. [Xem bộ minh chứng app + DB](evidence/application/demo-2026-10-21.md). Đã bổ sung ảnh server/domain và sơ đồ hosting; còn PHP version, tài nguyên, quyền SSH/firewall để đối chiếu toàn bộ Week 1. [Log kiểm tra truy cập](evidence/application/http-access-2026-10-21.md). Sơ đồ PNG bên dưới mô tả hosting hiện tại, có ghi các thông số chưa xác minh. [Thông tin server](evidence/server/README.md).
 
 **Kế hoạch hiện tại:** tận dụng hosting cPanel để kiểm tra app + DB và thu minh chứng Week 1 ngay. Kiểm tra quyền OS/SSH/firewall và khả năng chạy Docker trước khi chọn môi trường cho phần hạ tầng và Week 2; chưa xác nhận phải thuê VPS. Xem [hướng dẫn cPanel](docs/CPANEL_SETUP.md) và [kế hoạch tiếp tục](docs/DEPLOYMENT_PLAN.md).
 
@@ -18,7 +18,7 @@ Checklist Week 2–4 đã được đối chiếu đề chi tiết ngày 21/10/2
 
 | Tuần | Trọng tâm | Trạng thái hiện tại | Nơi theo dõi |
 |---|---|---|---|
-| Week 1 | Hạ tầng và triển khai ban đầu | App đã có ảnh thêm/sửa và SELECT đối chiếu ID 9 trên hosting; còn minh chứng hạ tầng và sơ đồ hiện trạng | [Checklist](docs/WEEK1_CHECKLIST.md) · [Minh chứng](evidence/week1/README.md) |
+| Week 1 | Hạ tầng và triển khai ban đầu | App đã có ảnh thêm/sửa và SELECT đối chiếu ID 9 trên hosting; đã có ảnh server/domain và sơ đồ hosting; còn quyền SSH/firewall, tài nguyên và PHP version | [Checklist](docs/WEEK1_CHECKLIST.md) · [Minh chứng](evidence/week1/README.md) |
 | Week 2 | Docker/Compose và CI/CD build–test–deploy | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK2_CHECKLIST.md) · [Minh chứng](evidence/week2/README.md) |
 | Week 3 | Monitoring, bảo mật, backup/restore và xử lý sự cố | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK3_CHECKLIST.md) · [Minh chứng](evidence/week3/README.md) |
 | Week 4 | Demo tổng thể, troubleshooting, báo cáo và bảo vệ | Chưa thực hiện; đã chuẩn bị checklist | [Checklist](docs/WEEK4_CHECKLIST.md) · [Minh chứng](evidence/week4/README.md) |
@@ -29,7 +29,7 @@ Checklist Week 2–4 đã được đối chiếu đề chi tiết ngày 21/10/2
 
 | Nội dung | Tài liệu |
 |---|---|
-| Kiến trúc đề xuất | [Sơ đồ PNG](architecture.png) · [Giải thích kiến trúc](docs/ARCHITECTURE.md) |
+| Kiến trúc hosting hiện tại | [Sơ đồ PNG](architecture.png) · [Giải thích kiến trúc](docs/ARCHITECTURE.md) |
 | Cài đặt trên hosting hiện có | [Hướng dẫn cPanel](docs/CPANEL_SETUP.md) |
 | Cài đặt Ubuntu/VM/VPS khi chọn môi trường đó | [Hướng dẫn Ubuntu](docs/MANUAL_SETUP.md) |
 | Bổ sung Week 1 và chuyển sang Week 2 | [Kế hoạch tiếp tục](docs/DEPLOYMENT_PLAN.md) |
@@ -56,13 +56,13 @@ Phạm vi chưa bao gồm đặt món, thanh toán, giao hàng và nhiều vai t
 ## 2. Công nghệ và yêu cầu chạy
 
 - PHP **8.2 trở lên**, bật `pdo_mysql`, `mbstring` và session.
-- MySQL **8.0 trở lên** với bảng `dishes`, charset `utf8mb4`, InnoDB.
+- Database dùng bảng `dishes`, charset `utf8mb4`, InnoDB. CI đã kiểm tra MySQL **8.0**; hosting báo **MariaDB 10.11.16**, có ảnh thao tác thêm/sửa/SELECT trên môi trường này.
 - HTML/CSS/JavaScript thuần; không cần Node.js, npm, Composer hoặc framework để chạy ứng dụng.
-- Môi trường đang dùng: hosting cPanel theo xác nhận của người triển khai; các phiên bản PHP/DB, đường dẫn và quyền server còn cần ghi nhận. Phương án Ubuntu/VM/VPS được giữ làm tham chiếu cho phần hạ tầng theo đề.
+- Môi trường đang dùng: cPanel gói **cp1**, Linux x86_64, cPanel báo Apache **2.4.67**, MariaDB **10.11.16**; Document Root domain `/public_html`. PHP version, quota, SSH/firewall chưa xác minh. Ubuntu/VM/VPS là phương án tham chiếu cho phần hạ tầng theo đề.
 
-![Kiến trúc dự kiến của DevopQLYFood](architecture.png)
+![Kiến trúc hosting hiện tại của DevopQLYFood](architecture.png)
 
-**Luồng đọc trên ứng dụng:** trình duyệt → HTTPS → web server/PHP trên hosting → SELECT database → trang HTML. Loại/phiên bản web server và vị trí DB còn cần xác minh từ tài khoản hosting.
+**Luồng đọc trên ứng dụng:** trình duyệt → HTTPS → web server/PHP trên hosting → SELECT database → trang HTML. cPanel báo Apache 2.4.67 và MariaDB 10.11.16; DB host/port và vị trí dữ liệu chưa xác minh.
 
 **Luồng ghi:** form quản trị → kiểm tra đăng nhập, CSRF và dữ liệu → INSERT/UPDATE/DELETE → tải lại danh sách từ MySQL.
 
@@ -80,7 +80,7 @@ Phạm vi chưa bao gồm đặt món, thanh toán, giao hàng và nhiều vai t
 6. Cấu hình DocumentRoot của web server trỏ vào **`public/`**.
 7. Kiểm tra từ máy khách và lưu minh chứng thật.
 
-`config/config.example.php` chỉ là mẫu. **Không commit `config/config.local.php`.** Chỉ `public/` được phục vụ ra web; `app/`, `config/`, `database/`, `tests/` và `docs/` phải nằm ngoài DocumentRoot.
+`config/config.example.php` chỉ là mẫu. **Không commit `config/config.local.php`.** Ưu tiên DocumentRoot trực tiếp vào `public/`. Với layout cPanel hiện tại, phải upload `.htaccess` cạnh `public/` để chặn truy cập các thư mục riêng theo [CPANEL_SETUP.md](docs/CPANEL_SETUP.md#bảo-vệ-layout-hiện-tại). Bản chặn chưa được xác nhận có hiệu lực trên hosting.
 
 Sau khi đã có cấu hình và database, có thể kiểm tra nhanh trên máy phát triển bằng:
 
@@ -133,9 +133,9 @@ Workflow hiện tại chỉ lint PHP, kiểm tra validation và thử CRUD trong
 |---|---|
 | Repository | [nathyu-le/DevopQLYFood](https://github.com/nathyu-le/DevopQLYFood) |
 | Website | [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) — HTTP 200 trang đăng nhập và health; có ảnh thêm/sửa và SELECT đối chiếu ID 9 |
-| Môi trường server / OS / CPU / RAM / disk | Hosting cPanel; phiên bản và quyền thực tế chờ xác minh theo `evidence/server/README.md` |
+| Môi trường server / OS / CPU / RAM / disk | cPanel cp1, Linux x86_64, Apache 2.4.67, MariaDB 10.11.16; quota/PHP/SSH/firewall chưa xác minh — [ảnh server](evidence/server/README.md) |
 | Demo ghi/đọc dữ liệu từ máy khách | Có [3 ảnh minh chứng](evidence/application/demo-2026-10-21.md): thêm ID 9, sửa giá 45.000 → 50.000đ, SELECT xác nhận 50000 và is_available 0 |
-| Video / ảnh cấu hình / logs | Có ảnh app/DB và log HTTP; video, thông tin server và cấu hình mạng còn cần bổ sung |
+| Video / ảnh cấu hình / logs | Có ảnh app/DB, Server Information, Domains và log HTTP; còn PHP/quota/SSH/firewall, chưa có video |
 | Thành viên và phân công Week 1 | Đã cập nhật 3 thành viên trong [docs/TEAM.md](docs/TEAM.md) |
 
 ## 8. Nguồn và đóng góp

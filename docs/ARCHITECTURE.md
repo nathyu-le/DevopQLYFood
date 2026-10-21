@@ -1,60 +1,37 @@
-# Kiến trúc Week 1: hosting đang dùng và phương án Ubuntu tham chiếu
+# Kiến trúc hosting hiện tại và phương án Ubuntu
 
-**Trạng thái ngày 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel. Phiên bản web server/PHP/DB, đường dẫn source/DocumentRoot và vị trí DB chưa được ghi nhận đầy đủ; chưa có sơ đồ hiện trạng được xác minh. Quyền cài Ubuntu, SSH và firewall vẫn cần đối chiếu đề.
+**Cập nhật 21/10/2026:** ứng dụng đang truy cập tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/). Sơ đồ mô tả các phần đã có bằng chứng; thông số chưa biết được ghi rõ. [Ảnh Server Information và Domains](../evidence/server/README.md).
 
-## Thông tin hiện trạng đã có
+![Kiến trúc hosting cPanel hiện tại](../architecture.png)
 
-| Thành phần | Đã xác nhận | Cần bổ sung |
+## Thành phần hiện tại
+
+| Thành phần | Hiện trạng và bằng chứng | Chưa xác minh |
 |---|---|---|
-| Client và đường truy cập | Website HTTPS tại `/DevopQLYFood/public/`; login và health trả HTTP 200 | Ảnh tải lại/tìm kiếm và trạng thái web đầy đủ |
-| App | Có ảnh thêm/sửa cùng món ID 9 trên hosting cPanel | Đường dẫn source/DocumentRoot và phiên bản PHP thật |
-| Database | SELECT cùng ID 9, giá 50000, is_available 0 trong phpMyAdmin | Engine/version, DB host/port và vị trí lưu dữ liệu thật |
-| Quản trị và mạng | Có tài khoản cPanel được dùng để triển khai/đối chiếu DB | OS/tài nguyên, quyền SSH, firewall/ports và phạm vi quyền của tài khoản |
+| Client / mạng | Trình duyệt truy cập HTTPS; login và health HTTP 200 | Chính sách mạng/firewall của nhà cung cấp |
+| Hosting | Gói `cp1`, Linux x86_64, Shared IP `160.191.243.50` theo cPanel | Distro/version OS, CPU/RAM/disk quota, quyền quản trị |
+| Web server / runtime | Apache Version 2.4.67 theo Server Information; PHP app đang chạy | PHP version/extensions, cấu hình handler; chưa có bằng chứng reverse proxy riêng do nhóm cấu hình |
+| Source / vùng web | Domain Document Root `/public_html`; URL app `/DevopQLYFood/public/` | Đường dẫn OS đầy đủ cần File Manager xác nhận |
+| Database | MariaDB `10.11.16-MariaDB-cll-lve`; SELECT bản ghi ID 9 khớp app | DB host/port, cùng máy hay máy khác, datadir và chính sách lưu trữ |
+| Quản trị | cPanel/File Manager và phpMyAdmin dùng triển khai/đối chiếu DB | SSH/Terminal, user/role và firewall/ports |
 
-[Xem ảnh app/DB](../evidence/application/demo-2026-10-21.md) · [Log HTTP](../evidence/application/http-access-2026-10-21.md).
-
-## Phương án Ubuntu tham chiếu
-
-Sơ đồ PNG và phần thiết kế dưới đây là **phương án Ubuntu/VM/VPS tham chiếu**. Không dùng các giá trị Apache, loopback DB, `/var/www` hoặc `/var/lib/mysql` bên dưới để mô tả hosting cPanel khi chưa kiểm chứng.
-
-![Deployment architecture proposal](../architecture.png)
-
-## Thành phần và luồng kết nối
-
-| Thành phần | Vai trò | Vị trí dự kiến |
-|---|---|---|
-| Client | Trình duyệt để đăng nhập, xem và thêm món | Laptop/điện thoại ngoài server |
-| Network | Đưa request từ client đến địa chỉ server | Internet hoặc mạng của VM, xác định khi triển khai |
-| Firewall | Chỉ cho phép các cổng cần thiết | Hệ điều hành server hoặc security group |
-| Apache | Nhận HTTP, phục vụ assets và chạy PHP | Ubuntu VM/VPS đề xuất |
-| PHP app | Kiểm tra đầu vào, phân quyền, xử lý CRUD | Cùng server, source ngoài public được bảo vệ |
-| MySQL | Lưu bảng `dishes` | Cùng server, kết nối loopback |
-| Storage | Lưu source và các file dữ liệu DB | Ổ đĩa server |
-| Management client | SSH bằng tài khoản có quyền phù hợp | Máy quản trị được cho phép |
-
-Luồng chính: client gửi HTTP đến Apache, Apache/PHP xử lý và kết nối MySQL qua `127.0.0.1:3306`. MySQL đọc/ghi dữ liệu trên ổ đĩa, PHP trả trang HTML về client. Chưa sử dụng reverse proxy riêng trong Week 1.
+**Luồng đọc:** trình duyệt → HTTPS → web server/PHP của hosting → PDO SELECT bảng `dishes` → HTML về client. **Luồng ghi:** form quản trị → session/CSRF/validation → INSERT/UPDATE/DELETE → SELECT lại danh sách. [Ảnh app và SQL](../evidence/application/demo-2026-10-21.md) chứng minh thao tác thêm/sửa ID 9. DB dùng driver PDO MySQL để kết nối MariaDB; CI riêng vẫn dùng MySQL 8.0.
 
 ## Cổng và lưu trữ
 
-| Cổng | Mục đích | Chính sách thiết kế |
-|---|---|---|
-| TCP 80 | HTTP | Cho máy khách demo truy cập |
-| TCP 22 | SSH | Chỉ máy quản trị / nguồn được phép; xác nhận port thực tế trước khi đặt firewall |
-| TCP 3306 | MySQL | Chỉ loopback; không mở ra Internet |
-| TCP 443 | HTTPS, khi cấu hình | Chưa xác nhận; chỉ thêm vào sơ đồ hiện trạng sau khi thực hiện |
+- HTTPS ở URL mặc định dùng TCP 443, đã truy cập thành công. Đây không phải bằng chứng nhóm đã cấu hình firewall. Force HTTPS Redirect đang Off; không suy ra SSL bị tắt.
+- Port SSH, DB port, địa chỉ DB và các port listening khác chưa được cung cấp; không ghi `127.0.0.1:3306` thành hiện trạng hosting.
+- Source nằm trong tài khoản hosting; URL và Document Root cho thấy layout dự kiến `public_html/DevopQLYFood/public`. Chưa xác định đường dẫn `/home/...` đầy đủ.
+- MariaDB lưu dữ liệu phía hosting; datadir, vị trí máy DB, backup và retention chưa xác minh. Không gán `/var/lib/mysql` cho hosting.
 
-Source dự kiến ở `/var/www/DevopQLYFood`, DocumentRoot chỉ đến `/var/www/DevopQLYFood/public`. MySQL thường dùng `/var/lib/mysql` trong phương án cài Ubuntu thông thường; xác minh `SELECT @@datadir;` trên server thật trước khi ghi là hiện trạng.
+## Bảo vệ các thư mục riêng
 
-## Database và độ bền dữ liệu
+Kiểm tra HTTP ngày 21/10/2026 thấy `database/schema.sql` và `README.md` ở thư mục cha `public/` còn tải được. Chỉ mở URL `/public/` chưa đủ để bảo vệ `config/`, `app/` và `database/`.
 
-`dishes` có khóa chính `id`, thông tin món, giá, tình trạng và timestamps. Các yêu cầu ghi dùng prepared statements. Tải lại trang chạy một truy vấn mới đến MySQL, không dùng mảng hoặc localStorage thay database.
+Repo có `.htaccess` đặt **cạnh `public/`** cho layout cPanel hiện tại, chặn mọi URL ngoài `public/`. Cần upload và kiểm tra thực tế theo [CPANEL_SETUP.md](CPANEL_SETUP.md#bảo-vệ-layout-hiện-tại); chưa ghi bản chặn có hiệu lực. Khi hosting cho phép, ưu tiên domain/subdomain riêng trỏ DocumentRoot trực tiếp vào `public/` và đặt thư mục riêng ngoài vùng web.
 
-Trong phương án Ubuntu tham chiếu, dữ liệu nằm trên ổ đĩa của MySQL cài trực tiếp. Với hosting đang dùng, engine/version, DB host và đường dẫn lưu trữ cần được nhà cung cấp hoặc công cụ quản trị xác nhận. Docker volumes, backup/restore và monitoring sẽ được thiết kế ở checkpoint tương ứng; sơ đồ này chưa chứng minh các phần đó đã hoàn thành.
+## Phương án Ubuntu/VM/VPS tham chiếu
 
-## Hoàn thiện thông tin môi trường thực tế
+[MANUAL_SETUP.md](MANUAL_SETUP.md) giữ hướng dẫn Ubuntu 24.04 nếu chọn môi trường đó để đáp ứng phần cài/cấu hình server và các tuần tiếp theo. Thiết kế tham chiếu dùng Apache/PHP cùng MySQL, DB loopback `127.0.0.1:3306`, source `/var/www/DevopQLYFood`, DocumentRoot `/var/www/DevopQLYFood/public`; SSH chỉ cho nguồn quản trị, DB không public. Các giá trị này **chưa phải hiện trạng hosting**.
 
-1. Xác định loại môi trường thực tế (VM/VPS/hosting được giảng viên chấp nhận).
-2. Ghi OS, tài nguyên, IP/đường dẫn demo ở mức được phép công khai.
-3. Chụp/lưu cấu hình SSH, firewall, port listening, Apache và MySQL.
-4. Chỉnh sơ đồ từ “dự kiến” thành đúng các thành phần đã chạy; ghi ngày xác minh.
-5. Liên kết minh chứng tương ứng trong `evidence/README.md`.
+Docker/Compose, volumes, pipeline deploy, monitoring và backup/restore thuộc checkpoint sau. Khi đổi môi trường, cập nhật sơ đồ và thu bằng chứng mới.

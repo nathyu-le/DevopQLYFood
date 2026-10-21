@@ -1,6 +1,6 @@
-# Rà soát repository sau khi bổ sung minh chứng app/DB — 21/10/2026
+# Rà soát repository và hosting — 21/10/2026
 
-Bản repo trước cập nhật: `b44951d9750a5c2830d329af040fb9a07159b169`.
+Đợt app/DB dựa trên commit `b44951d`; bản chặn truy cập được thêm ở `8ccfd83`, hướng dẫn ở `526829b`; đợt thông tin hosting này dựa trên `526829b`.
 
 | Nội dung kiểm tra | Kết quả và thay đổi |
 |---|---|
@@ -9,17 +9,19 @@ Bản repo trước cập nhật: `b44951d9750a5c2830d329af040fb9a07159b169`.
 | Trạng thái README/checklist/evidence | Sửa các dòng cũ ghi chưa có kiểm tra DB; đánh dấu đúng phần ảnh đã chứng minh |
 | Hướng dẫn cài đặt | README dẫn cPanel trước; Ubuntu là phương án tham chiếu, không ghi đã cài trên hosting |
 | Kịch bản demo | Đề Week 1 cho nộp ảnh/log hoặc video; video liền mạch là lựa chọn bổ sung |
-| Kiến trúc | Thêm bảng thông tin hosting đã biết; sơ đồ PNG Ubuntu vẫn được ghi rõ là tham chiếu, chưa phải sơ đồ hosting hoàn chỉnh |
+| Kiến trúc | Thay sơ đồ PNG/Mermaid bằng hiện trạng cp1/Linux/Apache/MariaDB theo ảnh; giữ hướng dẫn Ubuntu riêng; ghi rõ PHP/quota/DB host/port chưa biết |
 | Week 2–4 | Checklist bám đề chi tiết; chưa ghi thực hiện Docker/CI/CD/monitoring. Playbook Week 3 ≥2 sự cố, Week 4 ≥3 |
 | Phân công | Giữ Huy phụ trách hạ tầng, app/DB, tài liệu/GitHub; Hải kiểm tra, Tùng minh chứng. Chưa gán người thao tác ảnh nếu chưa xác nhận |
-| Source và CI | Không thay source PHP/SQL/workflow trong lần cập nhật này; kết quả CI PHP/MySQL trước đó giữ nguyên phạm vi |
+| Source và CI | Không thay PHP/SQL/workflow; giữ kết quả CI MySQL 8.0 riêng với ảnh thao tác MariaDB hosting |
+| Thông tin server | Thêm nguyên bản hai ảnh Server Information/Domains, xác nhận domain root `/public_html` và Force HTTPS Redirect Off |
+| Bảo vệ thư mục riêng | GET schema và README trên hosting trả 200; thêm `.htaccess` cho layout hiện tại và hướng dẫn upload/rollback. Kiểm tra pattern đã qua; chưa có Apache local và chưa xác nhận triển khai rule |
 | Credentials | Không đưa config.local.php hoặc mật khẩu/hash quản trị thật vào bộ thay đổi |
 
 ## Phần Week 1 còn cần hoàn thiện
 
-- OS/tài nguyên, phiên bản web server/PHP/DB, DocumentRoot và vị trí DB.
+- Distro/version OS, tài nguyên, PHP version, đường dẫn OS đầy đủ và DB host/port/datadir.
 - Quyền user/SSH, firewall/ports; đối chiếu yêu cầu tự cài/cấu hình môi trường theo đề.
-- Sơ đồ đúng môi trường hosting sau khi đủ thông tin.
+- Upload `.htaccess`, xác nhận health/login/assets còn hoạt động và schema/README trả 403; bổ sung các trường chưa biết vào sơ đồ khi có bằng chứng.
 - Ảnh tải lại/tìm kiếm và trạng thái web; ảnh hiện có xác nhận trạng thái 0 qua SQL.
 
 [Xem minh chứng app/DB](../evidence/application/demo-2026-10-21.md) · [Checklist Week 1](WEEK1_CHECKLIST.md).

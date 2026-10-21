@@ -1,14 +1,14 @@
 # Kế hoạch hoàn thiện Week 1 từ hosting và tiếp tục Week 2
 
-**Cập nhật: 21/10/2026.** Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Đã đối chiếu 3 ảnh thêm/sửa và SELECT cùng món ID 9. [Minh chứng app + DB](../evidence/application/demo-2026-10-21.md). Tiếp theo bổ sung ảnh web thấy rõ trạng thái, bước tải lại/tìm kiếm hoặc video liên tục, đồng thời thu thông tin hạ tầng theo đề. Chưa có VPS, chưa quyết định phải thuê thêm và chưa đánh dấu hoàn tất Week 1.
+**Cập nhật: 21/10/2026.** Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Đã đối chiếu 3 ảnh thêm/sửa và SELECT cùng món ID 9. [Minh chứng app + DB](../evidence/application/demo-2026-10-21.md). Tiếp theo bổ sung ảnh web thấy rõ trạng thái, bước tải lại/tìm kiếm hoặc video liên tục, đồng thời bổ sung PHP version, quota và quyền SSH/firewall. Đã có ảnh server/domain và sơ đồ hosting; cần upload `.htaccess` để chặn các URL ngoài `public/`. Chưa có VPS, chưa quyết định phải thuê thêm và chưa đánh dấu hoàn tất Week 1.
 
 ## Làm ngay trên hosting hiện có
 
 1. Đăng nhập; thêm “Cơm gà Demo Week 1” giá 45.000đ, tải lại và tìm đúng món.
 2. SELECT cùng bản ghi trong phpMyAdmin, đối chiếu ID/tên/giá/trạng thái.
 3. Sửa thành 50.000đ và hết món; tải lại, SELECT lần nữa; chụp/quay các kết quả.
-4. Thu thông tin cPanel: DocumentRoot, phiên bản PHP và DB, thông tin server, quyền SSH/Terminal. Chưa coi IP Blocker là bằng chứng đã tự cấu hình firewall hệ điều hành.
-5. Cập nhật sơ đồ hiện trạng sau khi đủ thông tin; đối chiếu yêu cầu cài Ubuntu Server/VM, EC2 hoặc VPS. Phần hosting không có quyền thực hiện cần bổ sung môi trường phù hợp hoặc được giảng viên chấp nhận thay thế.
+4. Đã thu Server Information và Domains; bổ sung PHP version, quota, DB host/port và quyền SSH/Terminal. Upload `.htaccess` theo hướng dẫn cPanel, kiểm tra health 200 và schema/README 403. Chưa coi IP Blocker là bằng chứng đã tự cấu hình firewall hệ điều hành.
+5. Bổ sung các thông số còn thiếu vào sơ đồ hosting; đối chiếu yêu cầu cài Ubuntu Server/VM, EC2 hoặc VPS. Phần hosting không có quyền thực hiện cần bổ sung môi trường phù hợp hoặc được giảng viên chấp nhận thay thế.
 6. Kiểm tra hosting có chạy được Docker/Compose và đáp ứng pipeline/monitoring hay không trước khi chọn môi trường Week 2.
 
 [Hướng dẫn cPanel](CPANEL_SETUP.md) · [Kịch bản demo](DEMO.md).

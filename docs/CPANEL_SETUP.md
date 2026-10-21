@@ -1,6 +1,6 @@
 # Triển khai app PHP/MySQL trên hosting cPanel
 
-**Trạng thái ngày 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Đã có [3 ảnh thêm/sửa và SELECT đối chiếu món ID 9](../evidence/application/demo-2026-10-21.md). Phần OS/tài nguyên, user/SSH, firewall/ports và sơ đồ hiện trạng vẫn cần bổ sung.
+**Trạng thái ngày 21/10/2026:** website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Có [3 ảnh thêm/sửa/SELECT ID 9](../evidence/application/demo-2026-10-21.md) và [ảnh thông tin hosting](../evidence/server/README.md): gói cp1, Linux, Apache 2.4.67, MariaDB 10.11.16; domain root `/public_html`. PHP version, tài nguyên và quyền SSH/firewall còn cần bổ sung.
 
 ## Source và thư mục
 
@@ -8,7 +8,7 @@ Bản source đã cung cấp để upload: commit `ca9ef4fcd9214266af681963caf20
 
 Đường dẫn Home do hosting cấp có thể khác nhau. Nếu nhà cung cấp giới hạn DocumentRoot bên trong `public_html`, cần điều chỉnh cách đặt thư mục và các đường dẫn require theo môi trường; không coi việc mở được URL `/public` là đã bảo vệ thư mục cha. Ghi đường dẫn thật vào minh chứng trước khi hoàn thiện sơ đồ.
 
-URL đang dùng có dạng `/DevopQLYFood/public/`. Cần kiểm tra Domains và File Manager để xác nhận DocumentRoot cùng vị trí các thư mục riêng; chưa kết luận cấu hình ngoài public đã được bảo vệ chỉ vì ứng dụng truy cập được.
+URL đang dùng có dạng `/DevopQLYFood/public/`, Domains xác nhận domain root `/public_html`. Layout này cần chặn HTTP vào các thư mục cạnh `public/`. Kiểm tra ngày 21/10/2026 thấy schema và README còn trả HTTP 200.
 
 ## Bảo vệ layout hiện tại
 
@@ -32,7 +32,7 @@ Quy tắc chạy trong thư mục dự án: chỉ cho phép HTTP với đường
 1. Tạo DB mới và user riêng trong Manage My Databases/MySQL Databases hoặc Database Wizard; ghi đầy đủ tên có prefix cPanel.
 2. Gán quyền SELECT, INSERT, UPDATE, DELETE cho tài khoản app. Import schema bằng phiên phpMyAdmin của cPanel có quyền tạo bảng.
 3. Chọn đúng DB trong phpMyAdmin, import `database/schema.sql`; tùy chọn import `database/seed.sql` một lần. File SQL gộp đã cung cấp gồm hai phần này; không import cả file gộp và seed riêng vì sẽ thêm dữ liệu mẫu hai lần.
-4. Chọn PHP 8.2+ có pdo_mysql, mbstring và session; ghi phiên bản DB thật. Source đã qua test với MySQL 8.0, cần xác minh môi trường hosting riêng.
+4. Chọn PHP 8.2+ có pdo_mysql, mbstring và session. Hosting báo MariaDB `10.11.16-MariaDB-cll-lve`; ảnh thao tác app/SQL xác nhận thêm/sửa trên DB hosting. Bộ CI tự động riêng dùng MySQL 8.0; chưa có suite tự động chạy trên MariaDB hosting.
 
 ## Cấu hình cục bộ
 
@@ -56,6 +56,5 @@ Quy tắc chạy trong thư mục dự án: chỉ cho phép HTTP với đường
 - [cPanel Domains](https://docs.cpanel.net/cpanel/domains/domains/)
 - [cPanel Manage My Databases](https://docs.cpanel.net/cpanel/databases/manage-my-databases/)
 - [PHP password_hash](https://www.php.net/manual/en/function.password-hash.php)
-
-- [Apache RewriteRule F/403](https://httpd.apache.org/docs/2.4/rewrite/flags.html#flag_f)
-- [Apache .htaccess và AllowOverride](https://httpd.apache.org/docs/2.4/howto/htaccess.html)
+- [Apache RewriteRule flags: F/403](https://httpd.apache.org/docs/2.4/rewrite/flags.html#flag_f)
+- [Apache .htaccess / AllowOverride](https://httpd.apache.org/docs/2.4/howto/htaccess.html)

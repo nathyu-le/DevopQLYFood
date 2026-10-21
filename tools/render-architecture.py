@@ -1,73 +1,75 @@
 #!/usr/bin/env python3
-"""Regenerate architecture.png. Requires Pillow only for diagram generation."""
+"""Regenerate the evidence-based hosting diagram. Requires Pillow."""
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-W, H = 1800, 1220
-im = Image.new('RGB', (W, H), '#f6f8f3')
+im = Image.new("RGB", (1800, 1220), "#f6f8f3")
 d = ImageDraw.Draw(im)
-FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
-BOLD = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
-def f(size=24, bold=False):
-    return ImageFont.truetype(BOLD if bold else FONT, size)
-def text(x,y,t,size=24,color='#304e3e',bold=False):
-    d.text((x,y),t,font=f(size,bold),fill=color)
-def box(x,y,w,h,title,lines,fill='#ffffff',border='#d9e3d7',label=None):
-    d.rounded_rectangle((x,y,x+w,y+h),radius=19,fill=fill,outline=border,width=2)
-    offset=23
-    if label:
-        text(x+24,y+18,label,15,'#8b9e84',True)
-        offset=46
-    text(x+24,y+offset,title,25,'#244c3b',True)
-    for i,line in enumerate(lines):
-        text(x+24,y+offset+42+i*32,line,19,'#788b76')
-def arrow(points,color='#75946f',width=4):
-    d.line(points,fill=color,width=width)
-    x,y=points[-1];px,py=points[-2]
-    if x>px: tri=[(x,y),(x-12,y-7),(x-12,y+7)]
-    elif x<px: tri=[(x,y),(x+12,y-7),(x+12,y+7)]
-    elif y>py: tri=[(x,y),(x-7,y-12),(x+7,y-12)]
-    else: tri=[(x,y),(x-7,y+12),(x+7,y+12)]
-    d.polygon(tri,fill=color)
+FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
-text(75,53,'DEVOPQLYFOOD  /  WEEK 1',21,'#8a9c7a',True)
-text(75,94,'Kiến trúc triển khai dự kiến',47,'#244c3b',True)
-text(75,164,'Website quản lý thực đơn quán ăn · PHP + MySQL',25,'#7a8d74')
-d.rounded_rectangle((75,228,777,274),radius=12,fill='#f5ebd4')
-text(93,238,'THIẾT KẾ ĐỀ XUẤT — CHƯA TRIỂN KHAI SERVER NHÓM',16,'#a1803e',True)
+def text(x, y, value, size=24, color="#304e3e", bold=False):
+    font = ImageFont.truetype(BOLD if bold else FONT, size)
+    d.text((x, y), value, font=font, fill=color)
 
-d.rounded_rectangle((830,230,1720,1010),radius=26,fill='#edf3e9',outline='#c6d7bf',width=3)
-text(865,251,'SERVER · Ubuntu VM / VPS',24,'#3b6348',True)
-text(865,290,'Loại môi trường, OS và tài nguyên thật: xác định khi triển khai',17,'#7e9477')
+def box(x, y, w, h, title, lines, fill="#ffffff"):
+    d.rounded_rectangle((x, y, x+w, y+h), radius=19, fill=fill,
+                        outline="#d9e3d7", width=2)
+    text(x+22, y+20, title, 25, "#244c3b", True)
+    for i, line in enumerate(lines):
+        text(x+22, y+62+i*31, line, 19, "#61755d")
 
-box(75,340,330,178,'Máy khách',['Trình duyệt web','Laptop / điện thoại'],label='CLIENT')
-box(477,357,267,142,'Mạng truy cập',['Internet / mạng VM'],fill='#f1f3e7')
-arrow([(405,426),(477,426)])
-arrow([(744,426),(868,426)])
-text(756,389,'HTTP 80',16,'#5d7c58',True)
+def arrow(points, color="#75946f"):
+    d.line(points, fill=color, width=4)
+    x, y = points[-1]
+    px, py = points[-2]
+    if x > px:
+        tip = [(x,y), (x-12,y-7), (x-12,y+7)]
+    elif x < px:
+        tip = [(x,y), (x+12,y-7), (x+12,y+7)]
+    elif y > py:
+        tip = [(x,y), (x-7,y-12), (x+7,y-12)]
+    else:
+        tip = [(x,y), (x-7,y+12), (x+7,y+12)]
+    d.polygon(tip, fill=color)
 
-box(868,337,814,108,'Firewall / security group',['HTTP cho client · SSH cho nguồn quản trị · Không public MySQL'])
-arrow([(1040,445),(1040,487)])
-box(868,487,345,134,'Apache',['Nhận request HTTP','DocumentRoot: public/'])
-box(1300,487,382,134,'Ứng dụng PHP',['Session · CSRF · validation','CRUD món ăn bằng PDO'])
-arrow([(1213,552),(1300,552)])
-arrow([(1490,621),(1490,708)])
-text(1218,646,'127.0.0.1 : 3306',18,'#5d7c58',True)
+text(75, 42, "DEVOPQLYFOOD  /  WEEK 1  /  21.10.2026", 21, "#8a9c7a", True)
+text(75, 84, "Kiến trúc hosting hiện tại", 47, "#244c3b", True)
+text(75, 154, "https://thitruongmmo.com/DevopQLYFood/public/", 27, "#5d7c58")
+text(75, 202, "Nguồn: ảnh cPanel, ảnh app/SQL và kiểm tra HTTP; thông số chưa biết được ghi rõ.", 21, "#7a8d74")
 
-box(868,708,345,135,'Source & cấu hình',['Source trên ổ đĩa','config/ ở ngoài public/'])
-box(1300,708,382,135,'MySQL',['Bảng dishes · InnoDB','DB user chỉ có quyền CRUD'])
-box(868,906,814,73,'Ổ đĩa server · Dữ liệu MySQL',[],fill='#ffffff')
-arrow([(1490,843),(1490,906)])
+d.rounded_rectangle((500, 260, 1720, 1020), radius=26,
+                    fill="#edf3e9", outline="#c6d7bf", width=3)
+text(535, 281, "HOSTING cp1 · Linux x86_64 · Shared IP 160.191.243.50", 24, "#3b6348", True)
+text(535, 321, "Phạm vi dịch vụ hosting; chưa xác minh vị trí máy DB hoặc reverse proxy.", 19, "#61755d")
 
-box(75,720,330,178,'Máy quản trị',['Đăng nhập user / SSH','Cấu hình và bảo trì'],label='MANAGEMENT')
-arrow([(405,802),(800,802),(800,465),(886,465),(886,445)],color='#a79a70')
-text(462,732,'SSH 22',20,'#9f8e59',True)
-text(462,764,'Nguồn được phép',17,'#9f8e59')
+box(75, 390, 330, 155, "Máy khách", ["Trình duyệt web", "Laptop / điện thoại"])
+arrow([(405, 460), (550, 460)])
+text(418, 420, "HTTPS", 19, "#5d7c58", True)
+text(418, 478, "443", 19, "#5d7c58", True)
+box(550, 385, 500, 165, "Web server", ["cPanel báo Apache 2.4.67", "Domain root: /public_html", "Force HTTPS Redirect: Off"])
+box(1140, 385, 530, 165, "Ứng dụng PHP", ["/DevopQLYFood/public/", "Session · CSRF · PDO CRUD", "PHP version: chưa xác minh"])
+arrow([(1050, 465), (1140, 465)])
 
-d.line((75,1060,1720,1060),fill='#dce5d7',width=2)
-text(75,1084,'Đọc / ghi: Client → Apache/PHP → MySQL → ổ đĩa → trả kết quả về trình duyệt.',23,'#52714f')
-text(75,1126,'Chưa có URL/IP thật. HTTPS 443 chỉ bổ sung khi đã cấu hình. Chưa sử dụng reverse proxy riêng.',19,'#8a987d')
-text(75,1160,'Sơ đồ này không thay thế minh chứng server, firewall và demo từ máy khách.',19,'#8a987d')
-im.save(ROOT/'architecture.png',optimize=True)
-print(ROOT/'architecture.png')
+box(550, 625, 500, 175, "Source trong tài khoản hosting", ["URL suy ra: public_html/", "DevopQLYFood; chờ File Manager", ".htaccess chặn riêng: chờ upload"])
+box(1140, 625, 530, 175, "MariaDB 10.11.16", ["Theo Server Information", "Bảng dishes · ảnh SELECT ID 9", "DB host/port: chưa xác minh"])
+arrow([(1405, 550), (1405, 625)])
+text(1420, 574, "PDO đọc / ghi", 19, "#5d7c58", True)
+arrow([(800, 625), (800, 585), (1280, 585), (1280, 550)])
+
+box(75, 720, 330, 175, "Quản trị hosting", ["cPanel / File Manager", "phpMyAdmin", "SSH: chưa xác minh"])
+arrow([(405, 775), (550, 775)], "#a79a70")
+box(1140, 865, 530, 110, "Dữ liệu phía hosting", ["Datadir / backup: chưa xác minh"])
+arrow([(1405, 800), (1405, 865)])
+text(550, 861, "Còn thiếu bằng chứng:", 22, "#8f773f", True)
+text(550, 901, "Distro/version OS · CPU/RAM/disk quota", 19, "#8f773f")
+text(550, 932, "PHP version · quyền SSH · firewall/ports", 19, "#8f773f")
+text(550, 963, "Chưa kết luận đã đủ hạ tầng Week 1.", 19, "#8f773f")
+
+d.line((75, 1060, 1720, 1060), fill="#dce5d7", width=2)
+text(75, 1080, "Đã có: login/health HTTP 200; ảnh thêm/sửa món và SELECT cùng ID 9 trên DB hosting.", 23, "#52714f")
+text(75, 1124, "Lưu ý: schema/README còn tải được trước bản sửa; cần upload .htaccess và xác nhận HTTP 403.", 21, "#8f773f")
+text(75, 1162, "Ubuntu/VM/VPS là phương án tham chiếu trong docs/MANUAL_SETUP.md; chưa triển khai môi trường đó.", 19, "#7a8d74")
+im.save(ROOT / "architecture.png", optimize=True)
+print(ROOT / "architecture.png")
