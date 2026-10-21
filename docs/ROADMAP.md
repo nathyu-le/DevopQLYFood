@@ -4,16 +4,18 @@
 
 Cả Week 1–4 sử dụng [nathyu-le/DevopQLYFood](https://github.com/nathyu-le/DevopQLYFood). Source được phát triển tiếp trên cùng ứng dụng; tài liệu và minh chứng được cập nhật theo checkpoint. Không tạo bốn bản ứng dụng độc lập.
 
-Hiện nhóm đang chuẩn bị **Week 1**. Source PHP/MySQL, tài liệu và phân công đã có; kiểm tra source trên GitHub Actions đã thành công. Triển khai server nhóm và minh chứng truy cập từ máy khách chưa hoàn thành. Week 2–4 dưới đây là kế hoạch theo brief chung, điều chỉnh tiếp khi có đề checkpoint chi tiết từ giảng viên.
+Hiện nhóm đang chuẩn bị **Week 1**. Source PHP/MySQL, tài liệu và phân công đã có; kiểm tra source trên GitHub Actions đã thành công. Triển khai server nhóm và minh chứng truy cập từ máy khách chưa hoàn thành. Checklist Week 2–4 đã được đối chiếu với ba ảnh đề chi tiết ngày 21/10/2026; đây là kế hoạch, chưa phải kết quả thực hiện.
+
+Nguồn đối chiếu: đề Week 1 đã cung cấp trước đó; ảnh Week 2 `1000003653.jpg`, Week 3 `1000003654.jpg`, Week 4 `1000003655.jpg`. Các tên ảnh dùng để nhận diện đề đã đọc, không phải đường dẫn file đang lưu trong repo. Rubric và hồ sơ nộp cụ thể nằm trong checklist từng tuần.
 
 ## Các checkpoint
 
-| Tuần | Trọng tâm theo đề | Đầu ra chính | Điểm theo brief chung | Trạng thái |
+| Tuần | Trọng tâm theo đề | Đầu ra chính | Điểm tối đa / 10 | Trạng thái |
 |---|---|---|---:|---|
 | Week 1 | Infrastructure & Initial Deployment | Kiến trúc, server/network, app + DB chạy, README và phân công | 2,0 | Đang chuẩn bị; chưa đủ minh chứng triển khai |
 | Week 2 | Containerization & CI/CD | Dockerfile, Compose, persistent volume, build–test–deploy từ commit mới | 2,5 | Chưa bắt đầu triển khai |
-| Week 3 | Monitoring, Security & Reliability | Logs, CPU/RAM/trạng thái app, cảnh báo đã thử, bảo mật, backup/restore, playbook | 2,5 | Chưa bắt đầu triển khai |
-| Week 4 | Final Demo & Troubleshooting | Demo end-to-end, xử lý sự cố, báo cáo, video và bảo vệ | 3,0 | Chưa thực hiện |
+| Week 3 | Monitoring, Security & Reliability | Logs theo thời gian, dashboard CPU/RAM/health, alert đã thử, bảo mật, backup/restore, playbook draft ≥2 sự cố | 2,5 | Chưa bắt đầu triển khai |
+| Week 4 | Final Demo & Troubleshooting | Bản tích hợp Week 1–3, triển khai từ server sạch, release/tag, playbook ≥3 sự cố, paper và video | 3,0 | Chưa thực hiện |
 
 ## Mỗi tuần cập nhật ở đâu?
 
@@ -38,10 +40,18 @@ Các mục sau là **vị trí dự kiến**, chưa phải file cấu hình đã
 | Checkpoint | Cấu hình / công cụ dự kiến bổ sung |
 |---|---|
 | Week 2 | `Dockerfile`, `docker-compose.yml`, `.dockerignore`, workflow build–test–deploy trong `.github/workflows/` |
-| Week 3 | Cấu hình monitoring trong `monitoring/`; công cụ backup/restore trong `tools/`; `docs/TROUBLESHOOTING.md` với ít nhất 3 tình huống |
-| Week 4 | Báo cáo trong `report/`, tài liệu demo và link video trong `evidence/week4/` |
+| Week 3 | Cấu hình monitoring trong `monitoring/`; script backup/restore trong `tools/`; `docs/TROUBLESHOOTING.md` với ít nhất 2 sự cố |
+| Week 4 | Nâng playbook lên ít nhất 3 sự cố; báo cáo trong `report/`; deployment/operations guide hoàn chỉnh; release/tag và video trong chỉ mục `evidence/week4/` |
 
 Chỉ tạo cấu hình thật sau khi chọn môi trường và triển khai tương ứng. Workflow **Source checks (not deployment)** hiện tại chỉ kiểm tra source với DB tạm, chưa hoàn thành CI/CD deploy Week 2.
+
+## Điều kiện chung khi nộp và demo
+
+- Nộp link và minh chứng đúng hạn theo thông báo của giảng viên; kế hoạch bổ sung không tự thay đổi hạn nộp.
+- Hệ thống và đường dẫn demo truy cập được; repository và các file minh chứng đã cập nhật.
+- Mỗi thành viên hiểu hệ thống và giải thích được phần phụ trách.
+- Không công khai mật khẩu, access key, token hoặc dữ liệu nhạy cảm trong source, logs và video.
+- Có video, ảnh hoặc logs dự phòng nếu mạng gặp vấn đề. Week 3 chỉ dùng dữ liệu thử nghiệm khi mô phỏng xóa để thử restore.
 
 ## Cách cập nhật sau mỗi đầu việc
 

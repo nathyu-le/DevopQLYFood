@@ -7,7 +7,9 @@
 | Build image và Compose khởi chạy app + MySQL | Chưa có | Chưa thực hiện |
 | Bản ghi vẫn còn sau khi tạo lại container, giữ volume | Chưa có | Chưa thực hiện |
 | Pipeline build–test–deploy từ commit mới | Chưa có | Chưa thực hiện |
+| Test thất bại làm pipeline fail và chặn deploy | Chưa có | Chưa kiểm chứng |
 | Thay đổi source xuất hiện trên môi trường deploy | Chưa có | Chưa thực hiện |
+| Ảnh/video trước và sau deploy, workflow logs của đúng commit | Chưa có | Chưa thu thập |
 | Hướng dẫn và cấu hình triển khai tái lập | Chưa có | Chưa xác minh |
 
 Mỗi kết quả ghi ngày, môi trường, người thực hiện, commit SHA và link run/ảnh/log/video. Workflow test source hiện có chưa thay cho minh chứng pipeline triển khai.
