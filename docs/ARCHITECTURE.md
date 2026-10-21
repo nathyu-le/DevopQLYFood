@@ -1,6 +1,8 @@
 # Kiến trúc triển khai dự kiến — Week 1
 
-**Trạng thái:** thiết kế đề xuất, chưa có server nhóm vận hành. Việc nhóm hiện có domain/hosting chưa xác nhận các quyền cài đặt Ubuntu, SSH và firewall; không coi hosting đó là một VPS đã dựng.
+**Trạng thái ngày 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel. Phiên bản web server/PHP/DB, đường dẫn source/DocumentRoot và vị trí DB chưa được ghi nhận đầy đủ; chưa có sơ đồ hiện trạng được xác minh. Quyền cài Ubuntu, SSH và firewall vẫn cần đối chiếu đề.
+
+Sơ đồ PNG và phần thiết kế dưới đây là **phương án Ubuntu/VM/VPS tham chiếu**. Không dùng các giá trị Apache, loopback DB, `/var/www` hoặc `/var/lib/mysql` bên dưới để mô tả hosting cPanel khi chưa kiểm chứng.
 
 ![Deployment architecture proposal](../architecture.png)
 

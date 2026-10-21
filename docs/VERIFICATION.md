@@ -18,16 +18,16 @@ Mở [Actions](https://github.com/nathyu-le/DevopQLYFood/actions), chọn workfl
 
 **Kết quả đã xác minh ngày 21/10/2026:** [run 39529399926](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926), commit `4baaaa1da776c714098e35ccc5e275c5495d7170`, kết luận **success**. Runner Ubuntu 24.04, PHP CLI 8.3.6 và dịch vụ MySQL 8.0 tạm. Log xác nhận tất cả file PHP hợp lệ, **14 validation checks passed** và **19 HTTP/MySQL integration checks passed**.
 
-Kiểm tra cú pháp JavaScript bằng `node --check` và cú pháp hai script Python bằng `py_compile` cũng đã thành công trong môi trường soạn. PHP/MySQL được thực thi trên runner GitHub Actions; chưa chạy trên server của nhóm.
+Kiểm tra cú pháp JavaScript bằng `node --check` và cú pháp hai script Python bằng `py_compile` cũng đã thành công trong môi trường soạn. PHP/MySQL của bộ test được thực thi trên runner GitHub Actions. Ngày 21/10/2026 người triển khai xác nhận website đã mở được trên hosting cPanel; kết quả CRUD/SELECT thực tế trên hosting chưa được ghi nhận.
 
 | Loại kiểm chứng | Trạng thái / nơi đối chiếu |
 |---|---|
 | JavaScript syntax / Python syntax | Đã kiểm tra thành công trong môi trường soạn |
 | PHP syntax và validation | Thành công — tất cả file PHP hợp lệ và 14 kiểm tra validation qua |
 | CRUD với MySQL tạm | Thành công — 19 kiểm tra HTTP/MySQL qua |
-| Server của nhóm | Chưa triển khai, chưa có minh chứng |
-| Apache/SSH/firewall của nhóm | Chưa cấu hình, chưa có minh chứng |
-| Demo từ client đến server nhóm | Chưa thực hiện |
+| Website trên hosting cPanel | Trang đăng nhập HTTP 200; health HTTP 200/status ok ngày 21/10/2026 — [log kiểm tra](../evidence/application/http-access-2026-10-21.md) |
+| OS/web server/SSH/firewall trên môi trường thật | Chưa xác minh đầy đủ; không áp thông số Ubuntu tham chiếu cho hosting |
+| Demo client → app → ghi/đọc DB hosting | Chờ thực hiện và lưu kết quả SELECT đối chiếu |
 
 Kiểm tra CI có thể chứng minh source hoạt động trong môi trường test. Nó **không chứng minh** đã dựng VPS/VM, không phải link website và chưa phải CI/CD build–test–deploy của Week 2.
 

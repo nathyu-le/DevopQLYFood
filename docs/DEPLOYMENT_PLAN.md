@@ -1,8 +1,19 @@
-# Kế hoạch bổ sung Week 1 và tiếp tục Week 2 trên VPS
+# Kế hoạch hoàn thiện Week 1 từ hosting và tiếp tục Week 2
 
-**Cập nhật: 21/10/2026.** Nhóm chưa có VPS và chưa triển khai ứng dụng. Repo hiện tại phục vụ nộp tiến độ Week 1; việc xin bổ sung triển khai/demo cần được giảng viên xác nhận, chưa ghi nhận chấp thuận. Week 1 vẫn còn thiếu server/network, app + DB chạy và minh chứng từ client.
+**Cập nhật: 21/10/2026.** Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Tiếp theo là kiểm tra CRUD, SELECT đối chiếu và lưu minh chứng; đồng thời kiểm tra phần hạ tầng theo đề. Chưa có VPS, chưa quyết định phải thuê thêm và chưa đánh dấu hoàn tất Week 1.
 
-## Trình tự thực hiện khi có VPS
+## Làm ngay trên hosting hiện có
+
+1. Đăng nhập; thêm “Cơm gà Demo Week 1” giá 45.000đ, tải lại và tìm đúng món.
+2. SELECT cùng bản ghi trong phpMyAdmin, đối chiếu ID/tên/giá/trạng thái.
+3. Sửa thành 50.000đ và hết món; tải lại, SELECT lần nữa; chụp/quay các kết quả.
+4. Thu thông tin cPanel: DocumentRoot, phiên bản PHP và DB, thông tin server, quyền SSH/Terminal. Chưa coi IP Blocker là bằng chứng đã tự cấu hình firewall hệ điều hành.
+5. Cập nhật sơ đồ hiện trạng sau khi đủ thông tin; đối chiếu yêu cầu cài Ubuntu Server/VM, EC2 hoặc VPS. Phần hosting không có quyền thực hiện cần bổ sung môi trường phù hợp hoặc được giảng viên chấp nhận thay thế.
+6. Kiểm tra hosting có chạy được Docker/Compose và đáp ứng pipeline/monitoring hay không trước khi chọn môi trường Week 2.
+
+[Hướng dẫn cPanel](CPANEL_SETUP.md) · [Kịch bản demo](DEMO.md).
+
+## Phương án nếu cần bổ sung VM/VPS
 
 | Bước | Công việc | Kết quả cần lưu |
 |---|---|---|
@@ -14,7 +25,7 @@
 | 6. Thực hiện Week 2 | Dockerfile/Compose, DB volume, secrets ngoài repo; pipeline checkout → build → test → tạo image → deploy tự động | Chạy và kiểm tra theo [WEEK2_CHECKLIST.md](WEEK2_CHECKLIST.md) |
 | 7. Ghi demo Week 2 | Push thay đổi nhỏ → xem workflow → refresh app; kiểm chứng test fail và dữ liệu còn sau recreate container | Commit/run, ảnh trước/sau, log và video trong `evidence/week2/` |
 
-Dùng tiếp **cùng VPS, cùng repository và cùng ứng dụng**. Khi chuyển từ Apache/MySQL cài trực tiếp sang Compose, xác định dịch vụ nào đang chiếm cổng 80/443/3306, cách chuyển dữ liệu và cách dừng/chuyển dịch vụ cũ trước khi dùng chung cổng. Không mặc định volume Docker tự chứa dữ liệu của MySQL cài trực tiếp. Chỉ chuyển sau khi đã lưu được bằng chứng Week 1 và kiểm tra bản sao dữ liệu cần giữ.
+Nếu chọn VM/VPS, dùng tiếp **cùng môi trường đó, cùng repository và cùng ứng dụng**. Khi chuyển từ Apache/MySQL cài trực tiếp sang Compose, xác định dịch vụ nào đang chiếm cổng 80/443/3306, cách chuyển dữ liệu và cách dừng/chuyển dịch vụ cũ trước khi dùng chung cổng. Không mặc định volume Docker tự chứa dữ liệu của MySQL cài trực tiếp. Chỉ chuyển sau khi đã lưu được bằng chứng Week 1 và kiểm tra bản sao dữ liệu cần giữ.
 
 ## Ghi minh chứng xuyên suốt
 

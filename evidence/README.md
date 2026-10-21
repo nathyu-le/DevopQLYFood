@@ -2,14 +2,14 @@
 
 | Checkpoint | Nơi cập nhật | Trạng thái |
 |---|---|---|
-| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Chưa có minh chứng triển khai server nhóm |
+| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Website được báo truy cập được trên cPanel; chờ ảnh/video, CRUD/SELECT và cấu hình hạ tầng |
 | Week 2 | [week2/](week2/README.md) | Chưa có minh chứng Docker/CI/CD triển khai |
 | Week 3 | [week3/](week3/README.md) | Chưa có minh chứng monitoring/security/backup/restore |
 | Week 4 | [week4/](week4/README.md) | Chưa có demo tổng thể hoặc báo cáo cuối kỳ |
 
 Week 1: Nguyễn Phước Hải kiểm tra chức năng và đối chiếu DB; Lê Quang Tùng tổng hợp ảnh/log/video demo; cả hai phối hợp hoàn thiện minh chứng. Xem [phân công](../docs/TEAM.md).
 
-Nhóm dự kiến thuê VPS để bổ sung triển khai/demo Week 1, sau đó làm tiếp Week 2 trên cùng hệ thống. Lưu minh chứng ngay trong quá trình thực hiện và dẫn về đúng checkpoint; phần bổ sung chưa được ghi nhận là đã được giảng viên chấp thuận. Xem [kế hoạch](../docs/DEPLOYMENT_PLAN.md).
+Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) truy cập được ngày 21/10/2026. Thu minh chứng app/DB trên hosting hiện có trước, rồi xác minh phần hạ tầng và khả năng thực hiện Week 2; VM/VPS là phương án bổ sung nếu cần. Xem [kế hoạch](../docs/DEPLOYMENT_PLAN.md).
 
 ## Minh chứng Week 1
 
@@ -19,8 +19,8 @@ Nhóm dự kiến thuê VPS để bổ sung triển khai/demo Week 1, sau đó l
 |---|---|---|---|
 | E01 | OS, CPU, RAM, disk của server | `server/` | Chưa có |
 | E02 | User/SSH, port listening, firewall/security group | `server/` | Chưa có |
-| E03 | Dịch vụ Apache/PHP và MySQL hoạt động | `server/` | Chưa có |
-| E04 | Client mở được URL ứng dụng | `application/` | Chưa có |
+| E03 | Web server/PHP và DB thực tế hoạt động | `server/` | Health HTTP 200/status ok; phiên bản/cấu hình dịch vụ chờ xác minh |
+| E04 | Client mở được URL ứng dụng | `application/` | Trang login HTTP 200; có [log truy cập](application/http-access-2026-10-21.md), chờ ảnh/video |
 | E05 | Thêm món và tải lại vẫn còn | `application/` | Chưa có |
 | E06 | SELECT xác nhận cùng bản ghi trong MySQL | `application/` | Chưa có |
 | E07 | Video demo hoặc bộ ảnh/log thay thế | Link video hoặc file trong `application/` | Chưa có |

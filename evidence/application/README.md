@@ -1,6 +1,8 @@
 # Minh chứng app + database
 
-**Chưa có minh chứng trên server của nhóm.**
+**Cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình admin trên hosting cPanel. Chưa có ảnh/video/SELECT của chuỗi CRUD thực tế để xác nhận demo hoàn tất.
+
+[Log kiểm tra HTTP ngày 21/10/2026](http-access-2026-10-21.md): health HTTP 200/status ok và trang đăng nhập HTTP 200. Kết quả này xác nhận truy cập và đọc bảng qua health; thao tác ghi/sửa cùng SELECT đối chiếu còn cần thực hiện.
 
 Theo `docs/DEMO.md`, cần bổ sung:
 

@@ -4,7 +4,7 @@
 
 Cả Week 1–4 sử dụng [nathyu-le/DevopQLYFood](https://github.com/nathyu-le/DevopQLYFood). Source được phát triển tiếp trên cùng ứng dụng; tài liệu và minh chứng được cập nhật theo checkpoint. Không tạo bốn bản ứng dụng độc lập.
 
-Hiện nhóm đang chuẩn bị **Week 1**. Source PHP/MySQL, tài liệu và phân công đã có; kiểm tra source trên GitHub Actions đã thành công. Triển khai server nhóm và minh chứng truy cập từ máy khách chưa hoàn thành. Checklist Week 2–4 đã được đối chiếu với ba ảnh đề chi tiết ngày 21/10/2026; đây là kế hoạch, chưa phải kết quả thực hiện.
+Hiện nhóm đang chuẩn bị **Week 1**. Source PHP/MySQL, tài liệu và phân công đã có; kiểm tra source trên GitHub Actions đã thành công. Người triển khai đã xác nhận website mở được trên hosting cPanel; kiểm tra CRUD/DB và minh chứng hạ tầng còn chờ. Checklist Week 2–4 đã được đối chiếu với ba ảnh đề chi tiết ngày 21/10/2026; đây là kế hoạch, chưa phải kết quả thực hiện.
 
 Nguồn đối chiếu: đề Week 1 đã cung cấp trước đó; ảnh Week 2 `1000003653.jpg`, Week 3 `1000003654.jpg`, Week 4 `1000003655.jpg`. Các tên ảnh dùng để nhận diện đề đã đọc, không phải đường dẫn file đang lưu trong repo. Rubric và hồ sơ nộp cụ thể nằm trong checklist từng tuần.
 
@@ -12,7 +12,7 @@ Nguồn đối chiếu: đề Week 1 đã cung cấp trước đó; ảnh Week 2
 
 | Tuần | Trọng tâm theo đề | Đầu ra chính | Điểm tối đa / 10 | Trạng thái |
 |---|---|---|---:|---|
-| Week 1 | Infrastructure & Initial Deployment | Kiến trúc, server/network, app + DB chạy, README và phân công | 2,0 | Đang chuẩn bị; chưa đủ minh chứng triển khai |
+| Week 1 | Infrastructure & Initial Deployment | Kiến trúc, server/network, app + DB chạy, README và phân công | 2,0 | Website được báo truy cập được trên cPanel; chờ demo DB và minh chứng hạ tầng |
 | Week 2 | Containerization & CI/CD | Dockerfile, Compose, persistent volume, build–test–deploy từ commit mới | 2,5 | Chưa bắt đầu triển khai |
 | Week 3 | Monitoring, Security & Reliability | Logs theo thời gian, dashboard CPU/RAM/health, alert đã thử, bảo mật, backup/restore, playbook draft ≥2 sự cố | 2,5 | Chưa bắt đầu triển khai |
 | Week 4 | Final Demo & Troubleshooting | Bản tích hợp Week 1–3, triển khai từ server sạch, release/tag, playbook ≥3 sự cố, paper và video | 3,0 | Chưa thực hiện |
@@ -66,6 +66,6 @@ Khi nộp checkpoint, ghi thêm commit SHA hoặc link commit trong chỉ mục 
 
 ## Chuyển từ Week 1 sang Week 2
 
-Kế hoạch hiện tại là tạm nộp repo để báo tiến độ, xin xác nhận thời hạn bổ sung với giảng viên; khi có VPS sẽ bổ sung triển khai/demo Week 1 rồi dùng tiếp cùng VPS cho Week 2. Chưa ghi nhận giảng viên chấp thuận phần bổ sung. Các bước và cách lưu minh chứng xuyên suốt nằm trong [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md).
+Kế hoạch hiện tại là kiểm tra và ghi minh chứng app + DB trên hosting cPanel đã có, đối chiếu quyền OS/SSH/firewall với Week 1, rồi chọn môi trường đáp ứng Docker/Compose cho Week 2. VM/VPS là phương án bổ sung nếu hosting không đủ quyền; chưa quyết định thuê VPS. Nếu cần thay yêu cầu hạ tầng hoặc bổ sung muộn, trao đổi với giảng viên. Các bước nằm trong [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md).
 
 Hoàn tất server, truy cập từ client và bằng chứng ghi/đọc DB của Week 1; ghi môi trường thực tế. Sau đó sao lưu dữ liệu/cấu hình cần giữ, containerize cùng source này, cập nhật sơ đồ theo cấu trúc Docker, kiểm tra dữ liệu qua volume và xây dựng deployment tự động. Xác định cách chuyển dữ liệu và cổng dịch vụ khi chuyển từ cài trực tiếp sang Docker. Không coi việc có source hoặc có workflow test là đã triển khai thành công.

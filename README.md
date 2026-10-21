@@ -4,9 +4,9 @@
 
 Ứng dụng PHP/MySQL giúp người quản lý thêm món, xem thực đơn, sửa giá, đổi tình trạng còn/hết và xóa món. Tên hiển thị trong ứng dụng: **Bếp Nhà**.
 
-> **Trạng thái bàn giao:** Source và bộ tài liệu Week 1 đã được chuẩn bị. Chưa triển khai lên hosting/VPS của nhóm, chưa có URL ứng dụng và chưa có minh chứng cấu hình server. Sơ đồ bên dưới là **phương án thiết kế**, chưa phải hiện trạng triển khai. Các mục này cần được hoàn thành để đáp ứng đủ checkpoint Week 1.
+> **Trạng thái ngày 21/10/2026:** người triển khai xác nhận website tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình tài khoản admin trên hosting cPanel. Kiểm tra HTTP độc lập ngày 21/10/2026 xác nhận health endpoint trả 200 với status ok và trang đăng nhập trả 200. Chưa có ảnh/video demo ghi–đọc DB và minh chứng hạ tầng để kết luận hoàn tất Week 1. [Log kiểm tra truy cập](evidence/application/http-access-2026-10-21.md). Sơ đồ PNG bên dưới vẫn là **phương án Ubuntu/VM/VPS tham chiếu**, chưa phải sơ đồ hiện trạng hosting.
 
-**Kế hoạch hiện tại:** dùng repo này để nộp tiến độ; dự kiến thuê VPS, bổ sung triển khai và demo Week 1 rồi làm tiếp Week 2 trên cùng hệ thống. Phần bổ sung cần được giảng viên xác nhận thời hạn, chưa ghi nhận chấp thuận. Xem [kế hoạch triển khai và thu thập minh chứng](docs/DEPLOYMENT_PLAN.md).
+**Kế hoạch hiện tại:** tận dụng hosting cPanel để kiểm tra app + DB và thu minh chứng Week 1 ngay. Kiểm tra quyền OS/SSH/firewall và khả năng chạy Docker trước khi chọn môi trường cho phần hạ tầng và Week 2; chưa xác nhận phải thuê VPS. Xem [hướng dẫn cPanel](docs/CPANEL_SETUP.md) và [kế hoạch tiếp tục](docs/DEPLOYMENT_PLAN.md).
 
 **Đã kiểm tra source trên GitHub Actions:** PHP syntax, **14 validation checks** và **19 HTTP/MySQL integration checks** thành công với commit `4baaaa1`. [Xem run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926). Đây là môi trường test tạm, không phải server triển khai của nhóm.
 
@@ -18,7 +18,7 @@ Checklist Week 2–4 đã được đối chiếu đề chi tiết ngày 21/10/2
 
 | Tuần | Trọng tâm | Trạng thái hiện tại | Nơi theo dõi |
 |---|---|---|---|
-| Week 1 | Hạ tầng và triển khai ban đầu | Source/tài liệu/phân công đã có; kiểm tra source qua; còn triển khai và minh chứng server | [Checklist](docs/WEEK1_CHECKLIST.md) · [Minh chứng](evidence/week1/README.md) |
+| Week 1 | Hạ tầng và triển khai ban đầu | Website được báo đã truy cập được trên cPanel; chờ demo CRUD/DB và minh chứng hạ tầng | [Checklist](docs/WEEK1_CHECKLIST.md) · [Minh chứng](evidence/week1/README.md) |
 | Week 2 | Docker/Compose và CI/CD build–test–deploy | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK2_CHECKLIST.md) · [Minh chứng](evidence/week2/README.md) |
 | Week 3 | Monitoring, bảo mật, backup/restore và xử lý sự cố | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK3_CHECKLIST.md) · [Minh chứng](evidence/week3/README.md) |
 | Week 4 | Demo tổng thể, troubleshooting, báo cáo và bảo vệ | Chưa thực hiện; đã chuẩn bị checklist | [Checklist](docs/WEEK4_CHECKLIST.md) · [Minh chứng](evidence/week4/README.md) |
@@ -30,8 +30,9 @@ Checklist Week 2–4 đã được đối chiếu đề chi tiết ngày 21/10/2
 | Nội dung | Tài liệu |
 |---|---|
 | Kiến trúc đề xuất | [Sơ đồ PNG](architecture.png) · [Giải thích kiến trúc](docs/ARCHITECTURE.md) |
-| Cài đặt thủ công ban đầu | [Hướng dẫn Ubuntu](docs/MANUAL_SETUP.md) |
-| Bổ sung Week 1 và chuyển sang Week 2 | [Kế hoạch trên cùng VPS](docs/DEPLOYMENT_PLAN.md) |
+| Cài đặt trên hosting hiện có | [Hướng dẫn cPanel](docs/CPANEL_SETUP.md) |
+| Cài đặt Ubuntu/VM/VPS khi chọn môi trường đó | [Hướng dẫn Ubuntu](docs/MANUAL_SETUP.md) |
+| Bổ sung Week 1 và chuyển sang Week 2 | [Kế hoạch tiếp tục](docs/DEPLOYMENT_PLAN.md) |
 | Phạm vi và nguồn code | [Scope & source](docs/SCOPE_AND_SOURCE.md) |
 | Phân công nhóm | [Thành viên và phân công Week 1](docs/TEAM.md) |
 | Kịch bản demo ghi/đọc DB | [Demo runbook](docs/DEMO.md) |
@@ -57,7 +58,7 @@ Phạm vi chưa bao gồm đặt món, thanh toán, giao hàng và nhiều vai t
 - PHP **8.2 trở lên**, bật `pdo_mysql`, `mbstring` và session.
 - MySQL **8.0 trở lên** với bảng `dishes`, charset `utf8mb4`, InnoDB.
 - HTML/CSS/JavaScript thuần; không cần Node.js, npm, Composer hoặc framework để chạy ứng dụng.
-- Phương án Week 1: Apache + PHP + MySQL trên Ubuntu Server/VM/VPS. Môi trường thật sẽ được xác định sau.
+- Môi trường đang dùng: hosting cPanel theo xác nhận của người triển khai; các phiên bản PHP/DB, đường dẫn và quyền server còn cần ghi nhận. Phương án Ubuntu/VM/VPS được giữ làm tham chiếu cho phần hạ tầng theo đề.
 
 ![Kiến trúc dự kiến của DevopQLYFood](architecture.png)
 
@@ -129,9 +130,9 @@ Workflow hiện tại chỉ lint PHP, kiểm tra validation và thử CRUD trong
 | Mục | Trạng thái |
 |---|---|
 | Repository | [nathyu-le/DevopQLYFood](https://github.com/nathyu-le/DevopQLYFood) |
-| Website | Chưa triển khai — bổ sung sau |
-| Môi trường server / OS / CPU / RAM / disk | Chưa cấu hình — dùng biểu mẫu trong `evidence/server/README.md` |
-| Demo ghi/đọc dữ liệu từ máy khách | Chưa thực hiện trên server của nhóm |
+| Website | [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) — đã kiểm tra HTTP 200 trang đăng nhập và health; chờ ảnh/video demo CRUD |
+| Môi trường server / OS / CPU / RAM / disk | Hosting cPanel; phiên bản và quyền thực tế chờ xác minh theo `evidence/server/README.md` |
+| Demo ghi/đọc dữ liệu từ máy khách | Chờ thực hiện và lưu SELECT đối chiếu trên hosting |
 | Video / ảnh cấu hình / logs | Chưa thu thập — xem `evidence/README.md` |
 | Thành viên và phân công Week 1 | Đã cập nhật 3 thành viên trong [docs/TEAM.md](docs/TEAM.md) |
 

@@ -1,15 +1,25 @@
 # Minh chứng Week 1
 
-**Trạng thái:** chưa có minh chứng triển khai server nhóm; source đã qua kiểm tra CI với MySQL tạm.
+**Cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình admin trên hosting cPanel. Đây là xác nhận tiến độ; chưa có bộ ảnh/video/SELECT để đánh dấu demo thành công.
 
-**Phần dự kiến bổ sung khi có VPS:** OS/tài nguyên, user/SSH, firewall/ports, dịch vụ app + DB, truy cập từ client và chuỗi ghi/đọc dữ liệu. Sau đó dùng tiếp cùng VPS cho Week 2. Thời hạn bổ sung cần được giảng viên xác nhận; chưa ghi nhận đồng ý. [Kế hoạch thực hiện](../../docs/DEPLOYMENT_PLAN.md).
+| Hạng mục | Trạng thái |
+|---|---|
+| URL website | Người triển khai xác nhận truy cập được; kiểm tra độc lập trang đăng nhập HTTP 200 |
+| Health endpoint trên hosting | HTTP 200, `{"status":"ok"}` — xem [log truy cập](../application/http-access-2026-10-21.md) |
+| Đăng nhập, thêm món, tải lại và sửa giá | Chờ kiểm tra và lưu minh chứng |
+| SELECT cùng bản ghi trong DB hosting | Chờ thực hiện và lưu kết quả |
+| OS/tài nguyên, user/SSH, firewall/ports | Chờ thu thập, xác minh quyền của tài khoản hosting và đối chiếu đề |
+| Sơ đồ hiện trạng hosting | Chờ xác nhận đường dẫn, web server, PHP và DB thực tế |
 
-- [Cấu hình server: OS, tài nguyên, user/SSH, firewall, ports](../server/README.md).
-- [Ứng dụng và DB: client truy cập, thêm món, tải lại và SELECT](../application/README.md).
-- [Chỉ mục tổng và link kiểm tra source](../README.md).
+Bản source được gửi để upload: commit `ca9ef4fcd9214266af681963caf2076e44bc7767`. Cấu hình DB và admin được tạo riêng trên hosting, không lưu trong repo. Commit trên nhận diện bản source đã cung cấp, chưa xác nhận file đang chạy trên hosting trùng hoàn toàn nếu có chỉnh thêm thủ công.
+
+- [Thông tin server và quyền hosting](../server/README.md).
+- [Minh chứng app và DB cần thu](../application/README.md).
 - [Kịch bản demo](../../docs/DEMO.md).
+- [Hướng dẫn cPanel](../../docs/CPANEL_SETUP.md).
 - [Checklist Week 1](../../docs/WEEK1_CHECKLIST.md).
+- [Kế hoạch tiếp tục](../../docs/DEPLOYMENT_PLAN.md).
 
-Hải phụ trách kiểm tra chức năng/đối chiếu DB; Tùng phụ trách tổng hợp ảnh/log/video; hai người phối hợp kiểm tra khả năng tái hiện. Phân công đầy đủ ở [TEAM.md](../../docs/TEAM.md).
+Hải phụ trách kiểm tra chức năng/đối chiếu DB; Tùng phụ trách tổng hợp ảnh/log/video theo [phân công Week 1](../../docs/TEAM.md). Đây là phân công, chưa ghi nhận hai thành viên đã thực hiện demo.
 
-Khi nộp Week 1, bổ sung ngày thực hiện, môi trường thật, người thực hiện, link/file minh chứng và commit SHA của bản nộp. Các thư mục `server/` và `application/` nằm ở cấp trên để giữ các đường dẫn đã có.
+Mỗi minh chứng ghi ngày, môi trường, người thực hiện, file/link và commit tương ứng. Chưa có xác nhận của giảng viên về việc dùng hosting thay yêu cầu tự cài/cấu hình server hoặc thời hạn bổ sung.

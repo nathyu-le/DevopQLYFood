@@ -1,10 +1,12 @@
-# Thu thập cấu hình server sau khi có môi trường thật
+# Thu thập cấu hình hosting/server
 
-**Chưa thực hiện.** Đây là biểu mẫu và hướng dẫn, không phải kết quả chạy lệnh.
+**Cập nhật 21/10/2026:** website được người triển khai xác nhận mở được trên hosting cPanel. Thông số và quyền thực tế chưa được thu thập đủ; bảng dưới đây chưa phải kết quả chạy lệnh.
+
+Trên hosting, thu ảnh mục Server Information, PHP configuration, phiên bản DB trong phpMyAdmin và DocumentRoot trong Domains. Kiểm tra SSH/Terminal và quyền thực tế riêng; các mục quảng cáo gói hosting không thay thế thông số tài khoản đang dùng. Chỉ dùng lệnh quản trị Ubuntu bên dưới nếu đang làm trên môi trường Ubuntu có quyền phù hợp.
 
 | Thông tin | Giá trị thực tế |
 |---|---|
-| Loại môi trường (VM/VPS/khác được chấp nhận) | Chưa xác định |
+| Loại môi trường (VM/VPS/khác được chấp nhận) | Hosting cPanel theo người triển khai; mức đáp ứng yêu cầu hạ tầng chờ đối chiếu |
 | OS / version | Chưa ghi nhận |
 | CPU / RAM / disk | Chưa ghi nhận |
 | Web server / PHP / MySQL version | Chưa ghi nhận |
