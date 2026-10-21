@@ -2,6 +2,8 @@
 
 **Cập nhật 21/10/2026:** ứng dụng đang được nhóm dùng trên [hosting cPanel](https://thitruongmmo.com/DevopQLYFood/public/). Đã có [3 ảnh thêm/sửa và SELECT cùng bản ghi ID 9](../evidence/application/demo-2026-10-21.md). Tài liệu này hướng dẫn toàn bộ trình tự demo; ảnh hiện có chưa thể hiện mọi bước, nhất là tải lại/tìm kiếm và trạng thái trên web.
 
+**Bản trình bày cho một người:** [WEEK1_PRESENTATION.md](WEEK1_PRESENTATION.md) có lời đọc theo từng màn hình, dữ liệu demo và câu trả lời khi được hỏi.
+
 ## Chuẩn bị
 
 - Có URL server truy cập được từ máy khách và tài khoản quản trị cấu hình riêng.

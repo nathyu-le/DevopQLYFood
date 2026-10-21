@@ -36,6 +36,7 @@ Checklist Week 2–4 đã được đối chiếu đề chi tiết ngày 21/10/2
 | Phạm vi và nguồn code | [Scope & source](docs/SCOPE_AND_SOURCE.md) |
 | Phân công nhóm | [Thành viên và phân công Week 1](docs/TEAM.md) |
 | Kịch bản demo ghi/đọc DB | [Demo runbook](docs/DEMO.md) |
+| Lời trình bày cho một người | [Mở trang nào, thao tác gì và lời đọc](docs/WEEK1_PRESENTATION.md) |
 | Trạng thái theo rubric | [Week 1 checklist](docs/WEEK1_CHECKLIST.md) |
 | Minh chứng cần bổ sung | [Evidence index](evidence/README.md) |
 | Kiểm tra source | [Hướng dẫn và giới hạn kiểm tra](docs/VERIFICATION.md) · [GitHub Actions](https://github.com/nathyu-le/DevopQLYFood/actions) |
