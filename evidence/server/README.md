@@ -1,49 +1,56 @@
 # Cấu hình hosting đang dùng — 21/10/2026
 
-Nguồn: hai ảnh cPanel do người triển khai cung cấp và cho phép công khai để minh chứng Week 1. Đây là thông tin tài khoản đang dùng, không lấy cấu hình gói quảng cáo làm hiện trạng.
+Nguồn: ảnh cPanel do người triển khai cung cấp để minh chứng Week 1, cùng kết quả HTTP độc lập. Số liệu quota thuộc tài khoản hosting; không suy ra CPU, RAM hay dung lượng vật lý của toàn server.
 
 | Thông tin | Giá trị quan sát |
 |---|---|
 | Môi trường / gói | Hosting cPanel, Hosting Package `cp1` |
-| OS / kiến trúc | `linux`, `x86_64`; chưa xác định bản phân phối/version OS |
+| OS / kiến trúc | `linux`, `x86_64`; chưa xác định distro/version OS |
 | Kernel | `6.12.0-211.55.1.el10_2.x86_64` |
 | cPanel | Server Information báo `134.0 (build 61)` |
 | Web server | Apache Version `2.4.67` theo Server Information |
 | Database | `10.11.16-MariaDB-cll-lve` theo Server Information |
-| PHP / extensions | Chưa có ảnh phiên bản thực tế; source cần PHP 8.2+, pdo_mysql, mbstring và session |
-| Shared IP Address | `160.191.243.50`; đây là IP dùng chung hiển thị trong cPanel |
-| Domain / Document Root | `thitruongmmo.com`, `/public_html` theo Domains; đường dẫn trong tài khoản, chưa phải đường dẫn OS đầy đủ |
+| PHP của domain | PHP **8.2** (`ea-php82`), **Inherited**, theo MultiPHP Manager; chưa có patch version/extensions chi tiết |
+| CPU quota tài khoản | Statistics hiển thị **0 / 100 (0%)**, giới hạn CPU 100%; không ghi là 100 CPU hoặc suy ra cấu hình CPU vật lý |
+| RAM quota tài khoản | Physical Memory Usage **3.01 MB / 600 MB (0.5%)** tại thời điểm chụp |
+| Disk quota tài khoản | Disk Usage **3.41 MB / 1,000 MB (0.34%)** tại thời điểm chụp |
+| Shared IP Address | `160.191.243.50`, IP dùng chung theo cPanel |
+| Domain / Document Root | `thitruongmmo.com`, `/public_html`; chưa phải đường dẫn OS đầy đủ |
 | Website | `https://thitruongmmo.com/DevopQLYFood/public/` |
-| Redirects To / Force HTTPS Redirect | `Not Redirected` / `Off` ở thời điểm chụp; HTTPS vẫn truy cập được |
-| CPU / RAM / disk quota | Chưa có ảnh thông số tài khoản |
-| User / SSH / firewall | Chưa xác minh quyền, port listening hoặc chính sách firewall |
-| Source / DB host, port, datadir | Source suy ra theo URL ở `public_html/DevopQLYFood`, cần File Manager xác nhận; DB host/port/datadir chưa được cung cấp |
+| Redirects To / Force HTTPS Redirect | `Not Redirected` / `Off` lúc chụp; HTTPS vẫn truy cập được |
+| User / SSH / firewall | Có ảnh giao diện **SSH Access / Manage SSH Keys**. Chưa có đăng nhập shell thành công, user/quyền, SSH port hoặc cấu hình firewall |
+| Source / DB host, port, datadir | URL suy ra source ở `public_html/DevopQLYFood`, chờ File Manager xác nhận đường dẫn OS; DB host/port/datadir chưa được cung cấp |
+| Bảo vệ thư mục riêng | Người triển khai đã upload `.htaccess`; health/login/CSS 200, schema/README 403 theo [log kiểm tra](http-protection-2026-10-21.md) |
 
-## Ảnh gốc
+## Ảnh thông tin server và domain
 
 ![cPanel Server Information: cp1, Linux, Apache và MariaDB](2026-10-21-server-information.jpeg)
 
 ![cPanel Domains: public_html và Force HTTPS Redirect Off](2026-10-21-domain-root.jpeg)
 
-Chỉ ghi OS là Linux theo ảnh; chưa có bằng chứng đã cài Ubuntu, tạo user/SSH hoặc tự cấu hình firewall. Không suy ra quyền root hay Docker từ việc có cPanel.
+## Ảnh PHP và quota tài khoản
 
-## Kiểm tra vùng phục vụ web
+![MultiPHP Manager: domain thitruongmmo.com dùng PHP 8.2, Inherited](2026-10-21-php-version.jpeg)
 
-Kiểm tra GET các file source công khai, không chứa credentials, ngày 21/10/2026:
+**Cách đọc:** lấy giá trị PHP Version ở dòng domain, không lấy ô lựa chọn để thay đổi phiên bản. Ô PHP 5.1 trong ảnh là lựa chọn chưa áp dụng; dòng domain đang là PHP 8.2.
 
-| URL tương đối từ `/DevopQLYFood/` | Kết quả trước bản sửa |
-|---|---|
-| `public/health.php` | HTTP 200, `{"status":"ok"}` |
-| `database/schema.sql` | HTTP 200, nội dung khớp schema công khai của repo |
-| `README.md` | HTTP 200, tải được tài liệu của repo |
+![Statistics: quota RAM 600 MB, disk 1.000 MB và CPU 100](2026-10-21-account-statistics.jpeg)
 
-Kết quả cho thấy các thư mục cạnh `public/` còn nằm trong vùng HTTP truy cập được. Không kiểm tra hoặc công khai cấu hình thật. Repo đã bổ sung `.htaccess` để chỉ cho phép URL trong `public/`; **chưa xác nhận đã upload và có hiệu lực trên hosting**. [Cách cài và kiểm tra](../../docs/CPANEL_SETUP.md#bảo-vệ-layout-hiện-tại).
+Đây là số liệu sử dụng/giới hạn của tài khoản tại thời điểm chụp. Giá trị Database Disk Usage hiển thị 0 trong Statistics không thay thế truy vấn dữ liệu; app và ảnh SELECT đã chứng minh có bản ghi trên database.
 
-## Minh chứng cần bổ sung
+## Giao diện SSH Access
 
-- Ảnh PHP version/extensions và quota CPU/RAM/disk của tài khoản, không chụp credentials.
-- File Manager xác nhận vị trí source; DB host/port và vị trí dữ liệu nếu có quyền xem.
-- Quyền SSH/Terminal và chính sách ports/firewall; đối chiếu yêu cầu server của đề.
-- Sau khi upload `.htaccess`: health/login/assets vẫn hoạt động, schema và README trả 403.
+![cPanel SSH Access: giao diện quản lý khóa, chưa có kết quả đăng nhập shell](2026-10-21-ssh-access-menu.jpeg)
 
-Nếu bổ sung Ubuntu có quyền quản trị, ghi kết quả thật từ `cat /etc/os-release`, `lscpu`, `free -h`, `df -h`, `php --version`, `apache2 -v`, `mysql --version`, `ss -lnt` và `sudo ufw status verbose`. Chỉ chạy trên đúng môi trường/quyền tương ứng.
+Ảnh mới xác nhận giao diện quản lý khóa xuất hiện, không có kết quả tạo/authorize khóa hoặc đăng nhập SSH. Không đánh dấu tiêu chí user/SSH/firewall đã hoàn tất từ ảnh này.
+
+## Phần cần bổ sung theo đề
+
+- Distro/version OS và môi trường tự cài/cấu hình server phù hợp đề, hoặc xác nhận thay thế của giảng viên.
+- Đăng nhập shell thực tế bằng user được cấp quyền, phương thức/port SSH và quyền của user; không công khai private key/password.
+- Firewall/security group và port listening. Chặn URL bằng `.htaccess` không thay thế firewall hệ điều hành.
+- Đường dẫn OS đầy đủ, DB host/port và nơi lưu dữ liệu khi có quyền xem.
+
+Bước kiểm tra tiếp theo trên cPanel: tìm **Terminal** để xác minh có shell thực tế hay không. Có SSH Access để quản lý khóa chưa đủ để kết luận có quyền root, cài Ubuntu hoặc cấu hình firewall. Nếu bổ sung Ubuntu VM/VPS, dùng [MANUAL_SETUP.md](../../docs/MANUAL_SETUP.md) và ghi kết quả thật.
+
+Tham khảo: [cPanel MultiPHP Manager](https://docs.cpanel.net/cpanel/software/multiphp-manager-for-cpanel/), [Terminal](https://docs.cpanel.net/cpanel/advanced/terminal-in-cpanel/).
