@@ -10,6 +10,23 @@ Bản source đã cung cấp để upload: commit `ca9ef4fcd9214266af681963caf20
 
 URL đang dùng có dạng `/DevopQLYFood/public/`. Cần kiểm tra Domains và File Manager để xác nhận DocumentRoot cùng vị trí các thư mục riêng; chưa kết luận cấu hình ngoài public đã được bảo vệ chỉ vì ứng dụng truy cập được.
 
+## Bảo vệ layout hiện tại
+
+1. Trong cPanel File Manager, mở `public_html/DevopQLYFood` — thư mục chứa `app`, `config`, `database`, `public`. Bật **Settings → Show Hidden Files (dotfiles)**.
+2. Tải [file `.htaccess` trong repo](../.htaccess) vào đúng thư mục đó. Nếu tải về tên `cpanel-project.htaccess`, đổi tên thành **`.htaccess`**. Không đặt vào `public/` hoặc `public_html/` của toàn domain. Nếu đã có `.htaccess`, tải bản cũ về máy trước và ghép các dòng dưới vào đầu file; cần xem nội dung trước khi ghi đè cấu hình khác.
+
+```apache
+RewriteEngine On
+RewriteRule !^public(?:/|$) - [F,L]
+```
+
+Quy tắc chạy trong thư mục dự án: chỉ cho phép HTTP với đường dẫn bắt đầu `public/` hoặc chính thư mục `public`. Các `require` PHP đọc config/app từ ổ đĩa vẫn hoạt động.
+
+3. Kiểm tra `/DevopQLYFood/public/health.php` trả 200/status ok, login và CSS/JS vẫn tải được. `/DevopQLYFood/database/schema.sql`, `/DevopQLYFood/README.md` và `/DevopQLYFood/` phải trả **403**. Không mở file config thật để chụp minh chứng.
+4. Nếu website trả 500 sau khi thêm file, gỡ đúng các dòng vừa thêm/khôi phục bản đã tải về, rồi hỏi hosting về `mod_rewrite` và quyền `AllowOverride FileInfo`, hoặc chuyển domain/subdomain sang DocumentRoot `public/`. Nếu schema vẫn trả 200, bản chặn chưa có hiệu lực.
+
+**Phạm vi kiểm tra bản sửa:** đối chiếu quy tắc với tài liệu Apache và kiểm tra pattern cho các đường dẫn public/private. Môi trường soạn không có Apache; chưa chạy integration Apache hoặc xác nhận rule có hiệu lực trên hosting. Chỉ đánh dấu hoàn tất sau bước kiểm tra HTTP thực tế.
+
 ## Database và PHP
 
 1. Tạo DB mới và user riêng trong Manage My Databases/MySQL Databases hoặc Database Wizard; ghi đầy đủ tên có prefix cPanel.
@@ -39,3 +56,6 @@ URL đang dùng có dạng `/DevopQLYFood/public/`. Cần kiểm tra Domains và
 - [cPanel Domains](https://docs.cpanel.net/cpanel/domains/domains/)
 - [cPanel Manage My Databases](https://docs.cpanel.net/cpanel/databases/manage-my-databases/)
 - [PHP password_hash](https://www.php.net/manual/en/function.password-hash.php)
+
+- [Apache RewriteRule F/403](https://httpd.apache.org/docs/2.4/rewrite/flags.html#flag_f)
+- [Apache .htaccess và AllowOverride](https://httpd.apache.org/docs/2.4/howto/htaccess.html)

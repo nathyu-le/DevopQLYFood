@@ -90,6 +90,8 @@ php -S 127.0.0.1:8080 -t public
 
 Mở `http://127.0.0.1:8080`. Đây là PHP development server để kiểm tra cục bộ, không thay cho triển khai Apache và minh chứng truy cập server từ máy khách.
 
+**Cần áp dụng trên hosting:** kiểm tra ngày 21/10/2026 thấy schema và README ở thư mục cha `public/` còn tải được qua HTTP. Repo có `.htaccess` để chỉ phục vụ `public/` cho layout cPanel hiện tại; cần upload cạnh `public/` và kiểm tra health 200, schema/README 403 theo [hướng dẫn cPanel](docs/CPANEL_SETUP.md#bảo-vệ-layout-hiện-tại). Chưa xác nhận bản chặn đã có hiệu lực trên hosting.
+
 ## 4. Database
 
 - [database/schema.sql](database/schema.sql): tạo bảng, khóa chính, chỉ mục và ràng buộc.
