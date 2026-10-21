@@ -1,4 +1,15 @@
-# Chỉ mục minh chứng Week 1
+# Chỉ mục minh chứng toàn dự án
+
+| Checkpoint | Nơi cập nhật | Trạng thái |
+|---|---|---|
+| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Chưa có minh chứng triển khai server nhóm |
+| Week 2 | [week2/](week2/README.md) | Chưa có minh chứng Docker/CI/CD triển khai |
+| Week 3 | [week3/](week3/README.md) | Chưa có minh chứng monitoring/security/backup/restore |
+| Week 4 | [week4/](week4/README.md) | Chưa có demo tổng thể hoặc báo cáo cuối kỳ |
+
+Week 1: Nguyễn Phước Hải kiểm tra chức năng và đối chiếu DB; Lê Quang Tùng tổng hợp ảnh/log/video demo; cả hai phối hợp hoàn thiện minh chứng. Xem [phân công](../docs/TEAM.md).
+
+## Minh chứng Week 1
 
 **Chưa thu thập minh chứng triển khai thật.** Không có ảnh server, video hoặc logs triển khai được dựng giả trong thư mục này.
 

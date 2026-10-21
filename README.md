@@ -1,12 +1,25 @@
 # DevopQLYFood · Website quản lý thực đơn quán ăn
 
-**DevOps Final Project 2026 · Week 1 — Infrastructure Setup & Initial Deployment**
+**DevOps Final Project 2026 · Lộ trình 4 tuần · Checkpoint hiện tại: Week 1**
 
 Ứng dụng PHP/MySQL giúp người quản lý thêm món, xem thực đơn, sửa giá, đổi tình trạng còn/hết và xóa món. Tên hiển thị trong ứng dụng: **Bếp Nhà**.
 
 > **Trạng thái bàn giao:** Source và bộ tài liệu Week 1 đã được chuẩn bị. Chưa triển khai lên hosting/VPS của nhóm, chưa có URL ứng dụng và chưa có minh chứng cấu hình server. Sơ đồ bên dưới là **phương án thiết kế**, chưa phải hiện trạng triển khai. Các mục này cần được hoàn thành để đáp ứng đủ checkpoint Week 1.
 
 **Đã kiểm tra source trên GitHub Actions:** PHP syntax, **14 validation checks** và **19 HTTP/MySQL integration checks** thành công với commit `4baaaa1`. [Xem run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926). Đây là môi trường test tạm, không phải server triển khai của nhóm.
+
+## Tiến độ cả dự án
+
+**Cả 4 tuần dùng chung repository này.** Source ứng dụng được cập nhật tiếp trong `app/`, `public/`, `database/` và `config/`; tiến độ, tài liệu và minh chứng được ghi theo từng checkpoint. [Xem lộ trình và nơi cập nhật](docs/ROADMAP.md).
+
+| Tuần | Trọng tâm | Trạng thái hiện tại | Nơi theo dõi |
+|---|---|---|---|
+| Week 1 | Hạ tầng và triển khai ban đầu | Source/tài liệu/phân công đã có; kiểm tra source qua; còn triển khai và minh chứng server | [Checklist](docs/WEEK1_CHECKLIST.md) · [Minh chứng](evidence/week1/README.md) |
+| Week 2 | Docker/Compose và CI/CD build–test–deploy | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK2_CHECKLIST.md) · [Minh chứng](evidence/week2/README.md) |
+| Week 3 | Monitoring, bảo mật, backup/restore và xử lý sự cố | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK3_CHECKLIST.md) · [Minh chứng](evidence/week3/README.md) |
+| Week 4 | Demo tổng thể, troubleshooting, báo cáo và bảo vệ | Chưa thực hiện; đã chuẩn bị checklist | [Checklist](docs/WEEK4_CHECKLIST.md) · [Minh chứng](evidence/week4/README.md) |
+
+**Nhóm:** Lê Đình Nhật Huy, Nguyễn Phước Hải, Lê Quang Tùng. [Xem phân công Week 1](docs/TEAM.md).
 
 ## Đi nhanh đến phần cần xem
 
@@ -15,7 +28,7 @@
 | Kiến trúc đề xuất | [Sơ đồ PNG](architecture.png) · [Giải thích kiến trúc](docs/ARCHITECTURE.md) |
 | Cài đặt thủ công ban đầu | [Hướng dẫn Ubuntu](docs/MANUAL_SETUP.md) |
 | Phạm vi và nguồn code | [Scope & source](docs/SCOPE_AND_SOURCE.md) |
-| Phân công nhóm | [Bảng phân công dự kiến](docs/TEAM.md) |
+| Phân công nhóm | [Thành viên và phân công Week 1](docs/TEAM.md) |
 | Kịch bản demo ghi/đọc DB | [Demo runbook](docs/DEMO.md) |
 | Trạng thái theo rubric | [Week 1 checklist](docs/WEEK1_CHECKLIST.md) |
 | Minh chứng cần bổ sung | [Evidence index](evidence/README.md) |
@@ -87,8 +100,8 @@ Giá được lưu bằng `DECIMAL(12,0)`; ứng dụng chấp nhận số nguy�
 | `app/bootstrap.php` | Kết nối PDO, session, CSRF, kiểm tra dữ liệu và escape HTML |
 | `config/config.example.php` | Mẫu cấu hình không có thông tin đăng nhập thật |
 | `database/` | Schema và dữ liệu mẫu |
-| `docs/` | Kiến trúc, cài đặt, phân công, demo và checklist Week 1 |
-| `evidence/` | Chỉ mục minh chứng; bổ sung ảnh/log/video thật sau triển khai |
+| `docs/` | Kiến trúc, cài đặt, phân công, demo, lộ trình và checklist Week 1–4 |
+| `evidence/` | Chỉ mục chung và các mục week1–week4; bổ sung ảnh/log/video thật theo tuần |
 | `tests/` | Kiểm tra validation và CRUD HTTP với MySQL test riêng |
 | `tools/configure.php` | Công cụ cấu hình bằng CLI |
 | `.github/workflows/source-checks.yml` | Kiểm tra source trên GitHub Actions; **không triển khai ứng dụng** |
@@ -115,7 +128,7 @@ Workflow hiện tại chỉ lint PHP, kiểm tra validation và thử CRUD trong
 | Môi trường server / OS / CPU / RAM / disk | Chưa cấu hình — dùng biểu mẫu trong `evidence/server/README.md` |
 | Demo ghi/đọc dữ liệu từ máy khách | Chưa thực hiện trên server của nhóm |
 | Video / ảnh cấu hình / logs | Chưa thu thập — xem `evidence/README.md` |
-| Tên thành viên và phân công chính thức | Chờ nhóm điền vào `docs/TEAM.md` |
+| Thành viên và phân công Week 1 | Đã cập nhật 3 thành viên trong [docs/TEAM.md](docs/TEAM.md); nhật ký thực hiện cập nhật sau khi có kết quả |
 
 ## 8. Nguồn và đóng góp
 
