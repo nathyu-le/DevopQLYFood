@@ -1,0 +1,4 @@
+# Install beside public/ for the cPanel public_html/DevopQLYFood layout.
+# PHP filesystem includes are unaffected; only HTTP requests are restricted.
+RewriteEngine On
+RewriteRule !^public(?:/|$) - [F,L]
