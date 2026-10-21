@@ -1,0 +1,50 @@
+name: Source checks (not deployment)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          # Ephemeral CI-only values. Never reuse these for a deployment.
+          MYSQL_ROOT_PASSWORD: ci-root-only
+          MYSQL_DATABASE: restaurant_menu_test
+          MYSQL_USER: menu_test
+          MYSQL_PASSWORD: ci-database-only
+        ports: [3306:3306]
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PHP runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq php-cli php-mysql php-mbstring
+          php --version
+      - name: Check PHP syntax
+        run: find app config public tools tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Check input validation
+        run: php tests/validation.php
+      - name: Check real CRUD with an isolated MySQL database
+        env:
+          RUN_INTEGRATION_TESTS: '1'
+          TEST_DB_HOST: 127.0.0.1
+          TEST_DB_PORT: '3306'
+          TEST_DB_NAME: restaurant_menu_test
+          TEST_DB_USER: menu_test
+          TEST_DB_PASSWORD: ci-database-only
+        run: python3 tests/integration.py
