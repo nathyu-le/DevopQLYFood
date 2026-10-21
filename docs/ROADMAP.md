@@ -66,4 +66,6 @@ Khi nộp checkpoint, ghi thêm commit SHA hoặc link commit trong chỉ mục 
 
 ## Chuyển từ Week 1 sang Week 2
 
-Hoàn tất server, truy cập từ client và bằng chứng ghi/đọc DB của Week 1; ghi môi trường thực tế. Sau đó containerize cùng source này, cập nhật sơ đồ theo cấu trúc Docker, kiểm tra dữ liệu qua volume và xây dựng deployment tự động. Không coi việc có source hoặc có workflow test là đã triển khai thành công.
+Kế hoạch hiện tại là tạm nộp repo để báo tiến độ, xin xác nhận thời hạn bổ sung với giảng viên; khi có VPS sẽ bổ sung triển khai/demo Week 1 rồi dùng tiếp cùng VPS cho Week 2. Chưa ghi nhận giảng viên chấp thuận phần bổ sung. Các bước và cách lưu minh chứng xuyên suốt nằm trong [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md).
+
+Hoàn tất server, truy cập từ client và bằng chứng ghi/đọc DB của Week 1; ghi môi trường thực tế. Sau đó sao lưu dữ liệu/cấu hình cần giữ, containerize cùng source này, cập nhật sơ đồ theo cấu trúc Docker, kiểm tra dữ liệu qua volume và xây dựng deployment tự động. Xác định cách chuyển dữ liệu và cổng dịch vụ khi chuyển từ cài trực tiếp sang Docker. Không coi việc có source hoặc có workflow test là đã triển khai thành công.

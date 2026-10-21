@@ -20,7 +20,7 @@ Các trường: tên món, danh mục, giá VNĐ, mô tả, tình trạng. Khôn
 - Thư viện chạy chính là các phần mở rộng PHP và MySQL; giao diện dùng CSS/JS thuần, biểu tượng SVG đơn giản do source định nghĩa.
 - AI hỗ trợ chuẩn bị bản đầu của ứng dụng, schema, kiểm tra source và tài liệu. Thành viên phải review, hiểu, thử chạy và giải thích được nội dung trước khi bảo vệ.
 - Nhóm tự ghi nhận các phần thực tế đã làm: cấu hình môi trường, chỉnh source, chạy thử, triển khai, chụp minh chứng và xử lý lỗi. Không ghi một việc là “đã làm” chỉ vì có hướng dẫn.
-- Không tạo commit thay tên thành viên hoặc ghi nhật ký đóng góp giả. Phân công Week 1 đã ghi tên thật trong `TEAM.md`; nhật ký đóng góp cần cập nhật bằng hoạt động và commit/evidence thật.
+- Phân công Week 1 ghi tên thật trong `TEAM.md`; người thực hiện và kết quả được ghi cùng commit/minh chứng của từng công việc. Không tạo commit thay tên thành viên hoặc khai đóng góp chưa thực hiện.
 
 ## Tài liệu tham khảo kỹ thuật
 

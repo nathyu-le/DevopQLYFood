@@ -9,6 +9,8 @@
 
 Week 1: Nguyễn Phước Hải kiểm tra chức năng và đối chiếu DB; Lê Quang Tùng tổng hợp ảnh/log/video demo; cả hai phối hợp hoàn thiện minh chứng. Xem [phân công](../docs/TEAM.md).
 
+Nhóm dự kiến thuê VPS để bổ sung triển khai/demo Week 1, sau đó làm tiếp Week 2 trên cùng hệ thống. Lưu minh chứng ngay trong quá trình thực hiện và dẫn về đúng checkpoint; phần bổ sung chưa được ghi nhận là đã được giảng viên chấp thuận. Xem [kế hoạch](../docs/DEPLOYMENT_PLAN.md).
+
 ## Minh chứng Week 1
 
 **Chưa thu thập minh chứng triển khai thật.** Không có ảnh server, video hoặc logs triển khai được dựng giả trong thư mục này.

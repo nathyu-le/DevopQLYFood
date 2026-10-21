@@ -6,11 +6,15 @@
 
 > **Trạng thái bàn giao:** Source và bộ tài liệu Week 1 đã được chuẩn bị. Chưa triển khai lên hosting/VPS của nhóm, chưa có URL ứng dụng và chưa có minh chứng cấu hình server. Sơ đồ bên dưới là **phương án thiết kế**, chưa phải hiện trạng triển khai. Các mục này cần được hoàn thành để đáp ứng đủ checkpoint Week 1.
 
+**Kế hoạch hiện tại:** dùng repo này để nộp tiến độ; dự kiến thuê VPS, bổ sung triển khai và demo Week 1 rồi làm tiếp Week 2 trên cùng hệ thống. Phần bổ sung cần được giảng viên xác nhận thời hạn, chưa ghi nhận chấp thuận. Xem [kế hoạch triển khai và thu thập minh chứng](docs/DEPLOYMENT_PLAN.md).
+
 **Đã kiểm tra source trên GitHub Actions:** PHP syntax, **14 validation checks** và **19 HTTP/MySQL integration checks** thành công với commit `4baaaa1`. [Xem run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926). Đây là môi trường test tạm, không phải server triển khai của nhóm.
 
 ## Tiến độ cả dự án
 
 **Cả 4 tuần dùng chung repository này.** Source ứng dụng được cập nhật tiếp trong `app/`, `public/`, `database/` và `config/`; tiến độ, tài liệu và minh chứng được ghi theo từng checkpoint. [Xem lộ trình và nơi cập nhật](docs/ROADMAP.md).
+
+Checklist Week 2–4 đã được đối chiếu đề chi tiết ngày 21/10/2026, có rubric, sản phẩm nộp và trình tự demo. Các mục chưa thực hiện vẫn để trống.
 
 | Tuần | Trọng tâm | Trạng thái hiện tại | Nơi theo dõi |
 |---|---|---|---|
@@ -27,6 +31,7 @@
 |---|---|
 | Kiến trúc đề xuất | [Sơ đồ PNG](architecture.png) · [Giải thích kiến trúc](docs/ARCHITECTURE.md) |
 | Cài đặt thủ công ban đầu | [Hướng dẫn Ubuntu](docs/MANUAL_SETUP.md) |
+| Bổ sung Week 1 và chuyển sang Week 2 | [Kế hoạch trên cùng VPS](docs/DEPLOYMENT_PLAN.md) |
 | Phạm vi và nguồn code | [Scope & source](docs/SCOPE_AND_SOURCE.md) |
 | Phân công nhóm | [Thành viên và phân công Week 1](docs/TEAM.md) |
 | Kịch bản demo ghi/đọc DB | [Demo runbook](docs/DEMO.md) |
