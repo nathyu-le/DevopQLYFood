@@ -1,17 +1,26 @@
 # Kế hoạch hoàn thiện Week 1 từ hosting và tiếp tục Week 2
 
-**Cập nhật: 21/10/2026.** Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được trên hosting cPanel sau khi cấu hình admin. Đã đối chiếu 3 ảnh thêm/sửa và SELECT cùng món ID 9. [Minh chứng app + DB](../evidence/application/demo-2026-10-21.md). Tiếp theo bổ sung ảnh web thấy rõ trạng thái, bước tải lại/tìm kiếm hoặc video liên tục, đã bổ sung PHP 8.2 và quota tài khoản; `.htaccess` đã được upload và kiểm tra health/login/CSS 200, schema/README 403. Đã có ảnh giao diện SSH Access; còn xác minh distro/version OS, đăng nhập shell/quyền user và firewall theo đề. Chưa có VPS, chưa quyết định phải thuê thêm và chưa đánh dấu hoàn tất Week 1.
+**Quyết định ngày 21/10/2026:** dùng hosting cPanel gói **cp1** để demo app + DB và trình bày tiến độ Week 1. Người triển khai xác nhận cp1 không hỗ trợ Terminal. Phần tự cài/cấu hình OS, user/SSH, firewall và ports **tạm hoãn bổ sung**, giữ trạng thái chưa hoàn thành.
 
-## Làm ngay trên hosting hiện có
+Ứng dụng đang truy cập tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/). Đã có [ảnh thêm/sửa và SELECT cùng ID 9](../evidence/application/demo-2026-10-21.md), [thông số PHP/quota](../evidence/server/README.md) và [log chặn HTTP sau upload .htaccess](../evidence/server/http-protection-2026-10-21.md). Còn có thể bổ sung ảnh tải lại/tìm kiếm và cột trạng thái web khi demo.
 
-1. Đăng nhập; thêm “Cơm gà Demo Week 1” giá 45.000đ, tải lại và tìm đúng món.
-2. SELECT cùng bản ghi trong phpMyAdmin, đối chiếu ID/tên/giá/trạng thái.
-3. Sửa thành 50.000đ và hết món; tải lại, SELECT lần nữa; chụp/quay các kết quả.
-4. Đã thu Server Information, Domains, MultiPHP Manager, Statistics và SSH Access. Đã kiểm tra `.htaccess`: health/login/CSS 200, schema/README 403. Tiếp theo xác minh DB host/port và quyền đăng nhập shell/Terminal. Chưa coi IP Blocker là bằng chứng đã tự cấu hình firewall hệ điều hành.
-5. Bổ sung các thông số còn thiếu vào sơ đồ hosting; đối chiếu yêu cầu cài Ubuntu Server/VM, EC2 hoặc VPS. Phần hosting không có quyền thực hiện cần bổ sung môi trường phù hợp hoặc được giảng viên chấp nhận thay thế.
-6. Kiểm tra hosting có chạy được Docker/Compose và đáp ứng pipeline/monitoring hay không trước khi chọn môi trường Week 2.
+## Week 1: trình bày trên cp1
 
-[Hướng dẫn cPanel](CPANEL_SETUP.md) · [Kịch bản demo](DEMO.md).
+1. Giữ website và database hiện tại để demo, giải thích sơ đồ và thao tác thêm/sửa/đọc dữ liệu theo [DEMO.md](DEMO.md).
+2. Dùng bộ ảnh/log hiện có làm minh chứng; ghi rõ phần đã làm và phần hạ tầng tạm hoãn.
+3. Tạm dừng tìm Terminal hoặc thử SSH trên cp1 theo quyết định của nhóm. Giao diện quản lý SSH keys chưa chứng minh có shell; khả năng SSH riêng ngoài Terminal chưa được kiểm chứng.
+4. Phần yêu cầu tự cài/cấu hình server vẫn nằm trong checklist. Kế hoạch tạm hoãn của nhóm chưa phải xác nhận giảng viên đồng ý thay tiêu chí hoặc gia hạn.
+
+## Week 2: xem xét môi trường mới
+
+Chưa chọn hoặc mua VPS/gói hosting mới. Hai phương án đang xem xét:
+
+| Phương án | Điều kiện cần xác nhận trước khi chọn |
+|---|---|
+| VPS | Quyền cài/chạy Docker và Compose, user/SSH, cấu hình firewall/ports, lưu dữ liệu bền vững và kết nối deploy từ runner |
+| Gói hosting khác | Nhà cung cấp xác nhận tài khoản thực sự chạy được Docker/Compose, có quyền và cách kết nối để pipeline deploy tự động, có network/volume phù hợp; chỉ nâng gói có Terminal chưa đủ kết luận đáp ứng |
+
+Sau khi chọn môi trường, bổ sung phần hạ tầng còn thiếu của Week 1 rồi triển khai Docker/Compose và pipeline theo [WEEK2_CHECKLIST.md](WEEK2_CHECKLIST.md). Dùng tiếp cùng repo, source và domain nếu phù hợp; sao lưu DB cùng cấu hình cục bộ ra nơi riêng trước khi chuyển. Không đưa credentials hoặc bản dump thật vào Git.
 
 ## Phương án nếu cần bổ sung VM/VPS
 

@@ -2,6 +2,8 @@
 
 **Trạng thái: chưa bắt đầu triển khai.** Đã đối chiếu ảnh đề chi tiết “DEVOPS FINAL PROJECT — WEEK 2: Containerization & CI/CD Automation” (`1000003653.jpg`), ngày 21/10/2026. Mục tiêu: **Automated Deployment Pipeline**. Điểm tối đa: **2,5/10**, demo nhóm và bảo vệ kỹ thuật.
 
+**Môi trường chưa chốt:** Week 1 đang demo trên cp1; người triển khai xác nhận gói này không hỗ trợ Terminal và tạm hoãn phần OS/user/SSH/firewall. Khi bắt đầu Week 2 sẽ xem xét VPS hoặc hosting khác. Môi trường được chọn phải thực sự chạy được Docker/Compose và cho pipeline deploy tự động; chỉ có Terminal/SSH chưa đủ kết luận đáp ứng. [Kế hoạch chuyển môi trường](DEPLOYMENT_PLAN.md).
+
 ## Mục tiêu
 
 Đưa cùng ứng dụng PHP/MySQL vào Docker/Compose, bảo đảm dữ liệu bền vững và tự động build → test → deploy khi có commit mới.
