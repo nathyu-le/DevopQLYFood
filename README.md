@@ -128,7 +128,7 @@ Workflow hiện tại chỉ lint PHP, kiểm tra validation và thử CRUD trong
 | Môi trường server / OS / CPU / RAM / disk | Chưa cấu hình — dùng biểu mẫu trong `evidence/server/README.md` |
 | Demo ghi/đọc dữ liệu từ máy khách | Chưa thực hiện trên server của nhóm |
 | Video / ảnh cấu hình / logs | Chưa thu thập — xem `evidence/README.md` |
-| Thành viên và phân công Week 1 | Đã cập nhật 3 thành viên trong [docs/TEAM.md](docs/TEAM.md); nhật ký thực hiện cập nhật sau khi có kết quả |
+| Thành viên và phân công Week 1 | Đã cập nhật 3 thành viên trong [docs/TEAM.md](docs/TEAM.md) |
 
 ## 8. Nguồn và đóng góp
 

@@ -36,12 +36,4 @@ Huy chuẩn bị môi trường và quyền truy cập cần thiết cho Hải/T
 - [Minh chứng Week 1](../evidence/week1/README.md).
 - Phân công trên áp dụng cho Week 1. Khi nhóm thống nhất công việc của tuần tiếp theo, bổ sung phần phân công tương ứng trong file này, giữ lại phân công của tuần trước.
 
-## Nhật ký đóng góp thực tế
-
-Chưa ghi nhận thêm việc đã hoàn thành theo từng người. Khi có kết quả, mỗi thành viên bổ sung dòng có ngày, nội dung đã thực hiện, commit hoặc minh chứng và kết quả kiểm tra. Không coi bảng phân công là nhật ký hoàn thành.
-
-| Ngày | Thành viên | Công việc đã thực hiện | Commit / minh chứng | Kết quả |
-|---|---|---|---|---|
-| Chưa ghi nhận | Chưa ghi nhận | Bổ sung sau khi thực hiện | Chưa có | Chờ cập nhật |
-
 Mỗi người cần hiểu cấu trúc hệ thống, vị trí app/database và giải thích được phần việc của mình khi bảo vệ.

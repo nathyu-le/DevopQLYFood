@@ -20,7 +20,7 @@ Hiện nhóm đang chuẩn bị **Week 1**. Source PHP/MySQL, tài liệu và ph
 | Nội dung | Đường dẫn |
 |---|---|
 | Tổng quan hiện tại và link nộp | `README.md` |
-| Thành viên, phân công, nhật ký thực tế | `docs/TEAM.md` |
+| Thành viên và phân công theo tuần | `docs/TEAM.md` |
 | Theo dõi Week 1 | `docs/WEEK1_CHECKLIST.md` và `evidence/week1/` |
 | Theo dõi Week 2 | `docs/WEEK2_CHECKLIST.md` và `evidence/week2/` |
 | Theo dõi Week 3 | `docs/WEEK3_CHECKLIST.md` và `evidence/week3/` |
@@ -50,7 +50,7 @@ Chỉ tạo cấu hình thật sau khi chọn môi trường và triển khai t�
 3. Commit theo nội dung công việc; không sửa tác giả hoặc thời điểm để giả lập đóng góp.
 4. Đặt ảnh/log hoặc link video vào thư mục evidence của tuần, có ngày, môi trường và người thực hiện.
 5. Đánh dấu checklist khi đã có kết quả và minh chứng đáp ứng yêu cầu.
-6. Cập nhật trạng thái và link ở README, thêm nhật ký theo người thực hiện trong `TEAM.md`.
+6. Cập nhật trạng thái và link ở README, điều chỉnh phân công trong `TEAM.md`; ghi người thực hiện cùng minh chứng của từng đầu việc.
 
 Khi nộp checkpoint, ghi thêm commit SHA hoặc link commit trong chỉ mục minh chứng. Nhờ vậy giảng viên vẫn xem lại đúng bản Week 1 sau khi repo tiếp tục phát triển ở Week 2–4. Chỉ tạo tag checkpoint hoàn thành sau khi nhóm kiểm tra đủ sản phẩm; chưa gắn tag hoàn tất Week 1 ở thời điểm hiện tại.
 
