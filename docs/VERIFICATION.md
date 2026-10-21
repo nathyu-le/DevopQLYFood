@@ -14,15 +14,17 @@ File `.github/workflows/source-checks.yml` dùng runner Ubuntu và MySQL tạm �
 
 ## Cách xem kết quả thật
 
-Sau khi source được đưa lên GitHub, mở [Actions](https://github.com/nathyu-le/DevopQLYFood/actions), chọn workflow **Source checks (not deployment)**, mở từng step và kiểm tra kết quả của đúng commit. Chỉ ghi “passed” sau khi run đã hoàn tất thành công.
+Mở [Actions](https://github.com/nathyu-le/DevopQLYFood/actions), chọn workflow **Source checks (not deployment)**, mở từng step và kiểm tra kết quả của đúng commit. Chỉ ghi “passed” sau khi run đã hoàn tất thành công.
 
-Ở thời điểm đóng gói bản chuẩn bị: kiểm tra cú pháp JavaScript bằng `node --check` và cú pháp hai script Python bằng `py_compile` đã thành công. Môi trường soạn chưa có PHP/MySQL nên chưa thực thi PHP hoặc bài kiểm tra CRUD. Workflow được chuẩn bị để chạy các kiểm tra đó sau khi có quyền ghi repository; chưa có kết quả Actions để báo là passed.
+**Kết quả đã xác minh ngày 21/10/2026:** [run 39529399926](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926), commit `4baaaa1da776c714098e35ccc5e275c5495d7170`, kết luận **success**. Runner Ubuntu 24.04, PHP CLI 8.3.6 và dịch vụ MySQL 8.0 tạm. Log xác nhận tất cả file PHP hợp lệ, **14 validation checks passed** và **19 HTTP/MySQL integration checks passed**.
+
+Kiểm tra cú pháp JavaScript bằng `node --check` và cú pháp hai script Python bằng `py_compile` cũng đã thành công trong môi trường soạn. PHP/MySQL được thực thi trên runner GitHub Actions; chưa chạy trên server của nhóm.
 
 | Loại kiểm chứng | Trạng thái / nơi đối chiếu |
 |---|---|
 | JavaScript syntax / Python syntax | Đã kiểm tra thành công trong môi trường soạn |
-| PHP syntax và validation | Chưa thực thi; xem Actions sau khi upload source |
-| CRUD với MySQL tạm | Chưa thực thi; xem step “Check real CRUD with an isolated MySQL database” sau khi upload |
+| PHP syntax và validation | Thành công — tất cả file PHP hợp lệ và 14 kiểm tra validation qua |
+| CRUD với MySQL tạm | Thành công — 19 kiểm tra HTTP/MySQL qua |
 | Server của nhóm | Chưa triển khai, chưa có minh chứng |
 | Apache/SSH/firewall của nhóm | Chưa cấu hình, chưa có minh chứng |
 | Demo từ client đến server nhóm | Chưa thực hiện |

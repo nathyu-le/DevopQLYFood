@@ -6,6 +6,8 @@
 
 > **Trạng thái bàn giao:** Source và bộ tài liệu Week 1 đã được chuẩn bị. Chưa triển khai lên hosting/VPS của nhóm, chưa có URL ứng dụng và chưa có minh chứng cấu hình server. Sơ đồ bên dưới là **phương án thiết kế**, chưa phải hiện trạng triển khai. Các mục này cần được hoàn thành để đáp ứng đủ checkpoint Week 1.
 
+**Đã kiểm tra source trên GitHub Actions:** PHP syntax, **14 validation checks** và **19 HTTP/MySQL integration checks** thành công với commit `4baaaa1`. [Xem run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926). Đây là môi trường test tạm, không phải server triển khai của nhóm.
+
 ## Đi nhanh đến phần cần xem
 
 | Nội dung | Tài liệu |
