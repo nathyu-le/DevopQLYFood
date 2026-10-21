@@ -18,7 +18,7 @@ Nguồn: ảnh cPanel do người triển khai cung cấp để minh chứng Wee
 | Domain / Document Root | `thitruongmmo.com`, `/public_html`; chưa phải đường dẫn OS đầy đủ |
 | Website | `https://thitruongmmo.com/DevopQLYFood/public/` |
 | Redirects To / Force HTTPS Redirect | `Not Redirected` / `Off` lúc chụp; HTTPS vẫn truy cập được |
-| User / SSH / firewall | Có ảnh giao diện **SSH Access / Manage SSH Keys**. Chưa có đăng nhập shell thành công, user/quyền, SSH port hoặc cấu hình firewall |
+| User / SSH / firewall | Người triển khai xác nhận **cp1 không hỗ trợ Terminal**. Có ảnh **SSH Access / Manage SSH Keys**, chưa có đăng nhập shell thành công, user/quyền, SSH port hoặc firewall; phần này tạm hoãn bổ sung |
 | Source / DB host, port, datadir | URL suy ra source ở `public_html/DevopQLYFood`, chờ File Manager xác nhận đường dẫn OS; DB host/port/datadir chưa được cung cấp |
 | Bảo vệ thư mục riêng | Người triển khai đã upload `.htaccess`; health/login/CSS 200, schema/README 403 theo [log kiểm tra](http-protection-2026-10-21.md) |
 
@@ -51,6 +51,6 @@ Nguồn: ảnh cPanel do người triển khai cung cấp để minh chứng Wee
 - Firewall/security group và port listening. Chặn URL bằng `.htaccess` không thay thế firewall hệ điều hành.
 - Đường dẫn OS đầy đủ, DB host/port và nơi lưu dữ liệu khi có quyền xem.
 
-Bước kiểm tra tiếp theo trên cPanel: tìm **Terminal** để xác minh có shell thực tế hay không. Có SSH Access để quản lý khóa chưa đủ để kết luận có quyền root, cài Ubuntu hoặc cấu hình firewall. Nếu bổ sung Ubuntu VM/VPS, dùng [MANUAL_SETUP.md](../../docs/MANUAL_SETUP.md) và ghi kết quả thật.
+**Quyết định ngày 21/10/2026:** người triển khai xác nhận cp1 không hỗ trợ Terminal và dùng gói này để demo tạm Week 1. Tạm dừng kiểm tra Terminal/SSH trên gói hiện tại; dự kiến bổ sung phần cài/cấu hình server và firewall khi chọn VPS hoặc hosting khác cho Week 2. Khả năng SSH riêng ngoài Terminal chưa được kiểm chứng. [Kế hoạch chuyển môi trường](../../docs/DEPLOYMENT_PLAN.md). Nếu chọn Ubuntu VM/VPS, dùng [MANUAL_SETUP.md](../../docs/MANUAL_SETUP.md) và lưu kết quả thật.
 
 Tham khảo: [cPanel MultiPHP Manager](https://docs.cpanel.net/cpanel/software/multiphp-manager-for-cpanel/), [Terminal](https://docs.cpanel.net/cpanel/advanced/terminal-in-cpanel/).

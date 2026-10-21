@@ -20,7 +20,7 @@
 ## Phần Week 1 còn cần hoàn thiện
 
 - Distro/version OS, đường dẫn OS đầy đủ và DB host/port/datadir; tài nguyên vật lý toàn máy không suy ra từ quota tài khoản.
-- Quyền user/SSH, firewall/ports; đối chiếu yêu cầu tự cài/cấu hình môi trường theo đề.
+- Phần OS/user/SSH/firewall tạm hoãn theo quyết định dùng cp1 demo Week 1. cp1 không hỗ trợ Terminal theo người triển khai; xem xét bổ sung khi chọn VPS hoặc hosting khác cho Week 2, chưa đánh dấu hoàn tất.
 - Đã upload và kiểm tra `.htaccess` trên các URL ghi trong log. Tiếp tục bổ sung các trường chưa biết vào sơ đồ khi có bằng chứng.
 - Ảnh tải lại/tìm kiếm và trạng thái web; ảnh hiện có xác nhận trạng thái 0 qua SQL.
 

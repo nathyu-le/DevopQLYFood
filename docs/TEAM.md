@@ -27,6 +27,8 @@ Phân công được cập nhật ngày 21/10/2026 theo thống nhất của nh�
 | Lê Quang Tùng | Truy cập ứng dụng từ máy khách; thu thập ảnh/log server, SSH/firewall/ports; ghi hình chuỗi thêm món → tải lại → đọc DB; kiểm tra link minh chứng mở được | Bộ ảnh/log đã loại secrets, video demo, chỉ mục file/link minh chứng |
 | Hải và Tùng | Đối chiếu UI và DB, kiểm tra khả năng tái hiện và chuẩn bị minh chứng dự phòng | Bộ minh chứng Week 1 đầy đủ, có ngày, môi trường và người thực hiện |
 
+**Cập nhật 21/10/2026:** nhóm dùng cp1 demo tạm Week 1; theo người triển khai gói này không hỗ trợ Terminal. Công việc OS/user/SSH/firewall và thu minh chứng tương ứng tạm hoãn, dự kiến bổ sung khi chọn môi trường Week 2. Phân công trên được giữ để theo dõi phần chưa làm, không ghi đã hoàn tất.
+
 Huy chuẩn bị môi trường và quyền truy cập cần thiết cho Hải/Tùng; thông tin đăng nhập được chia sẻ bằng kênh riêng phù hợp, không đưa vào repository.
 
 ## Nơi cập nhật

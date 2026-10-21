@@ -4,9 +4,9 @@
 
 Ứng dụng PHP/MySQL giúp người quản lý thêm món, xem thực đơn, sửa giá, đổi tình trạng còn/hết và xóa món. Tên hiển thị trong ứng dụng: **Bếp Nhà**.
 
-> **Trạng thái ngày 21/10/2026:** người triển khai xác nhận website tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình tài khoản admin trên hosting cPanel. Kiểm tra HTTP độc lập ngày 21/10/2026 xác nhận health endpoint trả 200 với status ok và trang đăng nhập trả 200. Đã có 3 ảnh thao tác thêm/sửa trên web và SELECT đối chiếu bản ghi ID 9 trên DB hosting. [Xem bộ minh chứng app + DB](evidence/application/demo-2026-10-21.md). Đã bổ sung ảnh server/domain và sơ đồ hosting; đã có ảnh PHP 8.2 và quota tài khoản, `.htaccess` đã qua kiểm tra HTTP. Còn môi trường OS/user/SSH/firewall theo đề. [Log kiểm tra truy cập](evidence/application/http-access-2026-10-21.md). Sơ đồ PNG bên dưới mô tả hosting hiện tại, có ghi các thông số chưa xác minh. [Thông tin server](evidence/server/README.md).
+> **Trạng thái ngày 21/10/2026:** người triển khai xác nhận website tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình tài khoản admin trên hosting cPanel. Kiểm tra HTTP độc lập ngày 21/10/2026 xác nhận health endpoint trả 200 với status ok và trang đăng nhập trả 200. Đã có 3 ảnh thao tác thêm/sửa trên web và SELECT đối chiếu bản ghi ID 9 trên DB hosting. [Xem bộ minh chứng app + DB](evidence/application/demo-2026-10-21.md). Đã bổ sung ảnh server/domain và sơ đồ hosting; đã có ảnh PHP 8.2 và quota tài khoản, `.htaccess` đã qua kiểm tra HTTP. Theo xác nhận của người triển khai, cp1 không hỗ trợ Terminal; phần OS/user/SSH/firewall tạm hoãn để bổ sung khi chọn môi trường cho Week 2. [Log kiểm tra truy cập](evidence/application/http-access-2026-10-21.md). Sơ đồ PNG bên dưới mô tả hosting hiện tại, có ghi các thông số chưa xác minh. [Thông tin server](evidence/server/README.md).
 
-**Kế hoạch hiện tại:** tận dụng hosting cPanel để kiểm tra app + DB và thu minh chứng Week 1 ngay. Kiểm tra quyền OS/SSH/firewall và khả năng chạy Docker trước khi chọn môi trường cho phần hạ tầng và Week 2; chưa xác nhận phải thuê VPS. Xem [hướng dẫn cPanel](docs/CPANEL_SETUP.md) và [kế hoạch tiếp tục](docs/DEPLOYMENT_PLAN.md).
+**Kế hoạch hiện tại:** dùng gói cp1 để demo app + DB và trình bày tiến độ Week 1. Tạm hoãn phần cài/cấu hình OS, user/SSH và firewall; sang Week 2 xem xét VPS hoặc gói hosting khác đáp ứng Docker/Compose và CI/CD. Chưa chọn hoặc mua môi trường mới. Xem [hướng dẫn cPanel](docs/CPANEL_SETUP.md) và [kế hoạch tiếp tục](docs/DEPLOYMENT_PLAN.md).
 
 **Đã kiểm tra source trên GitHub Actions:** PHP syntax, **14 validation checks** và **19 HTTP/MySQL integration checks** thành công với commit `4baaaa1`. [Xem run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926). Đây là môi trường test tạm, không phải server triển khai của nhóm.
 
@@ -18,7 +18,7 @@ Checklist Week 2–4 đã được đối chiếu đề chi tiết ngày 21/10/2
 
 | Tuần | Trọng tâm | Trạng thái hiện tại | Nơi theo dõi |
 |---|---|---|---|
-| Week 1 | Hạ tầng và triển khai ban đầu | App đã có ảnh thêm/sửa và SELECT đối chiếu ID 9 trên hosting; đã có ảnh server/domain và sơ đồ hosting; có PHP 8.2 và quota tài khoản; còn OS/user/SSH/firewall theo đề | [Checklist](docs/WEEK1_CHECKLIST.md) · [Minh chứng](evidence/week1/README.md) |
+| Week 1 | Hạ tầng và triển khai ban đầu | App đã có ảnh thêm/sửa và SELECT đối chiếu ID 9 trên hosting; đã có ảnh server/domain và sơ đồ hosting; có PHP 8.2 và quota tài khoản; OS/user/SSH/firewall tạm hoãn, dự kiến bổ sung khi đổi môi trường cho Week 2 | [Checklist](docs/WEEK1_CHECKLIST.md) · [Minh chứng](evidence/week1/README.md) |
 | Week 2 | Docker/Compose và CI/CD build–test–deploy | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK2_CHECKLIST.md) · [Minh chứng](evidence/week2/README.md) |
 | Week 3 | Monitoring, bảo mật, backup/restore và xử lý sự cố | Chưa bắt đầu triển khai; đã chuẩn bị checklist | [Checklist](docs/WEEK3_CHECKLIST.md) · [Minh chứng](evidence/week3/README.md) |
 | Week 4 | Demo tổng thể, troubleshooting, báo cáo và bảo vệ | Chưa thực hiện; đã chuẩn bị checklist | [Checklist](docs/WEEK4_CHECKLIST.md) · [Minh chứng](evidence/week4/README.md) |
@@ -58,7 +58,7 @@ Phạm vi chưa bao gồm đặt món, thanh toán, giao hàng và nhiều vai t
 - PHP **8.2 trở lên**, bật `pdo_mysql`, `mbstring` và session.
 - Database dùng bảng `dishes`, charset `utf8mb4`, InnoDB. CI đã kiểm tra MySQL **8.0**; hosting báo **MariaDB 10.11.16**, có ảnh thao tác thêm/sửa/SELECT trên môi trường này.
 - HTML/CSS/JavaScript thuần; không cần Node.js, npm, Composer hoặc framework để chạy ứng dụng.
-- Môi trường đang dùng: cPanel gói **cp1**, Linux x86_64, cPanel báo Apache **2.4.67**, MariaDB **10.11.16**; Document Root domain `/public_html`. PHP **8.2** theo MultiPHP Manager; quota tài khoản: CPU **100%**, RAM **600 MB**, disk **1.000 MB**. Distro/version OS và quyền SSH/firewall chưa xác minh. Ubuntu/VM/VPS là phương án tham chiếu cho phần hạ tầng theo đề.
+- Môi trường đang dùng: cPanel gói **cp1**, Linux x86_64, cPanel báo Apache **2.4.67**, MariaDB **10.11.16**; Document Root domain `/public_html`. PHP **8.2** theo MultiPHP Manager; quota tài khoản: CPU **100%**, RAM **600 MB**, disk **1.000 MB**. Người triển khai xác nhận cp1 không hỗ trợ Terminal; distro/version OS, quyền SSH và firewall chưa có minh chứng, tạm hoãn bổ sung. Ubuntu/VM/VPS là phương án tham chiếu cho phần hạ tầng theo đề.
 
 ![Kiến trúc hosting hiện tại của DevopQLYFood](architecture.png)
 
@@ -133,9 +133,9 @@ Workflow hiện tại chỉ lint PHP, kiểm tra validation và thử CRUD trong
 |---|---|
 | Repository | [nathyu-le/DevopQLYFood](https://github.com/nathyu-le/DevopQLYFood) |
 | Website | [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) — HTTP 200 trang đăng nhập và health; có ảnh thêm/sửa và SELECT đối chiếu ID 9 |
-| Môi trường server / OS / CPU / RAM / disk | cPanel cp1, Linux x86_64, Apache 2.4.67, MariaDB 10.11.16; PHP 8.2, quota CPU 100% / RAM 600 MB / disk 1.000 MB; OS/user/SSH/firewall theo đề còn thiếu — [ảnh server](evidence/server/README.md) |
+| Môi trường server / OS / CPU / RAM / disk | cPanel cp1, Linux x86_64, Apache 2.4.67, MariaDB 10.11.16; PHP 8.2, quota CPU 100% / RAM 600 MB / disk 1.000 MB; OS/user/SSH/firewall tạm hoãn bổ sung khi chọn môi trường Week 2 — [ảnh server](evidence/server/README.md) |
 | Demo ghi/đọc dữ liệu từ máy khách | Có [3 ảnh minh chứng](evidence/application/demo-2026-10-21.md): thêm ID 9, sửa giá 45.000 → 50.000đ, SELECT xác nhận 50000 và is_available 0 |
-| Video / ảnh cấu hình / logs | Có ảnh app/DB, Server Information, Domains và log HTTP; có thêm PHP/quota và log chặn HTTP; còn OS/user/SSH/firewall theo đề, chưa có video |
+| Video / ảnh cấu hình / logs | Có ảnh app/DB, Server Information, Domains và log HTTP; có thêm PHP/quota và log chặn HTTP; OS/user/SSH/firewall tạm hoãn bổ sung, chưa có video |
 | Thành viên và phân công Week 1 | Đã cập nhật 3 thành viên trong [docs/TEAM.md](docs/TEAM.md) |
 
 ## 8. Nguồn và đóng góp

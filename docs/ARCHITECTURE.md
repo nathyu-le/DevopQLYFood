@@ -13,7 +13,7 @@
 | Web server / runtime | Apache Version 2.4.67 theo Server Information; domain dùng PHP 8.2 (`ea-php82`, Inherited) theo MultiPHP Manager | PHP patch version/extensions chi tiết, cấu hình handler; chưa có bằng chứng reverse proxy riêng do nhóm cấu hình |
 | Source / vùng web | Domain Document Root `/public_html`; URL app `/DevopQLYFood/public/` | Đường dẫn OS đầy đủ cần File Manager xác nhận |
 | Database | MariaDB `10.11.16-MariaDB-cll-lve`; SELECT bản ghi ID 9 khớp app | DB host/port, cùng máy hay máy khác, datadir và chính sách lưu trữ |
-| Quản trị | cPanel/File Manager và phpMyAdmin dùng triển khai/đối chiếu DB | Có giao diện SSH Access quản lý khóa; chưa có đăng nhập shell thực tế, quyền user hoặc firewall/ports |
+| Quản trị | cPanel/File Manager và phpMyAdmin dùng triển khai/đối chiếu DB | cp1 không hỗ trợ Terminal theo người triển khai; giao diện SSH Access chỉ quản lý khóa. Phần đăng nhập shell/quyền user/firewall tạm hoãn bổ sung |
 
 **Luồng đọc:** trình duyệt → HTTPS → web server/PHP của hosting → PDO SELECT bảng `dishes` → HTML về client. **Luồng ghi:** form quản trị → session/CSRF/validation → INSERT/UPDATE/DELETE → SELECT lại danh sách. [Ảnh app và SQL](../evidence/application/demo-2026-10-21.md) chứng minh thao tác thêm/sửa ID 9. DB dùng driver PDO MySQL để kết nối MariaDB; CI riêng vẫn dùng MySQL 8.0.
 
@@ -34,4 +34,4 @@ Repo có `.htaccess` đặt **cạnh `public/`** cho layout cPanel hiện tại,
 
 [MANUAL_SETUP.md](MANUAL_SETUP.md) giữ hướng dẫn Ubuntu 24.04 nếu chọn môi trường đó để đáp ứng phần cài/cấu hình server và các tuần tiếp theo. Thiết kế tham chiếu dùng Apache/PHP cùng MySQL, DB loopback `127.0.0.1:3306`, source `/var/www/DevopQLYFood`, DocumentRoot `/var/www/DevopQLYFood/public`; SSH chỉ cho nguồn quản trị, DB không public. Các giá trị này **chưa phải hiện trạng hosting**.
 
-Docker/Compose, volumes, pipeline deploy, monitoring và backup/restore thuộc checkpoint sau. Khi đổi môi trường, cập nhật sơ đồ và thu bằng chứng mới.
+Nhóm giữ cp1 để demo Week 1, tạm hoãn phần OS/user/SSH/firewall. Week 2 sẽ xem xét VPS hoặc hosting khác có khả năng thực hiện Docker/Compose và CI/CD theo [kế hoạch](DEPLOYMENT_PLAN.md). Docker/Compose, volumes, pipeline deploy, monitoring và backup/restore thuộc checkpoint sau. Khi đổi môi trường, cập nhật sơ đồ và thu bằng chứng mới.

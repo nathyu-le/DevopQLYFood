@@ -26,7 +26,7 @@ Kiểm tra cú pháp JavaScript bằng `node --check` và cú pháp hai script P
 | PHP syntax và validation | Thành công — tất cả file PHP hợp lệ và 14 kiểm tra validation qua |
 | CRUD với MySQL tạm | Thành công — 19 kiểm tra HTTP/MySQL qua |
 | Website trên hosting cPanel | Trang đăng nhập HTTP 200; health HTTP 200/status ok ngày 21/10/2026 — [log kiểm tra](../evidence/application/http-access-2026-10-21.md) |
-| OS/web server/SSH/firewall trên môi trường thật | Có ảnh Linux x86_64, Apache 2.4.67, MariaDB 10.11.16, domain root `/public_html`; domain PHP 8.2, quota CPU 100%, RAM 600 MB, disk 1.000 MB; có ảnh giao diện SSH Access, chưa có đăng nhập SSH/firewall. [Log chặn HTTP](../evidence/server/http-protection-2026-10-21.md). [Ảnh server](../evidence/server/README.md) |
+| OS/web server/SSH/firewall trên môi trường thật | Có ảnh Linux x86_64, Apache 2.4.67, MariaDB 10.11.16, domain root `/public_html`; domain PHP 8.2, quota CPU 100%, RAM 600 MB, disk 1.000 MB; có ảnh SSH Access; cp1 không hỗ trợ Terminal theo người triển khai. Phần đăng nhập SSH/firewall tạm hoãn, chưa có kết quả thực hiện. [Log chặn HTTP](../evidence/server/http-protection-2026-10-21.md). [Ảnh server](../evidence/server/README.md) |
 | Demo client → app → ghi/đọc DB hosting | Ảnh xác nhận thêm ID 9, sửa 45.000 → 50.000đ và SELECT cùng ID/giá/trạng thái 0; cột trạng thái web chưa hiện trong ảnh |
 
 Kiểm tra CI có thể chứng minh source hoạt động trong môi trường test. Nó **không chứng minh** đã dựng VPS/VM, không phải link website và chưa phải CI/CD build–test–deploy của Week 2.

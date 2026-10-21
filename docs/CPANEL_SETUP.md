@@ -1,6 +1,6 @@
 # Triển khai app PHP/MySQL trên hosting cPanel
 
-**Trạng thái ngày 21/10/2026:** website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Có [3 ảnh thêm/sửa/SELECT ID 9](../evidence/application/demo-2026-10-21.md) và [ảnh thông tin hosting](../evidence/server/README.md): gói cp1, Linux, Apache 2.4.67, MariaDB 10.11.16; domain root `/public_html`. Có thêm PHP 8.2 (Inherited), quota CPU 100% / RAM 600 MB / disk 1.000 MB; còn distro/version OS và quyền user/SSH/firewall theo đề.
+**Trạng thái ngày 21/10/2026:** website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Có [3 ảnh thêm/sửa/SELECT ID 9](../evidence/application/demo-2026-10-21.md) và [ảnh thông tin hosting](../evidence/server/README.md): gói cp1, Linux, Apache 2.4.67, MariaDB 10.11.16; domain root `/public_html`. Có thêm PHP 8.2 (Inherited), quota CPU 100% / RAM 600 MB / disk 1.000 MB; người triển khai xác nhận cp1 không hỗ trợ Terminal. Nhóm dùng gói hiện tại để demo Week 1 và tạm hoãn phần OS/user/SSH/firewall, xem xét chuyển môi trường khi làm Week 2.
 
 ## Source và thư mục
 
@@ -47,7 +47,7 @@ Quy tắc chạy trong thư mục dự án: chỉ cho phép HTTP với đường
 1. Mở HTTPS và `/DevopQLYFood/public/health.php`; [log ngày 21/10/2026](../evidence/application/http-access-2026-10-21.md) đã ghi HTTP 200/status ok. Health xác nhận kết nối và đọc bảng; ảnh thao tác app/SELECT được lưu riêng.
 2. Theo [DEMO.md](DEMO.md): đăng nhập, thêm món mới, tải lại/tìm kiếm, SELECT cùng bản ghi, sửa giá/trạng thái và đối chiếu lại DB.
 3. Lưu ảnh/video có URL, ID bản ghi và ngày; ghi người thực hiện tại [evidence/week1/](../evidence/week1/README.md).
-4. Thu OS/tài nguyên, web server/PHP/DB, DocumentRoot, quyền user/SSH và firewall trong [thông tin server](../evidence/server/README.md).
+4. Đã thu thông số cPanel/PHP/quota và DocumentRoot trong [thông tin server](../evidence/server/README.md). cp1 không hỗ trợ Terminal theo người triển khai; phần OS/user/SSH/firewall tạm hoãn, không yêu cầu tìm lại Terminal trên gói hiện tại.
 5. Đối chiếu riêng yêu cầu cài Ubuntu Server/VM, EC2 hoặc VPS của đề. Có website chạy trên shared hosting chưa tự chứng minh nhóm đã thực hiện các bước quản trị hệ điều hành; chưa đánh dấu toàn bộ Week 1 hoàn tất.
 
 ## Tài liệu tham khảo
