@@ -2,11 +2,11 @@ flowchart TB
     client["Client: trình duyệt"] -->|"HTTPS 443"| web
     admin["Người quản trị"] --> panel["cPanel / File Manager / phpMyAdmin"]
     subgraph hosting["Hosting cp1 · Linux x86_64 · IP dùng chung 160.191.243.50"]
-        web["Web server: cPanel báo Apache 2.4.67"] --> app["PHP app: /DevopQLYFood/public/"]
-        source["Domain root /public_html; source trong tài khoản hosting"] -.-> app
+        web["Web server: cPanel báo Apache 2.4.67"] --> app["PHP 8.2: /DevopQLYFood/public/"]
+        source["Domain root /public_html; .htaccess đã kiểm tra HTTP 403"] -.-> app
         app -->|"PDO · DB host/port chưa xác minh"| db["MariaDB 10.11.16: bảng dishes"]
         db --> storage["Dữ liệu phía hosting: datadir chưa xác minh"]
         panel -.-> source
         panel -.-> db
     end
-    pending["Chưa xác minh: PHP version, quota, SSH/firewall; .htaccess chờ upload"] -.-> hosting
+    pending["Quota: CPU 100%, RAM 600 MB, disk 1.000 MB; còn OS/user/SSH/firewall"] -.-> hosting

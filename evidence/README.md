@@ -2,7 +2,7 @@
 
 | Checkpoint | Nơi cập nhật | Trạng thái |
 |---|---|---|
-| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Có log HTTP và ảnh thêm/sửa/SELECT trên hosting; có ảnh Server Information/Domains và sơ đồ hosting; còn PHP/quota/SSH/firewall |
+| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Có log HTTP và ảnh thêm/sửa/SELECT trên hosting; có ảnh Server Information/Domains và sơ đồ hosting; có PHP 8.2/quota và log chặn HTTP; còn OS/user/SSH/firewall |
 | Week 2 | [week2/](week2/README.md) | Chưa có minh chứng Docker/CI/CD triển khai |
 | Week 3 | [week3/](week3/README.md) | Chưa có minh chứng monitoring/security/backup/restore |
 | Week 4 | [week4/](week4/README.md) | Chưa có demo tổng thể hoặc báo cáo cuối kỳ |
@@ -13,13 +13,13 @@ Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/
 
 ## Minh chứng Week 1
 
-**Đã có minh chứng app + DB trên hosting:** [3 ảnh gốc và đối chiếu ID 9](application/demo-2026-10-21.md). Có thêm [ảnh server/domain](server/README.md); còn thông tin PHP, tài nguyên và quyền SSH/firewall. Video liền mạch là lựa chọn bổ sung.
+**Đã có minh chứng app + DB trên hosting:** [3 ảnh gốc và đối chiếu ID 9](application/demo-2026-10-21.md). Có thêm [ảnh server/domain](server/README.md); có PHP 8.2 và quota tài khoản; còn distro/version OS, quyền user/SSH và firewall. Video liền mạch là lựa chọn bổ sung.
 
 | Mã | Minh chứng cần có | Nơi lưu dự kiến | Trạng thái |
 |---|---|---|---|
-| E01 | OS, CPU, RAM, disk của server | `server/` | Có ảnh Linux/x86_64/kernel; CPU/RAM/disk và distro/version OS chưa có |
-| E02 | User/SSH, port listening, firewall/security group | `server/` | Chưa có |
-| E03 | Web server/PHP và DB thực tế hoạt động | `server/` | Health HTTP 200/status ok; cPanel báo Apache 2.4.67, MariaDB 10.11.16; PHP version chưa có |
+| E01 | OS, CPU, RAM, disk của server | `server/` | Có ảnh Linux/x86_64/kernel và quota CPU 100%, RAM 600 MB, disk 1.000 MB; chưa có distro/version OS, không suy ra cấu hình vật lý toàn máy |
+| E02 | User/SSH, port listening, firewall/security group | `server/` | Có ảnh giao diện SSH Access quản lý khóa; chưa có đăng nhập shell/ports/firewall. Có [log chặn HTTP](server/http-protection-2026-10-21.md), không thay cho firewall |
+| E03 | Web server/PHP và DB thực tế hoạt động | `server/` | Health HTTP 200/status ok; cPanel báo Apache 2.4.67, MariaDB 10.11.16; domain PHP 8.2 theo MultiPHP Manager |
 | E04 | Client mở được URL ứng dụng | `application/` | Trang login HTTP 200; có [log truy cập](application/http-access-2026-10-21.md) và ảnh app có món ID 9 |
 | E05 | Thêm món và tải lại vẫn còn | `application/` | Có ảnh thêm/sửa cùng ID 9; bước tải lại riêng chưa thể hiện trong ảnh |
 | E06 | SELECT xác nhận cùng bản ghi trong DB | `application/` | Có ảnh SELECT: ID 9, tên món khớp, price 50000, is_available 0 |

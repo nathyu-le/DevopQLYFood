@@ -1,6 +1,6 @@
 # Triển khai app PHP/MySQL trên hosting cPanel
 
-**Trạng thái ngày 21/10/2026:** website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Có [3 ảnh thêm/sửa/SELECT ID 9](../evidence/application/demo-2026-10-21.md) và [ảnh thông tin hosting](../evidence/server/README.md): gói cp1, Linux, Apache 2.4.67, MariaDB 10.11.16; domain root `/public_html`. PHP version, tài nguyên và quyền SSH/firewall còn cần bổ sung.
+**Trạng thái ngày 21/10/2026:** website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Có [3 ảnh thêm/sửa/SELECT ID 9](../evidence/application/demo-2026-10-21.md) và [ảnh thông tin hosting](../evidence/server/README.md): gói cp1, Linux, Apache 2.4.67, MariaDB 10.11.16; domain root `/public_html`. Có thêm PHP 8.2 (Inherited), quota CPU 100% / RAM 600 MB / disk 1.000 MB; còn distro/version OS và quyền user/SSH/firewall theo đề.
 
 ## Source và thư mục
 
@@ -8,7 +8,7 @@ Bản source đã cung cấp để upload: commit `ca9ef4fcd9214266af681963caf20
 
 Đường dẫn Home do hosting cấp có thể khác nhau. Nếu nhà cung cấp giới hạn DocumentRoot bên trong `public_html`, cần điều chỉnh cách đặt thư mục và các đường dẫn require theo môi trường; không coi việc mở được URL `/public` là đã bảo vệ thư mục cha. Ghi đường dẫn thật vào minh chứng trước khi hoàn thiện sơ đồ.
 
-URL đang dùng có dạng `/DevopQLYFood/public/`, Domains xác nhận domain root `/public_html`. Layout này cần chặn HTTP vào các thư mục cạnh `public/`. Kiểm tra ngày 21/10/2026 thấy schema và README còn trả HTTP 200.
+URL đang dùng có dạng `/DevopQLYFood/public/`, Domains xác nhận domain root `/public_html`. Layout này cần chặn HTTP vào các thư mục cạnh `public/`. Trước bản sửa, schema/README trả HTTP 200; sau upload `.htaccess`, hai URL này trả 403, health/login/CSS vẫn trả 200. [Log](../evidence/server/http-protection-2026-10-21.md).
 
 ## Bảo vệ layout hiện tại
 
@@ -25,14 +25,14 @@ Quy tắc chạy trong thư mục dự án: chỉ cho phép HTTP với đường
 3. Kiểm tra `/DevopQLYFood/public/health.php` trả 200/status ok, login và CSS/JS vẫn tải được. `/DevopQLYFood/database/schema.sql`, `/DevopQLYFood/README.md` và `/DevopQLYFood/` phải trả **403**. Không mở file config thật để chụp minh chứng.
 4. Nếu website trả 500 sau khi thêm file, gỡ đúng các dòng vừa thêm/khôi phục bản đã tải về, rồi hỏi hosting về `mod_rewrite` và quyền `AllowOverride FileInfo`, hoặc chuyển domain/subdomain sang DocumentRoot `public/`. Nếu schema vẫn trả 200, bản chặn chưa có hiệu lực.
 
-**Phạm vi kiểm tra bản sửa:** đối chiếu quy tắc với tài liệu Apache và kiểm tra pattern cho các đường dẫn public/private. Môi trường soạn không có Apache; chưa chạy integration Apache hoặc xác nhận rule có hiệu lực trên hosting. Chỉ đánh dấu hoàn tất sau bước kiểm tra HTTP thực tế.
+**Phạm vi kiểm tra bản sửa:** đối chiếu quy tắc với tài liệu Apache và kiểm tra pattern cho các đường dẫn public/private. Môi trường soạn không có Apache; kiểm tra pattern không thay cho integration Apache. Sau khi người triển khai upload, đã xác minh HTTP trên hosting: health/login/CSS 200, schema/README 403 ngày 21/10/2026.
 
 ## Database và PHP
 
 1. Tạo DB mới và user riêng trong Manage My Databases/MySQL Databases hoặc Database Wizard; ghi đầy đủ tên có prefix cPanel.
 2. Gán quyền SELECT, INSERT, UPDATE, DELETE cho tài khoản app. Import schema bằng phiên phpMyAdmin của cPanel có quyền tạo bảng.
 3. Chọn đúng DB trong phpMyAdmin, import `database/schema.sql`; tùy chọn import `database/seed.sql` một lần. File SQL gộp đã cung cấp gồm hai phần này; không import cả file gộp và seed riêng vì sẽ thêm dữ liệu mẫu hai lần.
-4. Chọn PHP 8.2+ có pdo_mysql, mbstring và session. Hosting báo MariaDB `10.11.16-MariaDB-cll-lve`; ảnh thao tác app/SQL xác nhận thêm/sửa trên DB hosting. Bộ CI tự động riêng dùng MySQL 8.0; chưa có suite tự động chạy trên MariaDB hosting.
+4. Domain hiện dùng PHP 8.2 (`ea-php82`, Inherited) theo ảnh MultiPHP Manager; ứng dụng cần pdo_mysql, mbstring và session. Hosting báo MariaDB `10.11.16-MariaDB-cll-lve`; ảnh thao tác app/SQL xác nhận thêm/sửa trên DB hosting. Bộ CI tự động riêng dùng MySQL 8.0; chưa có suite tự động chạy trên MariaDB hosting.
 
 ## Cấu hình cục bộ
 
