@@ -1,39 +1,18 @@
 # Chỉ mục minh chứng toàn dự án
 
-| Checkpoint | Nơi cập nhật | Trạng thái |
+| Tuần | Nơi cập nhật | Trạng thái |
 |---|---|---|
-| Week 1 | [Hướng dẫn Week 1](week1/README.md), [server](server/README.md), [application](application/README.md) | Có log HTTP và ảnh thêm/sửa/SELECT trên hosting; có ảnh Server Information/Domains và sơ đồ hosting; có PHP 8.2/quota và log chặn HTTP; OS/user/SSH/firewall tạm hoãn bổ sung khi chọn môi trường Week 2 |
-| Week 2 | [week2/](week2/README.md) | Chưa có minh chứng Docker/CI/CD triển khai |
-| Week 3 | [week3/](week3/README.md) | Chưa có minh chứng monitoring/security/backup/restore |
-| Week 4 | [week4/](week4/README.md) | Chưa có demo tổng thể hoặc báo cáo cuối kỳ |
+| Week 1 | [week1](week1/README.md), [server](server/README.md), [application](application/README.md) | Có ảnh/log app + DB và môi trường hosting cũ; OS/user/SSH/firewall chưa hoàn tất |
+| Week 2 | [week2](week2/README.md) | Docker/Compose/validation/HTTP/persistence qua trên runner; gói source cPanel qua kiểm tra; chưa deploy hosting |
+| Week 3 | [week3](week3/README.md) | Chưa có monitoring/security/backup/restore |
+| Week 4 | [week4](week4/README.md) | Chưa có demo tổng thể/báo cáo cuối |
 
-Week 1: Nguyễn Phước Hải kiểm tra chức năng và đối chiếu DB; Lê Quang Tùng tổng hợp ảnh/log/video demo; cả hai phối hợp hoàn thiện minh chứng. Xem [phân công](../docs/TEAM.md).
+**Quyết định mới ngày 28/10/2026:** người triển khai đã mua gói cPanel mới có Terminal, không triển khai VPS. Chưa xác minh Docker/Compose/quyền daemon hoặc thông số gói mới. Minh chứng Week 1 thuộc môi trường trước đó; không suy ra cấu hình gói mới từ ảnh cũ.
 
-Người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) truy cập được ngày 21/10/2026. Thu minh chứng app/DB trên hosting hiện có trước, rồi xác minh phần hạ tầng và khả năng thực hiện Week 2; VM/VPS là phương án bổ sung nếu cần. Xem [kế hoạch](../docs/DEPLOYMENT_PLAN.md).
+Week 2 có [run Docker checks](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164827) của commit `145a500`: 14 validation checks, 17 container checks, kiểm tra regression và gói source cPanel thành công. `deploy-cpanel` skipped; chưa có kết quả upload FTPS hoặc container chạy trên hosting. [Chi tiết và log chọn lọc](week2/README.md).
 
-## Minh chứng Week 1
+Week 1 giữ nguyên ảnh và kết quả đã lưu: [demo app/DB](application/demo-2026-10-21.md), [thông tin hosting cũ](server/README.md), [bảo vệ truy cập HTTP](server/http-protection-2026-10-21.md). [Bộ source checks Week 1](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926) có 14 validation và 19 HTTP/MySQL checks; đây là runner tạm.
 
-**Đã có minh chứng app + DB trên hosting:** [3 ảnh gốc và đối chiếu ID 9](application/demo-2026-10-21.md). Có thêm [ảnh server/domain](server/README.md); có PHP 8.2 và quota tài khoản; distro/version OS, quyền user/SSH và firewall tạm hoãn bổ sung theo kế hoạch chuyển môi trường. Video liền mạch là lựa chọn bổ sung.
+Mỗi minh chứng ghi ngày, môi trường, người thực hiện thực tế, commit/run và kết quả quan sát. Chỉ cập nhật checklist sau khi có kết quả. Không đưa config thật, mật khẩu, keys, token hoặc dump DB vào ảnh/log/repo. Video ngoài GitHub cần quyền xem phù hợp.
 
-| Mã | Minh chứng cần có | Nơi lưu dự kiến | Trạng thái |
-|---|---|---|---|
-| E01 | OS, CPU, RAM, disk của server | `server/` | Có ảnh Linux/x86_64/kernel và quota CPU 100%, RAM 600 MB, disk 1.000 MB; chưa có distro/version OS, không suy ra cấu hình vật lý toàn máy |
-| E02 | User/SSH, port listening, firewall/security group | `server/` | Có ảnh SSH Access quản lý khóa; cp1 không hỗ trợ Terminal theo người triển khai. Đăng nhập shell/ports/firewall tạm hoãn bổ sung. Có [log chặn HTTP](server/http-protection-2026-10-21.md), không thay cho firewall |
-| E03 | Web server/PHP và DB thực tế hoạt động | `server/` | Health HTTP 200/status ok; cPanel báo Apache 2.4.67, MariaDB 10.11.16; domain PHP 8.2 theo MultiPHP Manager |
-| E04 | Client mở được URL ứng dụng | `application/` | Trang login HTTP 200; có [log truy cập](application/http-access-2026-10-21.md) và ảnh app có món ID 9 |
-| E05 | Thêm món và tải lại vẫn còn | `application/` | Có ảnh thêm/sửa cùng ID 9; bước tải lại riêng chưa thể hiện trong ảnh |
-| E06 | SELECT xác nhận cùng bản ghi trong DB | `application/` | Có ảnh SELECT: ID 9, tên món khớp, price 50000, is_available 0 |
-| E07 | Video demo hoặc bộ ảnh/log thay thế | Link video hoặc file trong `application/` | Có bộ 3 ảnh app/DB và log HTTP; chưa có video |
-
-Khi thêm minh chứng, ghi ngày thực hiện, người thực hiện, môi trường, file/link thật và kết quả quan sát. Video để ngoài GitHub phải cấp quyền xem cho giảng viên. Không đưa credentials, private keys hoặc dữ liệu nhạy cảm vào ảnh/log/video.
-
-Sơ đồ hosting hiện tại nằm ở `../architecture.png`, ghi rõ các trường chưa xác minh. Kết quả Actions là kiểm tra source trên runner, không thay cho E01–E07 trên server của nhóm.
-
-## Kiểm tra source đã thực hiện
-
-- Ngày xác minh: 21/10/2026.
-- [GitHub Actions run 39529399926](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926).
-- Commit được kiểm tra: `4baaaa1da776c714098e35ccc5e275c5495d7170`.
-- Kết quả: PHP syntax hợp lệ; 14 validation checks và 19 HTTP/MySQL integration checks thành công.
-- Môi trường: runner Ubuntu 24.04, PHP CLI 8.3.6, dịch vụ MySQL 8.0 tạm.
-- Các request HTTP đi đến loopback của runner; đây là kiểm tra tích hợp thật với MySQL, **không phải** bằng chứng client truy cập server triển khai của nhóm.
+[Phân công đã xác nhận](../docs/TEAM.md) · [Kế hoạch cPanel](../docs/DEPLOYMENT_PLAN.md) · [Checklist Week 2](../docs/WEEK2_CHECKLIST.md).

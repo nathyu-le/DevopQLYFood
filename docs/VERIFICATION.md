@@ -1,40 +1,31 @@
-# Kiểm tra source và giới hạn minh chứng
+# Kiểm tra và giới hạn minh chứng
 
-## Những gì workflow kiểm tra
+## Week 2: Docker và gói source cPanel
 
-File `.github/workflows/source-checks.yml` dùng runner Ubuntu và MySQL tạm để:
+[Run 40604164827](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164827), commit `145a500655e02178bdec386ed608f7d460310ebb`: build/Compose/PHP lint, 14 validation checks, 17 container checks, regression và kiểm tra gói source thành công. [Chi tiết, artifacts và log](../evidence/week2/README.md).
 
-1. Kiểm tra cú pháp tất cả file PHP.
-2. Kiểm tra validation tên/giá/danh mục/trạng thái và escape HTML.
-3. Khởi động PHP development server trên loopback của runner.
-4. Thử đăng nhập, CSRF, thêm, tải lại/tìm kiếm, sửa, đổi tình trạng, xóa và đăng xuất qua HTTP.
-5. Kiểm tra giá/trạng thái bằng một truy vấn PDO độc lập vào MySQL.
+Container tests dùng Apache/PHP và MariaDB trên runner, có thao tác HTTP và PDO thực tế. Cả app/DB được tạo lại, cùng bản ghi còn trong named volume. Một source copy bị cố ý nới giới hạn giá phải fail đúng assertion; copy bị lỗi không được dùng làm image triển khai.
 
-`tests/integration.py` chỉ chạy khi `RUN_INTEGRATION_TESTS=1`, yêu cầu database có tên kết thúc bằng `_test`, từ chối ghi đè cấu hình có sẵn và dọn bản ghi thử nghiệm sau khi chạy. Các mật khẩu trong workflow chỉ dùng cho dịch vụ tạm của CI, không dùng để triển khai thật.
+`tests/cpanel_release.py` kiểm tra gói source không chứa config/secrets/DB/.htaccess; từ chối sai SHA và đường dẫn archive không an toàn. `deploy-cpanel` có dependency vào job kiểm tra, đang skipped vì chưa có cấu hình kết nối. Chưa có deploy thật.
 
-## Cách xem kết quả thật
+Người triển khai chọn gói cPanel mới có Terminal. Cần xác minh Docker/Compose/quyền daemon trước khi chọn cách triển khai; Docker trên runner chưa chứng minh container chạy trên hosting. [Lệnh kiểm tra và CI/CD setup](CICD_SETUP.md).
 
-Mở [Actions](https://github.com/nathyu-le/DevopQLYFood/actions), chọn workflow **Source checks (not deployment)**, mở từng step và kiểm tra kết quả của đúng commit. Chỉ ghi “passed” sau khi run đã hoàn tất thành công.
+## Week 1: bộ kiểm tra source giữ lại
 
-**Kết quả đã xác minh ngày 21/10/2026:** [run 39529399926](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926), commit `4baaaa1da776c714098e35ccc5e275c5495d7170`, kết luận **success**. Runner Ubuntu 24.04, PHP CLI 8.3.6 và dịch vụ MySQL 8.0 tạm. Log xác nhận tất cả file PHP hợp lệ, **14 validation checks passed** và **19 HTTP/MySQL integration checks passed**.
+`.github/workflows/source-checks.yml` lint PHP, chạy validation và `tests/integration.py` với PHP development server/MySQL tạm. Bộ test chỉ chạy khi `RUN_INTEGRATION_TESTS=1`, tên DB kết thúc `_test`; từ chối ghi đè cấu hình có sẵn và dọn bản ghi thử sau khi chạy. Không dùng database triển khai.
 
-Kiểm tra cú pháp JavaScript bằng `node --check` và cú pháp hai script Python bằng `py_compile` cũng đã thành công trong môi trường soạn. PHP/MySQL của bộ test được thực thi trên runner GitHub Actions. Ngày 21/10/2026 người triển khai xác nhận website đã mở được trên hosting cPanel; đã đối chiếu 3 ảnh thêm/sửa và SELECT của món ID 9 trên hosting. [Bộ minh chứng thủ công](../evidence/application/demo-2026-10-21.md).
+[Run 39529399926](https://github.com/nathyu-le/DevopQLYFood/actions/runs/39529399926), commit `4baaaa1da776c714098e35ccc5e275c5495d7170`: PHP syntax hợp lệ, 14 validation và 19 HTTP/MySQL checks thành công. [Run 40604164849](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164849) của bản Week 2 cũng thành công.
 
-| Loại kiểm chứng | Trạng thái / nơi đối chiếu |
-|---|---|
-| JavaScript syntax / Python syntax | Đã kiểm tra thành công trong môi trường soạn |
-| PHP syntax và validation | Thành công — tất cả file PHP hợp lệ và 14 kiểm tra validation qua |
-| CRUD với MySQL tạm | Thành công — 19 kiểm tra HTTP/MySQL qua |
-| Website trên hosting cPanel | Trang đăng nhập HTTP 200; health HTTP 200/status ok ngày 21/10/2026 — [log kiểm tra](../evidence/application/http-access-2026-10-21.md) |
-| OS/web server/SSH/firewall trên môi trường thật | Có ảnh Linux x86_64, Apache 2.4.67, MariaDB 10.11.16, domain root `/public_html`; domain PHP 8.2, quota CPU 100%, RAM 600 MB, disk 1.000 MB; có ảnh SSH Access; cp1 không hỗ trợ Terminal theo người triển khai. Phần đăng nhập SSH/firewall tạm hoãn, chưa có kết quả thực hiện. [Log chặn HTTP](../evidence/server/http-protection-2026-10-21.md). [Ảnh server](../evidence/server/README.md) |
-| Demo client → app → ghi/đọc DB hosting | Ảnh xác nhận thêm ID 9, sửa 45.000 → 50.000đ và SELECT cùng ID/giá/trạng thái 0; cột trạng thái web chưa hiện trong ảnh |
+Minh chứng app/DB và hosting Week 1 được giữ tại [evidence/week1](../evidence/week1/README.md). Kết quả CI không thay cho cấu hình OS/user/SSH/firewall hoặc truy cập môi trường triển khai.
 
-Kiểm tra CI có thể chứng minh source hoạt động trong môi trường test. Nó **không chứng minh** đã dựng VPS/VM, không phải link website và chưa phải CI/CD build–test–deploy của Week 2.
+## Chạy test
 
-## Chạy riêng validation trên máy có PHP
+Trên máy có PHP phù hợp:
 
 ```bash
 php tests/validation.php
 ```
 
-Để chạy integration ngoài CI, dùng checkout sạch, database test riêng với quyền tạo bảng và CRUD, khai báo `TEST_DB_HOST`, `TEST_DB_PORT`, `TEST_DB_NAME`, `TEST_DB_USER`, `TEST_DB_PASSWORD`, rồi chạy `RUN_INTEGRATION_TESTS=1 python3 tests/integration.py`. Không chạy bằng database triển khai và không chụp/in các biến chứa mật khẩu.
+Test integration cần checkout sạch và database test riêng, các biến `TEST_DB_HOST`, `TEST_DB_PORT`, `TEST_DB_NAME`, `TEST_DB_USER`, `TEST_DB_PASSWORD`. Không in credentials hoặc dùng DB hosting đang chạy.
+
+Container tests chỉ dành cho stack Compose tạm có hậu tố `_ci` và `RUN_CONTAINER_TESTS=1`; workflow tự khởi tạo/dọn stack đó. Không chạy script recreate/cleanup CI với DB cần giữ. Xem [Docker setup](DOCKER_SETUP.md).
