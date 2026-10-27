@@ -1,6 +1,6 @@
 # Minh chứng Week 2 — Docker CI đã chạy, hosting đang xác minh
 
-**Cập nhật 28/10/2026 (giờ Việt Nam):** người triển khai chọn **gói cPanel mới đã mua, có Terminal**; không triển khai VPS. Tên gói/thông số và Docker/Compose/quyền daemon trên hosting chưa có kết quả kiểm tra. cp1 là môi trường cũ có minh chứng Week 1.
+**Cập nhật 28/10/2026 (giờ Việt Nam):** người triển khai chọn **gói cPanel mới đã mua, có Terminal**; không triển khai VPS. Đã nhận ảnh kiểm tra Terminal: cả ba lệnh Docker đều trả `docker: command not found`. Tên gói/thông số, khả năng cấp quyền Docker và daemon vẫn chưa được xác minh. cp1 là môi trường cũ có minh chứng Week 1.
 
 ## Kết quả thực tế trên Actions
 
@@ -31,8 +31,8 @@ Log chọn lọc, không chứa credentials: [ci-2026-10-28.log](ci-2026-10-28.l
 
 ## Còn phải làm trên cPanel
 
-1. Trong Terminal gói mới, chạy `docker --version`, `docker compose version`, `docker info --format '{{.ServerVersion}}'`; lưu output đã kiểm tra, chưa cần cài hay thay cấu hình.
-2. Nếu Docker hoạt động, xác minh ports/storage và cách runner kết nối để chạy Compose trên cPanel. Nếu không dùng được Docker, cấu hình FTPS để deploy source; ghi rõ Docker mới chạy trên CI và đối chiếu với giảng viên về tiêu chí container trên máy triển khai.
+1. Đã chạy ba lệnh Docker trong Terminal: đều `command not found`. [Bản ghi lược thông tin tài khoản](terminal-check-2026-10-28.md); không đăng ảnh gốc.
+2. Tiếp tục kiểm tra mục FTP Accounts và hỗ trợ explicit FTPS để cấu hình deploy source. Docker mới được kiểm chứng trên CI; tiêu chí container trên máy triển khai chưa có kết quả đáp ứng.
 3. Chạy pipeline deploy thành công, lưu URL và SHA trước/sau cùng health/revision, demo thay đổi source xuất hiện trên web.
 4. Thu run fail chứng minh lỗi test chặn deploy và video/ảnh đúng môi trường, bổ sung OS/user/SSH/firewall còn thiếu nếu đáp ứng được trên hosting.
 

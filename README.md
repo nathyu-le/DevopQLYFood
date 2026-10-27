@@ -4,7 +4,7 @@
 
 Ứng dụng **Bếp Nhà** dùng PHP và MySQL/MariaDB để quản trị thực đơn. Cả bốn tuần tiếp tục phát triển trên cùng repository.
 
-**Cập nhật 28/10/2026:** nhóm chọn **gói cPanel mới đã mua, có Terminal theo người triển khai**, không triển khai VPS. Docker/Compose đã chạy kiểm tra trên GitHub Actions. Chưa xác minh Docker/Compose/quyền daemon trên Terminal gói mới; chưa kết nối deploy tự động. cp1 và các ảnh/thông số đã lưu là minh chứng Week 1, không phải thông số đã xác minh của gói mới.
+**Cập nhật 28/10/2026:** nhóm chọn **gói cPanel mới đã mua, có Terminal theo người triển khai**, không triển khai VPS. Docker/Compose đã chạy kiểm tra trên GitHub Actions. Ảnh Terminal ngày 28/10 cho thấy cả ba lệnh Docker đều trả `docker: command not found`; tài khoản hiện chưa gọi được Docker. Chưa kết nối deploy tự động. cp1 và các ảnh/thông số đã lưu là minh chứng Week 1, không phải thông số đã xác minh của gói mới.
 
 | Tuần | Nội dung | Tiến độ |
 |---|---|---|
@@ -27,15 +27,9 @@
 
 [Run 40604164827](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164827), commit `145a500`: Docker build/Compose/PHP lint thành công, **14 validation checks**, **17 container checks**, kiểm tra regression và gói source cPanel đều qua. Job `deploy-cpanel` **skipped** vì chưa kết nối/bật deploy. CI xanh chưa chứng minh đã triển khai container hoặc cập nhật website trên hosting.
 
-Trong Terminal gói mới, kiểm tra trước bằng các lệnh chỉ đọc:
+**Kết quả Terminal đã nhận:** `docker --version`, `docker compose version` và `docker info --format '{{.ServerVersion}}'` đều trả `docker: command not found`. Shell hiện không tìm được Docker trong PATH của tài khoản; chưa thể kết luận Docker được phép cài/chạy hoặc daemon khả dụng. [Bản ghi đã lược thông tin tài khoản](evidence/week2/terminal-check-2026-10-28.md).
 
-```bash
-docker --version
-docker compose version
-docker info --format '{{.ServerVersion}}'
-```
-
-Nếu Docker daemon hoạt động, tiếp tục xác minh ports/storage và cách runner kết nối để chạy Compose trên cPanel. Pipeline source FTPS là phương án đã chuẩn bị nếu chỉ triển khai PHP trực tiếp. Chưa chốt kết quả cuối trước khi có output kiểm tra. Không tự coi Terminal là quyền root hoặc quyền Docker.
+Tiếp tục cấu hình deploy source lên cPanel qua FTPS nếu nhà cung cấp hỗ trợ. Cần kiểm tra mục **FTP Accounts**, đích thư mục và TLS trước khi bật pipeline. Docker/Compose hiện chỉ được chứng minh trên runner; chưa ghi triển khai container trên hosting.
 
 ## Chức năng và phạm vi
 

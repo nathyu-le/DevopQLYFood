@@ -2,7 +2,7 @@
 
 **Quyết định hiện tại ngày 28/10/2026: dùng gói cPanel mới đã mua, có Terminal theo xác nhận của người triển khai; không triển khai VPS.**
 
-Website Week 1 đã chạy tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/), có ảnh app/DB và thông tin hosting. cp1 là môi trường cũ của Week 1, khi đó không có Terminal. Gói mới có Terminal, nhưng chưa có kết quả kiểm tra Docker/Compose/quyền daemon, tên gói hoặc thông số mới. Các phương án VM/VPS trong tài liệu hướng dẫn cũ chỉ là tham chiếu, không phải kế hoạch đang thực hiện.
+Website Week 1 đã chạy tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/), có ảnh app/DB và thông tin hosting. cp1 là môi trường cũ của Week 1, khi đó không có Terminal. Gói mới có Terminal; ảnh mới cho thấy cả ba lệnh Docker đều trả `docker: command not found`. Chưa xác minh khả năng cấp quyền Docker/daemon, tên gói hoặc thông số mới. Các phương án VM/VPS trong tài liệu hướng dẫn cũ chỉ là tham chiếu, không phải kế hoạch đang thực hiện.
 
 ## Week 2 đang làm
 
@@ -15,7 +15,7 @@ Website Week 1 đã chạy tại [thitruongmmo.com/DevopQLYFood/public/](https:/
 | Deploy tự động lên cPanel | FTPS nếu nhà cung cấp bật và tài khoản được cấu hình | Chưa kết nối; chưa có run deploy thành công |
 | Website cPanel | PHP/MariaDB chạy trực tiếp | Giữ bản hiện tại, không tự chuyển DNS/DB |
 
-Thực hiện tiếp: chạy `docker --version`, `docker compose version`, `docker info --format '{{.ServerVersion}}'` trong Terminal gói mới. Nếu Docker hoạt động, hoàn thiện cách chạy Compose trên cPanel và kết nối runner. Nếu chưa chạy được Docker, phương án deploy source FTPS đã được chuẩn bị; cần xác nhận hỗ trợ FTPS và cấu hình kết nối. Chưa bật deploy khi chưa có kết quả. [Hướng dẫn CI/CD](CICD_SETUP.md).
+Đã nhận output Terminal với `docker: command not found` cho cả ba lệnh. Thực hiện tiếp: kiểm tra **FTP Accounts** và explicit FTPS, xác định đúng thư mục đồ án, cấu hình GitHub Secrets/Variables rồi kiểm tra kết nối. Tiếp tục deploy source trên cPanel; chưa có bằng chứng Docker chạy trên hosting và chưa bật deploy khi chưa cấu hình kết nối. [Hướng dẫn CI/CD](CICD_SETUP.md).
 
 ## Dữ liệu và cấu hình cần giữ
 

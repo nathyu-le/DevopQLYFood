@@ -2,7 +2,7 @@
 
 **Trạng thái: đang thực hiện, chưa hoàn tất.** Đã đối chiếu ảnh đề chi tiết “DEVOPS FINAL PROJECT — WEEK 2: Containerization & CI/CD Automation” (`1000003653.jpg`), ngày 21/10/2026. Mục tiêu: **Automated Deployment Pipeline**. Điểm tối đa: **2,5/10**, demo nhóm và bảo vệ kỹ thuật.
 
-**Môi trường theo xác nhận mới nhất 28/10/2026:** người triển khai đã mua gói **cPanel mới có Terminal**, không chọn VPS. Docker/Compose đã kiểm tra thành công trên Actions; chưa có output xác minh Docker/Compose/quyền daemon trên gói mới. Pipeline source FTPS đã chuẩn bị nhưng chưa kết nối. Có Terminal chưa xác nhận được Docker daemon hoạt động. [Kiểm tra và cấu hình cPanel](CICD_SETUP.md) · [Kết quả CI](../evidence/week2/README.md).
+**Môi trường theo xác nhận mới nhất 28/10/2026:** người triển khai đã mua gói **cPanel mới có Terminal**, không chọn VPS. Docker/Compose đã kiểm tra thành công trên Actions. Ảnh Terminal gói mới cho thấy cả ba lệnh Docker trả `docker: command not found`; tài khoản hiện chưa chạy được Docker, daemon chưa được xác minh. Pipeline source FTPS đã chuẩn bị nhưng chưa kết nối. Có Terminal chưa xác nhận được Docker daemon hoạt động. [Kiểm tra và cấu hình cPanel](CICD_SETUP.md) · [Kết quả CI](../evidence/week2/README.md).
 
 ## Mục tiêu
 
@@ -12,7 +12,8 @@
 
 Các dấu đã làm dưới đây ghi rõ phạm vi **runner CI**, chưa phải đã deploy container trên cPanel.
 
-- [ ] Xác minh Docker/Compose/quyền daemon trên Terminal gói cPanel mới, ghi thông số thực tế và cập nhật sơ đồ.
+- [x] Kiểm tra ba lệnh Docker trên Terminal gói mới: đều `command not found`; [bản ghi](../evidence/week2/terminal-check-2026-10-28.md).
+- [ ] Chạy được Docker/Compose và xác minh daemon trên hosting nếu dùng môi trường này để triển khai container; cập nhật sơ đồ theo kết quả thực tế.
 - [x] Có `Dockerfile` build runtime app và `.dockerignore` chỉ cho source cần thiết vào context.
 - [x] Có `docker-compose.yml` định nghĩa app, MariaDB, network, secrets và persistent volume; build/run đã qua trên Actions.
 - [x] Chứng minh cùng bản ghi còn sau recreate app + DB, giữ named volume trong môi trường CI tạm.

@@ -1,6 +1,6 @@
 # Week 2: Docker checks và deploy lên cPanel
 
-**Quyết định 28/10/2026: dùng gói cPanel mới đã mua, có Terminal theo người triển khai; không triển khai VPS.** Docker/Compose dùng để build và kiểm tra app + MariaDB trên GitHub Actions. Website Week 1 đã chạy PHP/MariaDB trực tiếp; chưa xác nhận môi trường và quyền Docker trên gói mới. Pipeline chuẩn bị deploy source qua **FTPS**, không cần Terminal hoặc Docker trên cPanel.
+**Quyết định 28/10/2026: dùng gói cPanel mới đã mua, có Terminal theo người triển khai; không triển khai VPS.** Docker/Compose dùng để build và kiểm tra app + MariaDB trên GitHub Actions. Website Week 1 đã chạy PHP/MariaDB trực tiếp; ảnh Terminal mới cho thấy cả ba lệnh Docker trả `docker: command not found`, chưa chạy được Docker với tài khoản này. Pipeline chuẩn bị deploy source qua **FTPS**, không cần Terminal hoặc Docker trên cPanel.
 
 **Chưa kết nối deploy thật.** Nhà cung cấp phải bật FTP với explicit TLS/FTPS; hiện chưa có thông tin tài khoản hoặc lần kết nối xác nhận. Việc cPanel có thể quản lý website không tự chứng minh FTP/FTPS được bật. Nếu chỉ có File Manager, có thể upload gói source thủ công nhưng chưa đạt tiêu chí deploy tự động.
 
@@ -39,7 +39,9 @@ docker info --format '{{.ServerVersion}}'
 - Docker/Compose có phiên bản và `docker info` kết nối được daemon: có thể xem xét chạy Compose trên chính gói cPanel này; cần kiểm tra thêm storage/ports và cách runner kết nối trước khi bật deploy container. Không cần chuyển sang VPS.
 - `command not found`, `permission denied` hoặc không kết nối được daemon: Terminal đã có nhưng Docker chưa dùng được với tài khoản. Không tự cài Docker bằng sudo hoặc suy ra có quyền root. Khi đó pipeline FTPS dưới đây là phương án deploy source, có giới hạn rubric đã ghi ở cuối.
 
-Hiện chưa có output ba lệnh nên chưa chọn deploy container trực tiếp hay source FTPS làm kết quả cuối.
+**Đã nhận kết quả ngày 28/10/2026:** cả ba lệnh đều trả `docker: command not found`. Terminal có hoạt động nhưng shell không tìm được Docker trong PATH tài khoản. Chưa xác minh Docker có thể được nhà cung cấp cấp quyền/cài đặt hay không; không tự cài hoặc suy ra có quyền root. [Bản ghi](../evidence/week2/terminal-check-2026-10-28.md).
+
+Tiếp tục phương án deploy source FTPS lên cPanel. Bước cần xác nhận tiếp là **FTP Accounts** và explicit TLS; chưa bật deploy khi chưa có kết nối được cấu hình.
 
 ## Cấu hình deploy source qua FTPS khi áp dụng
 
