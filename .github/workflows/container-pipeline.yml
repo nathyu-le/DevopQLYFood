@@ -1,4 +1,4 @@
-name: Week 2 - Container build, test and deploy
+name: Week 2 - Docker checks and cPanel deploy
 
 on:
   push:
@@ -43,7 +43,18 @@ jobs:
         run: docker compose up -d --no-build --wait --wait-timeout 180
       - name: Test HTTP, database writes and volume persistence
         run: python3 tests/container_smoke.py
-      - name: Export the tested image for deployment
+      - name: Check cPanel release boundaries
+        run: python3 tests/cpanel_release.py
+      - name: Package runtime source from the tested commit
+        run: python3 tools/package-cpanel.py
+      - uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          name: cpanel-source-${{ github.sha }}
+          path: dist/cpanel-release.zip
+          retention-days: 7
+          if-no-files-found: error
+      - name: Save the tested Docker image as evidence
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: docker save "$APP_IMAGE" | gzip > app-image.tar.gz
       - uses: actions/upload-artifact@v4
@@ -69,24 +80,25 @@ jobs:
         if: always()
         run: docker compose down --volumes --remove-orphans
 
-  deploy:
+  deploy-cpanel:
     needs: container-checks
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.CPANEL_DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    environment: production
+    timeout-minutes: 10
+    environment: cpanel
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: tested-image-${{ github.sha }}
-      - name: Deploy the exact image that passed checks
+          name: cpanel-source-${{ github.sha }}
+          path: dist
+      - name: Deploy tested source to the existing cPanel website
         env:
-          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
-          DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
-          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
-          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
-          DEPLOY_REVISION: ${{ github.sha }}
-        run: bash tools/deploy.sh
+          CPANEL_FTP_HOST: ${{ vars.CPANEL_FTP_HOST }}
+          CPANEL_FTP_PORT: ${{ vars.CPANEL_FTP_PORT }}
+          CPANEL_FTP_ROOT: ${{ vars.CPANEL_FTP_ROOT }}
+          CPANEL_BASE_URL: ${{ vars.CPANEL_BASE_URL }}
+          CPANEL_FTP_USER: ${{ secrets.CPANEL_FTP_USER }}
+          CPANEL_FTP_PASSWORD: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          APP_REVISION: ${{ github.sha }}
+        run: python3 tools/deploy-cpanel.py

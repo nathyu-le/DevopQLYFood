@@ -22,3 +22,4 @@ __pycache__/
 /deployment-state/
 /container-test-results/
 *.tar.gz
+/dist/
