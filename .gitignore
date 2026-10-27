@@ -17,3 +17,8 @@
 .vscode/
 __pycache__/
 *.pyc
+/.secrets/
+/deployment.env
+/deployment-state/
+/container-test-results/
+*.tar.gz

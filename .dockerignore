@@ -1,0 +1,10 @@
+**
+!Dockerfile
+!docker/
+!docker/**
+!app/
+!app/**
+!public/
+!public/**
+!config/
+!config/config.example.php
