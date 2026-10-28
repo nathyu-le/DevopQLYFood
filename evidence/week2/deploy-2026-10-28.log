@@ -1,0 +1,20 @@
+Source: GitHub Actions run 40633267900, event push, attempt 1, success
+Commit: 6583790e9850d7cdbdfa9aebac1bc896781dbcfb
+Timestamps copied below are UTC. Verified on 28/10/2026 Asia/Ho_Chi_Minh.
+No credentials or connection variables are included.
+
+2026-10-28T04:36:56.7806748Z 14 validation checks passed.
+2026-10-28T04:37:28.5590902Z PASS: same ID, name, price and status survive recreation of app and DB
+2026-10-28T04:37:28.7337353Z 17 container checks passed; persistence verified.
+2026-10-28T04:37:28.9568681Z PASS: all runtime files and REVISION use archive mode 0644, even with source mode 0600.
+2026-10-28T04:37:28.9569404Z PASS: HTTP gates reject 403/404/503, invalid JSON/health and wrong revisions; logs contain only stage/status.
+2026-10-28T04:37:29.0060404Z Packaged 9 runtime files for cPanel; credentials, DB and .htaccess excluded.
+
+2026-10-28T04:38:10.8280520Z Pre-deploy HTTP health check passed; starting FTPS transfer.
+2026-10-28T04:38:43.4128783Z FTPS source transfer completed; checking the deployed website.
+2026-10-28T04:38:45.8622370Z cPanel deployment passed HTTP health and exact commit revision checks.
+2026-10-28T04:38:45.8623716Z Existing DB configuration, database and .htaccess were preserved.
+
+External public checks: login/health/version/CSS/JS HTTP 200.
+Health: ok. Revision: 6583790e9850d7cdbdfa9aebac1bc896781dbcfb.
+Login old message absent; new message present. CSS/JS match repository source.

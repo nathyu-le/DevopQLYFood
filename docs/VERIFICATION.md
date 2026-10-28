@@ -6,9 +6,9 @@
 
 Container tests dùng Apache/PHP và MariaDB trên runner, có thao tác HTTP và PDO thực tế. Cả app/DB được tạo lại, cùng bản ghi còn trong named volume. Một source copy bị cố ý nới giới hạn giá phải fail đúng assertion; copy bị lỗi không được dùng làm image triển khai.
 
-`tests/cpanel_release.py` kiểm tra gói source không chứa config/secrets/DB/.htaccess; từ chối sai SHA và đường dẫn archive không an toàn. `deploy-cpanel` có dependency vào job kiểm tra, đang skipped vì chưa có cấu hình kết nối. Chưa có deploy thật.
+`tests/cpanel_release.py` kiểm tra gói source không chứa config/secrets/DB/.htaccess; từ chối sai SHA và đường dẫn archive không an toàn. `deploy-cpanel` có dependency vào job kiểm tra; nay đã chạy thành công trong [run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900), event push, commit `6583790`, attempt 1. [UI/revision trước sau và public checks](../evidence/week2/deploy-2026-10-28.md).
 
-Người triển khai chọn gói cPanel mới có Terminal. Cần xác minh Docker/Compose/quyền daemon trước khi chọn cách triển khai; Docker trên runner chưa chứng minh container chạy trên hosting. [Lệnh kiểm tra và CI/CD setup](CICD_SETUP.md).
+Người triển khai chọn gói cPanel mới có Terminal; lệnh Docker trả command not found. Đã deploy source PHP/DB trực tiếp qua FTPS, chưa chứng minh container trên hosting. [Lệnh kiểm tra và CI/CD setup](CICD_SETUP.md).
 
 ## Week 1: bộ kiểm tra source giữ lại
 

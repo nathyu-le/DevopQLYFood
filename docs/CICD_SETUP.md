@@ -1,81 +1,66 @@
-# Week 2: Docker checks và deploy lên cPanel
+# Week 2 — CI/CD lên cPanel
 
-**Quyết định 28/10/2026: dùng gói cPanel mới đã mua, có Terminal theo người triển khai; không triển khai VPS.** Docker/Compose dùng để build và kiểm tra app + MariaDB trên GitHub Actions. Website Week 1 đã chạy PHP/MariaDB trực tiếp; ảnh Terminal mới cho thấy cả ba lệnh Docker trả `docker: command not found`, chưa chạy được Docker với tài khoản này. Pipeline chuẩn bị deploy source qua **FTPS**, không cần Terminal hoặc Docker trên cPanel.
+**Đã chạy thành công ngày 28/10/2026:** [run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900), event push, commit `6583790`, attempt 1. Cả build/test và deploy qua; website có dòng mới và đúng revision. [Minh chứng](../evidence/week2/deploy-2026-10-28.md).
 
-**Chưa kết nối deploy thật.** Nhà cung cấp phải bật FTP với explicit TLS/FTPS; hiện chưa có thông tin tài khoản hoặc lần kết nối xác nhận. Việc cPanel có thể quản lý website không tự chứng minh FTP/FTPS được bật. Nếu chỉ có File Manager, có thể upload gói source thủ công nhưng chưa đạt tiêu chí deploy tự động.
+## Luồng thực tế
 
-## Pipeline thực hiện gì?
+Push main → checkout → build Docker image → PHP lint/validation/regression → Compose HTTP/DB/persistence → kiểm tra gói source → artifact → FTPS upload → health/revision. [Sơ đồ](WEEK2_ARCHITECTURE.md).
 
-```mermaid
-flowchart TD
-    A["Push main / Pull request"] --> B["Build Docker image"]
-    B --> C["Validation + HTTP/DB + giữ dữ liệu"]
-    C --> D["Đóng gói source đúng commit"]
-    D --> E{"Đã cấu hình FTPS?"}
-    E -->|Có| F["Upload cPanel + health/revision"]
-    E -->|Chưa| G["Lưu artifact, bỏ qua deploy"]
-```
+Docker chạy trên runner. cPanel chạy PHP và DB trực tiếp; ba lệnh Docker trong Terminal hosting trả command not found. Không triển khai VPS theo quyết định của nhóm.
 
-Workflow `.github/workflows/container-pipeline.yml` chạy khi push `main` hoặc mở PR có thay đổi code/cấu hình; cũng có nút **Run workflow**. Commit chỉ sửa docs/evidence/Markdown không rebuild container. Workflow source Week 1 vẫn chạy riêng.
+Job deploy chỉ chạy trên main khi `CPANEL_DEPLOY_ENABLED=true`, có `needs: container-checks`. PR chỉ kiểm tra. Commit docs/evidence/Markdown được bỏ qua bởi container workflow; có thể Run workflow thủ công nếu cần. Thay đổi source/config chạy tự động.
 
-`container-checks` build image `devopqlyfood:<SHA>`, lint PHP, chạy 14 validation checks và kiểm tra một regression cố ý trên bản sao source. Sau đó chạy Apache/PHP/MariaDB, thử CRUD qua HTTP và PDO, tạo lại app + DB để kiểm tra cùng bản ghi còn trong volume. Bản sao lỗi phải bị đúng assertion trả exit 1; source và image thật không bị sửa.
+## Cấu hình để tái triển khai
 
-Sau kiểm tra, pipeline tạo ZIP chỉ chứa `app/`, runtime files trong `public/` và `REVISION`. Không đóng gói config DB/admin, secrets, SQL, backup, docs hoặc `.htaccess`. Test bổ sung kiểm tra ranh giới gói source, SHA và archive paths. Artifact `cpanel-source-<SHA>` dùng cho deploy; `tested-image-<SHA>` giữ image Docker làm minh chứng, **không upload image lên cPanel**. Image/source artifacts giữ 7 ngày, logs giữ 14 ngày.
+Trước lần deploy đầu, hosting phải có app + DB đã cấu hình, `config/config.local.php`, các thư mục app/public/config và health trả ok. Pipeline cập nhật source không thay việc cài mới hoặc chuyển database. Sao lưu source/config/DB ở nơi riêng trước khi chuyển môi trường.
 
-Job `deploy-cpanel` có `needs: container-checks`; chỉ chạy trên `main` khi `CPANEL_DEPLOY_ENABLED=true`. Nó tải gói source của cùng run, kiểm tra website hiện tại đang healthy rồi kết nối FTPS có kiểm tra certificate và mã hóa cả control/data channel. Script xác nhận đúng thư mục app có `app/`, `public/`, `config/` và cấu hình cục bộ trước khi upload; thay từng file bằng upload tạm rồi rename. `REVISION` được cập nhật cuối, sau đó health và phiên bản public phải khớp SHA. Script không xóa file hosting, không đổi DB và giữ nguyên `.htaccess`/`config.local.php`.
+Tạo FTP account riêng, giới hạn đúng thư mục đồ án. Dùng **hostname dịch vụ thực tế có DNS và khớp SAN trong certificate**; tên FTP do giao diện gợi ý chưa chắc đã có bản ghi DNS. TLS phải xác minh được trước khi client gửi credentials.
 
-Đây là cập nhật từng file, chưa phải chuyển đổi nguyên release cùng lúc hoặc rollback tự động. Nếu upload dở, job sẽ fail; khôi phục source từ bản sao cPanel nếu cần. Sao lưu source và export DB riêng trước lần deploy đầu; không lưu bản sao chứa credentials vào Git hoặc artifact công khai.
-
-## Kiểm tra Terminal trên gói cPanel mới trước
-
-Chạy ba lệnh chỉ đọc, không cài đặt hoặc đổi cấu hình:
-
-```bash
-docker --version
-docker compose version
-docker info --format '{{.ServerVersion}}'
-```
-
-- Docker/Compose có phiên bản và `docker info` kết nối được daemon: có thể xem xét chạy Compose trên chính gói cPanel này; cần kiểm tra thêm storage/ports và cách runner kết nối trước khi bật deploy container. Không cần chuyển sang VPS.
-- `command not found`, `permission denied` hoặc không kết nối được daemon: Terminal đã có nhưng Docker chưa dùng được với tài khoản. Không tự cài Docker bằng sudo hoặc suy ra có quyền root. Khi đó pipeline FTPS dưới đây là phương án deploy source, có giới hạn rubric đã ghi ở cuối.
-
-**Đã nhận kết quả ngày 28/10/2026:** cả ba lệnh đều trả `docker: command not found`. Terminal có hoạt động nhưng shell không tìm được Docker trong PATH tài khoản. Chưa xác minh Docker có thể được nhà cung cấp cấp quyền/cài đặt hay không; không tự cài hoặc suy ra có quyền root. [Bản ghi](../evidence/week2/terminal-check-2026-10-28.md).
-
-Tiếp tục phương án deploy source FTPS lên cPanel. Bước cần xác nhận tiếp là **FTP Accounts** và explicit TLS; chưa bật deploy khi chưa có kết nối được cấu hình.
-
-## Cấu hình deploy source qua FTPS
-
-**Tiến độ mới:** người triển khai xác nhận website mới đã chạy; ảnh FTP Accounts cho thấy đã tạo tài khoản riêng. Chưa có lần đăng nhập FTPS hoặc deploy từ runner được xác minh. Tiếp tục cấu hình Secrets/Variables và chạy workflow; chưa đánh dấu deploy hoàn tất.
-
-1. Vào cPanel → **FTP Accounts**. Nếu không có mục này, xác nhận với nhà cung cấp xem gói mới có hỗ trợ **explicit FTP over TLS/FTPS** không. Phương án FTPS này không phụ thuộc Terminal.
-2. Tạo **tài khoản FTP riêng cho đồ án**, giới hạn Directory đúng `public_html/DevopQLYFood`. Không dùng tài khoản có quyền sửa toàn bộ website khác. Ghi FTP Server, username đầy đủ, port và kiểu TLS theo nhà cung cấp. Certificate phải hợp lệ với FTP hostname; không tắt kiểm tra certificate để chữa lỗi.
-3. Tài khoản bị giới hạn đúng thư mục trên thường dùng `CPANEL_FTP_ROOT=/`. Nếu dùng tài khoản có root khác, lấy đường dẫn FTP thực tế trỏ đến thư mục chứa `app/`, `public/`, `config/`; không suy ra từ đường dẫn cPanel.
-4. Trong GitHub repo → **Settings → Secrets and variables → Actions**, thêm vào **repository** các biến/secrets dưới đây. Đặt `CPANEL_DEPLOY_ENABLED` ở cấp repository vì điều kiện job được đánh giá trước khi job chạy; các trường kết nối cũng dùng repository scope trong hướng dẫn này. Điền mật khẩu FTP trực tiếp vào GitHub Secrets. Job dùng environment `cpanel`; nếu mục tiêu là deploy tự động thì không đặt yêu cầu duyệt thủ công cho từng lần.
+Repo → Settings → Secrets and variables → Actions, dùng repository scope:
 
 | Loại | Tên | Nội dung |
 |---|---|---|
-| Variable | `CPANEL_DEPLOY_ENABLED` | Để trống/`false` trước khi cấu hình; đổi `true` khi sẵn sàng |
-| Variable | `CPANEL_FTP_HOST` | FTP hostname đúng certificate do nhà cung cấp cung cấp, không thêm `ftp://` |
-| Variable | `CPANEL_FTP_PORT` | Port explicit FTPS, thường 21; script mặc định 21 |
-| Variable | `CPANEL_FTP_ROOT` | Root FTP trỏ đúng thư mục đồ án; `/` khi tài khoản bị giới hạn đúng `DevopQLYFood` |
-| Variable | `CPANEL_BASE_URL` | `https://khotrick.org/DevopQLYFood/public/` — URL hosting mới người triển khai xác nhận đã chạy |
-| Secret | `CPANEL_FTP_USER` | Username FTP đầy đủ |
-| Secret | `CPANEL_FTP_PASSWORD` | Mật khẩu tài khoản FTP riêng; nhập trực tiếp ở GitHub Secrets, không đưa vào chat/code |
+| Variable | CPANEL_DEPLOY_ENABLED | true sau khi cấu hình xong; false để tắt deploy |
+| Variable | CPANEL_FTP_HOST | Hostname dịch vụ đã xác minh với certificate, không có https:// |
+| Variable | CPANEL_FTP_PORT | 21 cho explicit FTPS của môi trường đang dùng |
+| Variable | CPANEL_FTP_ROOT | / khi FTP account đã giới hạn đúng thư mục DevopQLYFood |
+| Variable | CPANEL_BASE_URL | https://khotrick.org/DevopQLYFood/public/ |
+| Secret | CPANEL_FTP_USER | Username FTP đầy đủ |
+| Secret | CPANEL_FTP_PASSWORD | Mật khẩu FTP riêng, nhập trực tiếp trong GitHub Secrets |
 
-5. Trên Actions, chọn **Week 2 - Docker checks and cPanel deploy** → Run workflow trên `main`. Theo dõi đủ container-checks và deploy-cpanel. Chỉ ghi deploy hoàn thành khi cả hai job qua, health 200 và `version.php` trả đúng SHA.
+Đặt flag ở repository scope để điều kiện job đọc được trước khi job chạy. Job dùng environment cpanel; không đặt duyệt thủ công từng lần nếu cần demo tự động sau push.
 
-Nếu FTPS bị chặn hoặc hosting không hỗ trợ, job deploy vẫn chưa thể hoàn tất; File Manager chỉ là phương án upload thủ công. Không tự dùng FTP không mã hóa, đổi hosting hoặc tạo VPS.
+Mở Actions → Week 2 - Docker checks and cPanel deploy → Run workflow → main cho lần kiểm tra đầu. Sau đó push thay đổi source sẽ tự chạy.
 
-## Demo Week 2
+## Source và dữ liệu được xử lý thế nào?
 
-1. Mở website cPanel, ghi phiên bản trước qua `version.php` sau khi đã có lần deploy pipeline đầu tiên.
-2. Sửa một dòng chữ dễ thấy trong `public/login.php`, commit/push `main`; ghi SHA.
-3. Mở run: build Docker → tests → source artifact → deploy-cpanel. Refresh web thấy dòng mới; `version.php` phải khớp SHA. Đây là source PHP đang chạy trực tiếp trên hosting.
-4. Demo test lỗi trên nhánh thử/PR riêng, không merge source lỗi. Test fail thì deploy không được chạy. Cần thu thêm run fail/ảnh trước sau để chứng minh; kiểm tra regression trên bản sao trong run xanh chưa phải toàn bộ tình huống live này.
-5. Mở log persistence trên Actions: cùng ID/giá/trạng thái còn sau recreate app + DB. Có thể demo thêm Compose trên máy có Docker theo [DOCKER_SETUP.md](DOCKER_SETUP.md); không gọi đó là container đang chạy trên cPanel.
+Gói ZIP chỉ gồm runtime PHP/CSS/JS trong app/public và REVISION. Không chứa config thật, SQL/DB, .htaccess, backup hoặc secrets. Archive chuẩn hóa file quyền 0644; bộ test có fixture 0600 để tránh lặp lỗi CSS khi giải nén.
 
-## Đối chiếu rubric
+Script kiểm tra SHA của artifact, health trước upload và thư mục đích/config đã có. Nó upload từng file tạm rồi rename, REVISION cuối cùng; sau đó kiểm tra health và revision đúng SHA. Đây không phải chuyển nguyên release cùng lúc hoặc rollback DB tự động. Script không xóa file cũ trên hosting; khi thêm migration hoặc đổi cấu trúc phải có kế hoạch riêng.
 
-Dockerfile/Compose, image, volume và persistence đã có thể kiểm chứng trên runner. CI/CD source lên cPanel sẽ được chứng minh sau khi FTPS kết nối thành công. **Chưa chứng minh container chạy trên máy triển khai của nhóm**, vì Docker/Compose và quyền daemon trên gói mới chưa được xác minh. Nếu giảng viên yêu cầu đúng điều đó, cách dùng Docker trên CI và PHP trực tiếp trên cPanel chưa thay thế được tiêu chí ấy; cần trình bày rõ để giảng viên xác nhận cách đánh giá. Không tự đánh dấu đủ Week 2.
+## Kiểm tra sau deploy
 
-Tham khảo: [cPanel FTP Accounts](https://docs.cpanel.net/cpanel/files/ftp-accounts/), [giới hạn FTP vào một thư mục](https://support.cpanel.net/hc/en-us/articles/4402390715543-How-to-limit-an-FTP-account-s-access-to-a-single-directory), [GitHub job dependencies](https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow).
+- Mở login, health.php, version.php và assets/app.css trên URL public.
+- Đối chiếu revision với commit của run, không suy ra chỉ từ màu xanh.
+- Kiểm tra CI dùng User-Agent mô tả đúng ứng dụng DevopQLYFood-CI; TLS và health gate vẫn được giữ.
+- Khi commit chỉ đổi docs, website có thể giữ revision của lần source deploy trước; xem đúng run được liên kết trong evidence.
+
+## Các lỗi đã gặp và xử lý
+
+| Lỗi | Xử lý đã kiểm chứng |
+|---|---|
+| HTTP 403 ở pre-deploy health | Client mặc định bị chặn; định danh ứng dụng bằng User-Agent mô tả rõ, health trả 200/ok |
+| FTP hostname không phân giải | Dùng hostname dịch vụ có DNS thực tế |
+| SSLCertVerificationError | Đối chiếu certificate/SAN và dùng hostname khớp; giữ xác minh TLS |
+| HTTP 520 tại pre-check | Kiểm tra lại health, chỉ retry job lỗi sau khi endpoint về ok; không bỏ health gate |
+| CSS bị 403 sau giải nén thủ công | Sửa quyền file và chuẩn hóa ZIP; CSS/JS đã được xác minh 200 sau FTPS deploy |
+
+Có workflow Hosting connection diagnostics để đọc certificate công khai qua AUTH TLS, **không dùng FTP credentials hoặc truyền file**. Việc deploy dùng client riêng có xác minh certificate đầy đủ.
+
+Với lỗi tạm và source/secrets đã đúng, có thể retry failed jobs của run; không cần chạy lại các job đã qua. Chỉ ghi deploy thành công khi job và public revision được xác minh.
+
+## Giới hạn rubric
+
+Docker/Compose và volume persistence đã có kết quả trên runner. Source lên cPanel đã tự động cập nhật từ push. Chưa chứng minh container chạy trên hosting; phần yêu cầu đó cần môi trường đáp ứng hoặc xác nhận cách đánh giá từ giảng viên. Chưa tự đánh dấu toàn bộ Week 2 hoàn tất.
+
+[GitHub Actions](https://docs.github.com/en/actions) · [cPanel FTP Accounts](https://docs.cpanel.net/cpanel/files/ftp-accounts/) · [Docker Compose](https://docs.docker.com/compose/).

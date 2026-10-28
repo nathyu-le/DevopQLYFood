@@ -1,35 +1,30 @@
 # Kế hoạch tiếp tục trên cPanel
 
-**Quyết định hiện tại ngày 28/10/2026: dùng gói cPanel mới đã mua, có Terminal theo xác nhận của người triển khai; không triển khai VPS.**
+**Ngày 28/10/2026: CI/CD source lên hosting mới đã được kiểm chứng.** Không triển khai VPS theo quyết định của nhóm.
 
-Website Week 1 đã chạy tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/), có ảnh app/DB và thông tin hosting. cp1 là môi trường cũ của Week 1, khi đó không có Terminal. Gói mới có Terminal; ảnh mới cho thấy cả ba lệnh Docker đều trả `docker: command not found`. Chưa xác minh khả năng cấp quyền Docker/daemon, tên gói hoặc thông số mới. Các phương án VM/VPS trong tài liệu hướng dẫn cũ chỉ là tham chiếu, không phải kế hoạch đang thực hiện.
+## Trạng thái hiện tại
 
-## Week 2 đang làm
+| Phần | Kết quả |
+|---|---|
+| App/DB hosting mới | Login/health/version/CSS/JS trả 200; health ok |
+| Docker và persistence | Build/test/Compose/recreate thành công trên runner |
+| FTPS | Đã cấu hình tài khoản riêng và hostname khớp certificate; TLS được xác minh |
+| Push → deploy | Run 40633267900 success ngay attempt 1, UI và revision thay đổi đúng commit |
+| Data/config khi update | Không có config thật/SQL/DB/.htaccess trong source package |
+| Docker trên hosting | Terminal báo command not found; chưa chứng minh container tại môi trường này |
 
-| Phần | Môi trường / cách thực hiện | Trạng thái |
-|---|---|---|
-| Build app image | Docker trên runner GitHub Actions | Có cấu hình và run, xem evidence |
-| App + MariaDB/network/volume | Compose trên runner, test CRUD và recreate container | Có kiểm tra thực tế; chưa xác minh chạy container trên gói mới |
-| Kiểm tra lỗi chặn deploy | Test job là dependency của deploy; regression trên source copy | Đã có kiểm tra; còn demo run fail đầy đủ |
-| Đóng gói source | ZIP của đúng commit đã qua kiểm tra | Không chứa config thật, DB, secrets hoặc .htaccess |
-| Deploy tự động lên cPanel | FTPS nếu nhà cung cấp bật và tài khoản được cấu hình | Chưa kết nối; chưa có run deploy thành công |
-| Website cPanel | PHP/MariaDB chạy trực tiếp | Giữ bản hiện tại, không tự chuyển DNS/DB |
+[Trước/sau](../evidence/week2/deploy-2026-10-28.md) · [Kiến trúc](WEEK2_ARCHITECTURE.md) · [Cấu hình tái triển khai](CICD_SETUP.md).
 
-Đã nhận output Terminal với `docker: command not found` cho cả ba lệnh. Thực hiện tiếp: kiểm tra **FTP Accounts** và explicit FTPS, xác định đúng thư mục đồ án, cấu hình GitHub Secrets/Variables rồi kiểm tra kết nối. Tiếp tục deploy source trên cPanel; chưa có bằng chứng Docker chạy trên hosting và chưa bật deploy khi chưa cấu hình kết nối. [Hướng dẫn CI/CD](CICD_SETUP.md).
+## Vận hành tiếp
 
-## Dữ liệu và cấu hình cần giữ
+Tiếp tục thay đổi source trong cùng repo; push main sẽ test rồi deploy nếu đạt. Với lỗi host/network tạm, xác minh health và chỉ retry job lỗi; không bỏ test/TLS. Sao lưu dữ liệu/config riêng trước thay đổi DB hoặc migration; cập nhật source package không tự chuyển schema hoặc rollback DB.
 
-Trước lần deploy đầu, sao lưu source đang chạy và export DB từ phpMyAdmin ra nơi riêng. Giữ nguyên `config/config.local.php`, `.htaccess` và DB đang dùng; bộ deploy cPanel không upload hay xóa các mục này. Không đưa mật khẩu/private key/config thật/dump DB vào Git hoặc ảnh/log công khai.
+Week 1 đã có minh chứng trên cp1 cũ. Ảnh/thông số đó không chứng minh cấu hình gói mới. Không tự thay DNS, tài nguyên hoặc gói hosting trong quá trình cập nhật source.
 
-Compose có DB và volume riêng trên runner/máy chạy Docker. Nó không chứa sẵn dữ liệu cPanel và không tự chuyển dữ liệu hosting sang container. Không chạy lệnh xóa volume với dữ liệu cần giữ.
+## Những mục còn thiếu
 
-## Phần yêu cầu còn thiếu
+- Container trên môi trường triển khai nếu rubric yêu cầu: Docker trên CI chưa tự thay thế; cần khả năng hỗ trợ thực tế hoặc xác nhận cách đánh giá từ giảng viên.
+- Minh chứng OS/user/SSH/firewall Week 1 vẫn chưa được hoàn tất.
+- Nhóm bổ sung ảnh/video, xác nhận đóng góp thực tế; tiếp tục Week 3 theo checklist riêng sau khi chốt checkpoint.
 
-- OS/user/SSH/firewall của Week 1 vẫn tạm hoãn/chưa có minh chứng; không coi quản lý SSH keys hay .htaccess là bằng chứng đã cấu hình firewall hệ điều hành.
-- Chưa xác nhận gói cPanel mới hỗ trợ Docker/Compose và quyền daemon; hiện chỉ dùng Docker trên CI. Nếu đề yêu cầu container trên server triển khai, phần đó chưa đạt bằng cách deploy PHP trực tiếp lên cPanel.
-- Chưa có run FTPS thành công hoặc demo source thay đổi tự động trên website.
-- Cách triển khai hiện tại chưa được giảng viên xác nhận thay tiêu chí. Giữ các giới hạn này trong [checklist Week 2](WEEK2_CHECKLIST.md).
-
-## Tài liệu và minh chứng
-
-[Chạy Docker](DOCKER_SETUP.md) · [CI/CD cPanel](CICD_SETUP.md) · [Minh chứng Week 2](../evidence/week2/README.md) · [Minh chứng Week 1](../evidence/week1/README.md). Dùng chung repo và cùng ứng dụng cho cả bốn tuần. Chỉ cập nhật hoàn tất khi có kết quả thật.
+[Week 2 checklist](WEEK2_CHECKLIST.md) · [Lộ trình](ROADMAP.md).

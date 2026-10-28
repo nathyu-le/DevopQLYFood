@@ -1,59 +1,39 @@
 # Week 2 — Containerization & CI/CD
 
-**Trạng thái: đang thực hiện, chưa hoàn tất.** Đã đối chiếu ảnh đề chi tiết “DEVOPS FINAL PROJECT — WEEK 2: Containerization & CI/CD Automation” (`1000003653.jpg`), ngày 21/10/2026. Mục tiêu: **Automated Deployment Pipeline**. Điểm tối đa: **2,5/10**, demo nhóm và bảo vệ kỹ thuật.
+**Trạng thái 28/10/2026:** CI/CD source lên cPanel đã chạy thành công. Docker/Compose/persistence được chứng minh trên runner; chưa chứng minh container trên hosting. Chưa đánh dấu toàn bộ Week 2 hoàn tất khi phần này chưa được giảng viên xác nhận.
 
-**Môi trường theo xác nhận mới nhất 28/10/2026:** người triển khai đã mua gói **cPanel mới có Terminal**, không chọn VPS. Docker/Compose đã kiểm tra thành công trên Actions. Ảnh Terminal gói mới cho thấy cả ba lệnh Docker trả `docker: command not found`; tài khoản hiện chưa chạy được Docker, daemon chưa được xác minh. Pipeline source FTPS đã chuẩn bị nhưng chưa kết nối. Có Terminal chưa xác nhận được Docker daemon hoạt động. [Kiểm tra và cấu hình cPanel](CICD_SETUP.md) · [Kết quả CI](../evidence/week2/README.md).
+Nguồn yêu cầu: ảnh đề Week 2 đã đối chiếu ngày 21/10/2026. Mục tiêu Automated Deployment Pipeline, tối đa 2,5/10; không dự đoán điểm đạt.
 
-## Mục tiêu
+## Đã có kết quả
 
-Đưa cùng ứng dụng PHP/MySQL vào Docker/Compose, bảo đảm dữ liệu bền vững và tự động build → test → deploy khi có commit mới.
+- [x] Ghi rõ hai môi trường CI và hosting trong [sơ đồ Week 2](WEEK2_ARCHITECTURE.md).
+- [x] Dockerfile và .dockerignore; Compose có app, DB, network, secrets và named volume; build/run qua.
+- [x] Cùng ID/tên/giá/trạng thái còn sau recreate cả app + DB trên runner, giữ volume: 17 container checks qua.
+- [x] Secrets ngoài Git/build context; gói source không chứa config thật, DB hoặc .htaccess.
+- [x] 14 validation checks, PHP lint và regression có ý nghĩa; tests của source package/HTTP gate qua.
+- [x] Workflow build → test → source artifact → deploy FTPS → health/revision. Deploy phụ thuộc container-checks.
+- [x] Kết nối hosting bằng tài khoản FTP riêng và TLS có xác minh certificate.
+- [x] Push thay đổi giao diện nhỏ → run tự động → web có dòng mới và đúng SHA, không cập nhật source thủ công.
+- [x] Run HTTP health check thất bại làm pipeline fail và dừng trước FTP; ghi đúng là lỗi pre-deploy health, không gọi là validation test thất bại.
+- [x] README, hướng dẫn tái triển khai và log/minh chứng trước sau đã cập nhật.
+- [x] Đã kiểm tra Terminal hosting: Docker command not found; ghi rõ giới hạn.
 
-## Việc cần hoàn thành
+## Còn thiếu hoặc phụ thuộc xác nhận
 
-Các dấu đã làm dưới đây ghi rõ phạm vi **runner CI**, chưa phải đã deploy container trên cPanel.
+- [ ] Chạy được Docker/Compose trên môi trường triển khai của nhóm nếu rubric yêu cầu điều đó; Docker trên CI chưa tự thay tiêu chí hosting.
+- [ ] Có xác nhận của giảng viên nếu sử dụng cách Docker trên runner + PHP trực tiếp trên cPanel để đánh giá tiêu chí trên.
+- [ ] Nhóm bổ sung ảnh/video trình bày, đóng góp thực tế và phần OS/user/SSH/firewall Week 1 còn thiếu.
 
-- [x] Kiểm tra ba lệnh Docker trên Terminal gói mới: đều `command not found`; [bản ghi](../evidence/week2/terminal-check-2026-10-28.md).
-- [ ] Chạy được Docker/Compose và xác minh daemon trên hosting nếu dùng môi trường này để triển khai container; cập nhật sơ đồ theo kết quả thực tế.
-- [x] Có `Dockerfile` build runtime app và `.dockerignore` chỉ cho source cần thiết vào context.
-- [x] Có `docker-compose.yml` định nghĩa app, MariaDB, network, secrets và persistent volume; build/run đã qua trên Actions.
-- [x] Chứng minh cùng bản ghi còn sau recreate app + DB, giữ named volume trong môi trường CI tạm.
-- [x] Secrets ngoài repository/build context; setup giữ file hiện có; app đọc secret files lúc khởi động.
-- [x] Có automated tests validation/HTTP/DB/persistence; kiểm tra regression cố ý bị assertion từ chối.
-- [x] Có workflow build → test → tạo artifact; job deploy phụ thuộc test và chỉ bật khi cấu hình.
-- [x] Có hướng dẫn chạy Docker, cấu hình cPanel FTPS và giới hạn minh chứng.
-- [ ] Chốt cách runner kết nối hosting (container nếu Docker được phép; source FTPS là phương án đã chuẩn bị).
-- [ ] Deploy tự động từ commit mới lên cPanel đã xác định; không cần thao tác upload/cập nhật thủ công.
-- [ ] Nếu rubric yêu cầu container trên máy triển khai, chứng minh Docker trên hosting hoặc có xác nhận của giảng viên về cách đánh giá khác. Docker trên CI chưa tự thay thế tiêu chí này.
-- [ ] Demo sửa nhỏ → commit → pipeline → website cập nhật đúng SHA.
-- [ ] Run test fail chặn deploy và website giữ phiên bản trước; thu ảnh/log/video thật trên môi trường phù hợp.
+## Kết quả để nộp / demo
 
+[Run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900), event **push**, commit `6583790e9850d7cdbdfa9aebac1bc896781dbcfb`, attempt 1: container-checks và deploy-cpanel success. Public login/health/version/CSS/JS trả 200; health ok, revision đúng commit, dòng mới xuất hiện. [Bộ minh chứng](../evidence/week2/deploy-2026-10-28.md).
 
-## Trình tự live demo
-
-1. Push một thay đổi nhỏ lên nhánh triển khai, ghi commit SHA và phiên bản đang chạy trước đó.
-2. Mở từng bước workflow, cho thấy build/test/tạo image/deploy thành công.
-3. Refresh trang/API trên server, xác nhận thay đổi của đúng commit đã xuất hiện.
-4. Thử hoặc giải thích một trường hợp test thất bại; chứng minh lỗi test làm pipeline fail và chặn deploy.
-5. Tạo bản ghi thử, recreate container nhưng giữ volume, đối chiếu lại bản ghi. Lưu trạng thái trước/sau và lệnh đã dùng.
-
-## Hồ sơ nộp và rubric
-
-| Tiêu chí | Điểm theo đề | Sản phẩm / minh chứng |
+| Rubric | Điểm tối đa | Minh chứng và giới hạn |
 |---|---:|---|
-| Dockerfile + Compose build/run đúng | 0,7 | `Dockerfile`, `docker-compose.yml`, log build và trạng thái services |
-| Volume và DB persistence được chứng minh | 0,3 | Cùng bản ghi còn sau khi recreate container |
-| CI/CD đủ build/test/deploy, hoạt động tự động | 1,2 | Workflow `.github/workflows/*.yml`, test source và workflow logs |
-| Demo commit → pipeline → app update rõ ràng | 0,3 | Video/ảnh phiên bản trước và sau deploy, commit và run tương ứng |
-| **Tổng** | **2,5** | README hướng dẫn chạy pipeline và các link minh chứng |
+| Dockerfile + Compose build/run | 0,7 | Run và source; hiện chạy trên runner |
+| Volume và DB persistence | 0,3 | Cùng bản ghi qua recreate trên runner |
+| CI/CD build/test/deploy tự động | 1,2 | Run push và FTPS deploy thành công |
+| Commit → pipeline → app update | 0,3 | Dòng giao diện trước/sau và revision đúng SHA |
+| Tổng | 2,5 | Phần Docker trên hosting vẫn cần đối chiếu tiêu chí |
 
-## Hiện có và giới hạn
-
-[Run 40604164827](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164827), commit `145a500`: build/Compose, PHP lint, **14 validation checks**, **17 container checks**, regression và gói source cPanel đều qua. `deploy-cpanel` **skipped**, chưa có kết nối FTPS, chưa xác minh Docker trên hosting mới. Kết quả/artefacts/log được ghi trong [evidence Week 2](../evidence/week2/README.md). Chưa hoàn thành toàn bộ rubric.
-
-## Nơi cập nhật
-
-- Source dùng chung: `app/`, `public/`, `database/`, `config/`.
-- Docker/Compose: `Dockerfile`, `docker-compose.yml`, `.dockerignore`, `docker/`.
-- CI/CD: `.github/workflows/`.
-- [Minh chứng Week 2](../evidence/week2/README.md).
-- Phân công tuần này: bổ sung vào [TEAM.md](TEAM.md) khi nhóm thống nhất; hiện mới xác nhận phân công Week 1.
+[Docker setup](DOCKER_SETUP.md) · [CI/CD setup](CICD_SETUP.md) · [Evidence](../evidence/week2/README.md).

@@ -4,12 +4,14 @@
 
 Ứng dụng **Bếp Nhà** dùng PHP và MySQL/MariaDB để quản trị thực đơn. Cả bốn tuần tiếp tục phát triển trên cùng repository.
 
-**Cập nhật 28/10/2026:** nhóm chọn **gói cPanel mới đã mua, có Terminal theo người triển khai**, không triển khai VPS. Docker/Compose đã chạy kiểm tra trên GitHub Actions. Ảnh Terminal ngày 28/10 cho thấy cả ba lệnh Docker đều trả `docker: command not found`; tài khoản hiện chưa gọi được Docker. Chưa kết nối deploy tự động. cp1 và các ảnh/thông số đã lưu là minh chứng Week 1, không phải thông số đã xác minh của gói mới.
+**Cập nhật 28/10/2026:** đã hoàn thành luồng **push main → build/test Docker → đóng gói source → FTPS deploy lên cPanel → kiểm tra health/revision**. [Run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900) tự chạy từ commit `6583790`, cả hai job thành công ngay attempt 1; website đã hiện dòng đăng nhập mới và đúng SHA. [Minh chứng trước/sau](evidence/week2/deploy-2026-10-28.md).
+
+Docker/Compose và DB volume được kiểm tra trên runner GitHub Actions. Trên hosting hiện tại, ba lệnh Docker trả `command not found`; website chạy PHP/DB trực tiếp. Chưa chứng minh container chạy trên hosting và chưa coi đó là tiêu chí đã được giảng viên chấp thuận thay thế. Giữ hướng cPanel theo quyết định của nhóm.
 
 | Tuần | Nội dung | Tiến độ |
 |---|---|---|
 | Week 1 | Triển khai app/DB ban đầu | Có ảnh thêm/sửa/SELECT và logs hosting; OS/user/SSH/firewall còn thiếu, xem [checklist](docs/WEEK1_CHECKLIST.md) |
-| Week 2 | Docker/Compose và CI/CD | Build/test container và persistence qua trên Actions; gói source cPanel đã có; chưa xác minh Docker hoặc deploy trên hosting |
+| Week 2 | Docker/Compose và CI/CD | CI/CD source lên cPanel đã chạy tự động và kiểm chứng trước/sau; Docker/persistence đã chứng minh trên runner, chưa chạy container trên hosting |
 | Week 3 | Monitoring, bảo mật, backup/restore | Chưa triển khai, xem [checklist](docs/WEEK3_CHECKLIST.md) |
 | Week 4 | Demo tổng thể, xử lý sự cố, báo cáo | Chưa thực hiện, xem [checklist](docs/WEEK4_CHECKLIST.md) |
 
@@ -25,11 +27,11 @@
 | Kết quả thực tế, logs và artifacts | [Evidence Week 2](evidence/week2/README.md) |
 | Hướng tiếp tục | [Deployment plan](docs/DEPLOYMENT_PLAN.md) · [Lộ trình 4 tuần](docs/ROADMAP.md) |
 
-[Run 40604164827](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164827), commit `145a500`: Docker build/Compose/PHP lint thành công, **14 validation checks**, **17 container checks**, kiểm tra regression và gói source cPanel đều qua. Job `deploy-cpanel` **skipped** vì chưa kết nối/bật deploy. CI xanh chưa chứng minh đã triển khai container hoặc cập nhật website trên hosting.
+[Run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900), commit `6583790`: build/Compose/PHP lint, **14 validation checks**, **17 container checks**, regression và gói source qua; **deploy-cpanel success**. [Source checks cùng commit](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267716) cũng success. Xem [log và giới hạn](evidence/week2/README.md).
 
 **Kết quả Terminal đã nhận:** `docker --version`, `docker compose version` và `docker info --format '{{.ServerVersion}}'` đều trả `docker: command not found`. Shell hiện không tìm được Docker trong PATH của tài khoản; chưa thể kết luận Docker được phép cài/chạy hoặc daemon khả dụng. [Bản ghi đã lược thông tin tài khoản](evidence/week2/terminal-check-2026-10-28.md).
 
-Tiếp tục cấu hình deploy source lên cPanel qua FTPS nếu nhà cung cấp hỗ trợ. Cần kiểm tra mục **FTP Accounts**, đích thư mục và TLS trước khi bật pipeline. Docker/Compose hiện chỉ được chứng minh trên runner; chưa ghi triển khai container trên hosting.
+FTPS đã được cấu hình và xác minh bằng run từ push. Tiếp tục dùng [hướng dẫn CI/CD](docs/CICD_SETUP.md) để tái triển khai và xử lý lỗi; Docker/Compose hiện chỉ được chứng minh trên runner, chưa có container trên hosting.
 
 ## Chức năng và phạm vi
 
@@ -60,13 +62,13 @@ Docker runtime và database tạm trên Actions tách khỏi database hosting; k
 
 ## Deploy cPanel và cấu hình riêng
 
-**Cập nhật sau cài mới:** người triển khai xác nhận website mới tại [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/) đã chạy. Tài khoản FTP riêng đã được tạo theo ảnh cung cấp; chưa có lần deploy FTPS từ Actions được xác minh. [Run 40629412986](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40629412986) của commit `751285c` qua kiểm tra Docker và đóng gói source; deploy-cpanel skipped. Phần giữ dữ liệu và thay đổi source tự động trên hosting vẫn cần demo.
+**Website mới:** [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/). Đã xác minh từ ngoài runner: login/health/version/CSS/JS HTTP 200; health `ok`, revision khớp commit `6583790`, CSS/JS khớp source và dòng mô tả mới xuất hiện. [Kiến trúc Week 2](docs/WEEK2_ARCHITECTURE.md).
 
 Bản Week 1: [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/). URL này không chứng minh bản pipeline mới đã được upload hoặc đang chạy Docker.
 
 [CPANEL_SETUP.md](docs/CPANEL_SETUP.md) hướng dẫn upload/config DB ban đầu. `config/config.example.php` chỉ là mẫu; **không commit `config/config.local.php`**, `.env` hoặc `.secrets/`. Đặt DocumentRoot vào `public/`; layout cPanel có thư mục cha cần giữ quy tắc bảo vệ trong `.htaccess` như hướng dẫn.
 
-Pipeline FTPS chỉ upload runtime source của đúng commit đã kiểm tra, giữ nguyên config DB/admin, DB và `.htaccess`. Chưa có thông tin FTPS hoặc kết nối thành công. Chưa bật deploy khi chưa xác nhận đích và credentials. [Thiết lập](docs/CICD_SETUP.md).
+Pipeline FTPS chỉ upload runtime source của đúng commit đã kiểm tra; không đưa config DB/admin, DB hoặc `.htaccess` vào gói cập nhật. Kết nối đã được cấu hình bằng GitHub Variables/Secrets và chạy thành công. [Cách tái triển khai và xử lý lỗi](docs/CICD_SETUP.md).
 
 Nếu giảng viên yêu cầu container chạy trên máy triển khai, Docker trên runner và source PHP trực tiếp trên cPanel chưa tự thay thế được tiêu chí đó. Chưa đánh dấu hoàn tất Week 2.
 
