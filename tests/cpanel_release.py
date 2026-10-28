@@ -27,6 +27,8 @@ with tempfile.TemporaryDirectory() as directory:
     }
     for name, data in fixtures.items():
         path = root / name; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(data)
+    # Reproduce a restrictive source mode; deployment assets must still be 0644.
+    (root / 'public/assets/app.css').chmod(0o600)
     output = root / 'release.zip'
     packager.package(root, output, revision)
     with zipfile.ZipFile(output) as archive:
@@ -34,6 +36,8 @@ with tempfile.TemporaryDirectory() as directory:
         assert set(names) == {'app/bootstrap.php', 'public/version.php', 'public/assets/app.css', 'REVISION'}
         assert names[-1] == 'REVISION'
         assert b'PRIVATE_' not in b''.join(archive.read(name) for name in names)
+        assert all((archive.getinfo(name).external_attr >> 16) & 0o777 == 0o644 for name in names)
+        assert (root / 'public/assets/app.css').stat().st_mode & 0o777 == 0o600
         try:
             deployer.validated_entries(archive, 'b' * 40)
             raise AssertionError('Mismatched revision accepted.')
@@ -52,3 +56,4 @@ with tempfile.TemporaryDirectory() as directory:
                 pass
 print('PASS: cPanel package excludes config, secrets, database and .htaccess.')
 print('PASS: mismatched revisions and unsafe archive paths are rejected before upload.')
+print('PASS: all runtime files and REVISION use archive mode 0644, even with source mode 0600.')
