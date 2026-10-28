@@ -3,9 +3,9 @@ name: Week 2 - Docker checks and cPanel deploy
 on:
   push:
     branches: [main]
-    paths-ignore: ['docs/**', 'evidence/**', '*.md', 'architecture.png', '.github/workflows/hosting-diagnostics.yml']
+    paths-ignore: ['docs/**', 'evidence/**', '*.md']
   pull_request:
-    paths-ignore: ['docs/**', 'evidence/**', '*.md', 'architecture.png', '.github/workflows/hosting-diagnostics.yml']
+    paths-ignore: ['docs/**', 'evidence/**', '*.md']
   workflow_dispatch:
 
 permissions:
