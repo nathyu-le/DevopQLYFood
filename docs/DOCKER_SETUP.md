@@ -4,7 +4,7 @@ Dùng tiếp source PHP và bảng `dishes` của Week 1. Compose chạy hai ser
 
 ## Chạy trên máy có Docker
 
-Cần Git, Python 3, Docker Engine hoặc Docker Desktop đang chạy và Docker Compose plugin hỗ trợ `up --wait` (khuyến nghị Compose 2.24 trở lên). Với Mac Apple Silicon, Docker build theo kiến trúc máy; CI/deploy hiện tạo image Linux amd64 trên runner Ubuntu. Docker trên Actions dùng amd64; cPanel nhận source PHP từ pipeline, không nhận image này.
+Cần Git, Python 3, Docker Engine hoặc Docker Desktop đang chạy và Docker Compose plugin hỗ trợ `up --wait` (khuyến nghị Compose 2.24 trở lên). Với Mac Apple Silicon, Docker build theo kiến trúc máy; CI/deploy hiện tạo image Linux amd64 trên runner Ubuntu. CI xuất image Linux amd64 đã test thành artifact; job staging trên runner mới tải đúng image ID và deploy bằng --no-build. cPanel nhận source PHP cùng commit.
 
 ```bash
 git clone https://github.com/nathyu-le/DevopQLYFood.git
@@ -23,7 +23,7 @@ cat .secrets/admin_password
 
 Không chụp màn hình lệnh đọc mật khẩu khi ghi minh chứng. Script setup tạo mật khẩu ngẫu nhiên, không in ra log và không ghi đè file đã có. `.env` chỉ chứa cấu hình thông thường; `.secrets/` chứa ba mật khẩu, bị loại khỏi Git và build context. Entrypoint tạo cấu hình PHP cùng password hash bên trong container, ngoài DocumentRoot.
 
-`APP_BIND=127.0.0.1` giới hạn truy cập từ máy chạy Docker. Cổng mặc định `APP_PORT=8080`, đổi trong `.env` nếu bị trùng. Website Week 1 dùng PHP/MariaDB trực tiếp. Gói cPanel mới có Terminal theo người triển khai; cần chạy kiểm tra trong [CI/CD setup](CICD_SETUP.md) để xác nhận Docker/Compose trước khi dùng cấu hình này trên hosting. Không yêu cầu VPS.
+`APP_BIND=127.0.0.1` giới hạn truy cập từ máy chạy Docker. Cổng mặc định `APP_PORT=8080`, đổi trong `.env` nếu bị trùng. Website Week 1 dùng PHP/MariaDB trực tiếp. Terminal gói cPanel mới đã trả docker: command not found. Pipeline hiện deploy image vào staging Docker tạm trên GitHub runner mới và deploy source lên cPanel qua FTPS; không cần Docker trên hosting hoặc VPS. [CI/CD setup](CICD_SETUP.md).
 
 ## File và cách hoạt động
 
@@ -65,7 +65,7 @@ $q=$p->prepare("SELECT id,name,price,is_available FROM dishes WHERE name=? ORDER
 $q->execute(["Cơm gà Demo Week 2"]); echo json_encode($q->fetch(PDO::FETCH_ASSOC),JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT),PHP_EOL;'
 ```
 
-`docker compose down` giữ named volume. **Không dùng `down --volumes`, `down -v` hoặc `docker volume rm` với dữ liệu cần giữ.** Bước xóa volume trong workflow chỉ áp dụng stack CI tạm `devopqlyfood_ci`.
+`docker compose down` giữ named volume. **Không dùng `down --volumes`, `down -v` hoặc `docker volume rm` với dữ liệu cần giữ.** Bước xóa volume trong workflow chỉ áp dụng stack tạm devopqlyfood_ci và devopqlyfood_staging_ci, sau khi đã ghi nhận persistence. Nó không chạy với dữ liệu cPanel.
 
 ## Lỗi thường gặp
 
@@ -76,6 +76,10 @@ $q->execute(["Cơm gà Demo Week 2"]); echo json_encode($q->fetch(PDO::FETCH_ASS
 | DB/app unhealthy | Xem `docker compose logs --tail=100 app db`; kiểm tra secret files và tên DB/user, không xóa volume để chữa lỗi |
 | Đổi mật khẩu file nhưng app không vào DB | User trong volume vẫn có mật khẩu cũ; cập nhật DB và secrets cùng nhau sau khi sao lưu |
 | Image CI không chạy trên Mac M3 | Image CI là amd64; build tại Mac bằng Compose để có image arm64, hoặc chọn nền tảng amd64 có hỗ trợ giả lập |
-| cPanel không có Docker/Terminal | Dùng Compose trong môi trường kiểm tra; deploy source lên cPanel theo [CI/CD](CICD_SETUP.md). Điều này chưa thay tiêu chí container chạy trên máy triển khai |
+| cPanel không có Docker/Terminal | Dùng image artifact triển khai staging Docker trên runner mới; source cPanel tiếp tục qua [CI/CD](CICD_SETUP.md). Ghi rõ hai môi trường khi trình bày |
 
 Tài liệu chính thức: [PHP Docker image](https://github.com/docker-library/docs/blob/master/php/README.md), [Compose dependency health](https://docs.docker.com/compose/how-tos/startup-order/), [Compose secrets](https://docs.docker.com/compose/how-tos/use-secrets/).
+
+## Minh chứng đã chạy
+
+[Run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505) build/test image, chuyển artifact sang runner staging mới và đối chiếu image ID; 17 checks staging qua. [JSON persistence](../evidence/week2/persistence-2026-10-28.json) có cùng bản ghi trước/sau recreate. [Ảnh staging và trước/sau live](../evidence/week2/completion-2026-10-28.md) được lưu riêng; không phải DB hosting.

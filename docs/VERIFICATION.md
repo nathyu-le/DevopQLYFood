@@ -1,14 +1,18 @@
 # Kiểm tra và giới hạn minh chứng
 
-## Week 2: Docker và gói source cPanel
+## Week 2: image staging và cPanel
 
-[Run 40604164827](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164827), commit `145a500655e02178bdec386ed608f7d460310ebb`: build/Compose/PHP lint, 14 validation checks, 17 container checks, regression và kiểm tra gói source thành công. [Chi tiết, artifacts và log](../evidence/week2/README.md).
+[Run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505), source `d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a`, event push, attempt 1: container-checks, deploy-staging và deploy-cpanel success. [Source checks cùng commit](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997549) success. [Ảnh/JSON/log và phạm vi](../evidence/week2/completion-2026-10-28.md).
 
-Container tests dùng Apache/PHP và MariaDB trên runner, có thao tác HTTP và PDO thực tế. Cả app/DB được tạo lại, cùng bản ghi còn trong named volume. Một source copy bị cố ý nới giới hạn giá phải fail đúng assertion; copy bị lỗi không được dùng làm image triển khai.
+CI build app image, lint PHP, chạy 14 validation checks và chứng minh bản copy cố ý làm sai validator bị test bắt. Stack Apache/PHP + MariaDB thực hiện 17 checks: HTTP, CSRF, validation, CRUD và recreate cả app/DB vẫn giữ cùng bản ghi trong volume.
 
-`tests/cpanel_release.py` kiểm tra gói source không chứa config/secrets/DB/.htaccess; từ chối sai SHA và đường dẫn archive không an toàn. `deploy-cpanel` có dependency vào job kiểm tra; nay đã chạy thành công trong [run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900), event push, commit `6583790`, attempt 1. [UI/revision trước sau và public checks](../evidence/week2/deploy-2026-10-28.md).
+Runner staging mới tải image artifact, đối chiếu ID đã xuất ở CI và chạy --no-build. Nó chạy lại 17 checks, lưu JSON persistence và ảnh Chrome thật. DB staging là dữ liệu thử riêng và được dọn sau job.
 
-Người triển khai chọn gói cPanel mới có Terminal; lệnh Docker trả command not found. Đã deploy source PHP/DB trực tiếp qua FTPS, chưa chứng minh container trên hosting. [Lệnh kiểm tra và CI/CD setup](CICD_SETUP.md).
+`tests/cpanel_release.py` xác minh gói không có config/secrets/SQL/.htaccess, đúng SHA, archive path an toàn và quyền 0644; HTTP gates từ chối status/health/revision sai. CPanel job cần hai job trên thành công; dùng FTPS có xác minh TLS, kiểm tra health/revision và ảnh sau deploy. Website thật dùng PHP/DB trực tiếp.
+
+**Thử lỗi ở workflow thật:** [run 40635078470](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40635078470) từ PR có sửa validator để chấp nhận giá sai; validation báo `FAIL: reject invalid price: 1000000000` và exit 1. Hai job deploy skipped. PR cũng có branch guard không deploy; dependency test bảo vệ main. [PR #1](https://github.com/nathyu-le/DevopQLYFood/pull/1) đã đóng, không merge, source live giữ bản hợp lệ.
+
+Public health xác nhận kết nối/truy vấn bảng dishes; bộ screenshot anonymous không đăng nhập admin và không sửa dữ liệu cPanel. Persistence JSON không phải chứng minh recreate DB cPanel. Phần OS/user/SSH/firewall Week 1 chưa được hoàn tất bởi các tests trên.
 
 ## Week 1: bộ kiểm tra source giữ lại
 

@@ -1,0 +1,77 @@
+# Selected original GitHub Actions output; environment/connection sections omitted.
+# Success run: https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505
+# Source commit: d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a
+
+# container-checks (success)
+2026-10-28T04:55:52.5932965Z PASS: accept a valid Vietnamese dish
+2026-10-28T04:55:52.5933571Z PASS: reject invalid price: -1
+2026-10-28T04:55:52.5934276Z PASS: reject invalid price: 1.5
+2026-10-28T04:55:52.5934808Z PASS: reject invalid price: 1e4
+2026-10-28T04:55:52.5935274Z PASS: reject invalid price: 45000abc
+2026-10-28T04:55:52.5935740Z PASS: reject invalid price: 1000000000
+2026-10-28T04:55:52.5936187Z PASS: accept zero price
+2026-10-28T04:55:52.5936573Z PASS: reject empty dish name
+2026-10-28T04:55:52.5936955Z PASS: enforce Unicode name limit
+2026-10-28T04:55:52.5937215Z PASS: reject unknown category
+2026-10-28T04:55:52.5937467Z PASS: reject unknown availability
+2026-10-28T04:55:52.5937755Z PASS: reject array input without type error
+2026-10-28T04:55:52.5938062Z PASS: escape HTML output
+2026-10-28T04:55:52.5938312Z PASS: validate record identifiers
+2026-10-28T04:55:52.5938574Z 14 validation checks passed.
+2026-10-28T04:55:52.9332013Z PASS: deliberately broken price validation exits 1 at the expected assertion.
+2026-10-28T04:56:12.2692810Z PASS: health check reaches MariaDB
+2026-10-28T04:56:12.2709258Z PASS: running image has the expected commit revision
+2026-10-28T04:56:12.2718855Z PASS: DocumentRoot excludes config/config.local.php
+2026-10-28T04:56:12.2729058Z PASS: DocumentRoot excludes database/schema.sql
+2026-10-28T04:56:12.2738654Z PASS: DocumentRoot excludes .secrets/admin_password
+2026-10-28T04:56:12.2746747Z PASS: DocumentRoot excludes README.md
+2026-10-28T04:56:12.3396707Z PASS: administrator can log in through Apache
+2026-10-28T04:56:12.3413957Z PASS: invalid CSRF blocks a write
+2026-10-28T04:56:12.4626669Z PASS: invalid price is absent from the real database
+2026-10-28T04:56:12.5795162Z PASS: HTTP create persists a dish in MariaDB
+2026-10-28T04:56:12.5820790Z PASS: reload and search read the inserted dish
+2026-10-28T04:56:12.5821598Z PASS: stored description is escaped
+2026-10-28T04:56:12.6992621Z PASS: HTTP update changes price and availability
+2026-10-28T04:56:25.3982047Z PASS: same ID, name, price and status survive recreation of app and DB
+2026-10-28T04:56:25.4658716Z PASS: administrator can log in through Apache
+2026-10-28T04:56:25.4690098Z PASS: the recreated web container reads the persistent record
+2026-10-28T04:56:25.5856881Z PASS: HTTP delete removes the test record
+2026-10-28T04:56:25.5857423Z 17 container checks passed; persistence verified.
+2026-10-28T04:56:25.9499944Z PASS: cPanel package excludes config, secrets, database and .htaccess.
+2026-10-28T04:56:25.9501496Z PASS: mismatched revisions and unsafe archive paths are rejected before upload.
+2026-10-28T04:56:25.9502492Z PASS: all runtime files and REVISION use archive mode 0644, even with source mode 0600.
+2026-10-28T04:56:25.9503655Z PASS: HTTP gates reject 403/404/503, invalid JSON/health and wrong revisions; logs contain only stage/status.
+
+# deploy-staging (success)
+2026-10-28T04:57:36.8646498Z Captured live-before: health ok, revision 6583790e9850d7cdbdfa9aebac1bc896781dbcfb, PNG 1440x1000.
+2026-10-28T04:57:56.8108490Z PASS: health check reaches MariaDB
+2026-10-28T04:57:56.8127444Z PASS: running image has the expected commit revision
+2026-10-28T04:57:56.8136468Z PASS: DocumentRoot excludes config/config.local.php
+2026-10-28T04:57:56.8145990Z PASS: DocumentRoot excludes database/schema.sql
+2026-10-28T04:57:56.8154488Z PASS: DocumentRoot excludes .secrets/admin_password
+2026-10-28T04:57:56.8161973Z PASS: DocumentRoot excludes README.md
+2026-10-28T04:57:56.8809673Z PASS: administrator can log in through Apache
+2026-10-28T04:57:56.8826145Z PASS: invalid CSRF blocks a write
+2026-10-28T04:57:57.0007204Z PASS: invalid price is absent from the real database
+2026-10-28T04:57:57.1185311Z PASS: HTTP create persists a dish in MariaDB
+2026-10-28T04:57:57.1210754Z PASS: reload and search read the inserted dish
+2026-10-28T04:57:57.1211361Z PASS: stored description is escaped
+2026-10-28T04:57:57.2361748Z PASS: HTTP update changes price and availability
+2026-10-28T04:58:09.9465369Z PASS: same ID, name, price and status survive recreation of app and DB
+2026-10-28T04:58:10.0133651Z PASS: administrator can log in through Apache
+2026-10-28T04:58:10.0163699Z PASS: the recreated web container reads the persistent record
+2026-10-28T04:58:10.1328647Z PASS: HTTP delete removes the test record
+2026-10-28T04:58:10.1329649Z 17 container checks passed; persistence verified.
+2026-10-28T04:58:11.1295745Z Captured staging: health ok, revision d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a, PNG 1440x1000.
+
+# deploy-cpanel (success)
+2026-10-28T04:58:25.4766008Z Pre-deploy HTTP health check passed; starting FTPS transfer.
+2026-10-28T04:58:56.6910129Z cPanel deployment passed HTTP health and exact commit revision checks.
+2026-10-28T04:59:10.4243614Z Captured live-after: health ok, revision d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a, PNG 1440x1000.
+
+# Expected validation failure on isolated PR; no merge
+# Run: https://github.com/nathyu-le/DevopQLYFood/actions/runs/40635078470
+2026-10-28T04:56:46.0100807Z FAIL: reject invalid price: 1000000000
+2026-10-28T04:56:46.0793628Z ##[error]Process completed with exit code 1.
+# API job conclusions: container-checks=failure; deploy-staging=skipped; deploy-cpanel=skipped.
+# PR #1 state=closed; merged=false.

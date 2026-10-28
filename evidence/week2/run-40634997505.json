@@ -1,0 +1,64 @@
+{
+  "source_commit": "d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a",
+  "run_url": "https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505",
+  "event": "push",
+  "run_attempt": 1,
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "container-checks",
+      "id": 122639810788,
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy-staging",
+      "id": 122640322915,
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy-cpanel",
+      "id": 122640674777,
+      "conclusion": "success"
+    }
+  ],
+  "source_checks_run": "https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997549",
+  "tested_image_id": "sha256:3b8576ad8276e5086455b3fd5c383903ce6979049bb92224ee04fb245d244ae9",
+  "artifacts": [
+    {
+      "id": 12793275926,
+      "name": "cpanel-source-d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a"
+    },
+    {
+      "id": 12792823146,
+      "name": "tested-image-d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a"
+    },
+    {
+      "id": 12793540381,
+      "name": "container-test-results-d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a"
+    },
+    {
+      "id": 12793032887,
+      "name": "week2-staging-evidence-d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a"
+    },
+    {
+      "id": 12792933462,
+      "name": "week2-live-evidence-d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a"
+    }
+  ],
+  "persistence_file": "persistence-2026-10-28.json",
+  "negative_test": {
+    "run_url": "https://github.com/nathyu-le/DevopQLYFood/actions/runs/40635078470",
+    "event": "pull_request",
+    "head_sha": "19f9878063eb89a5d8a454a5dff348b2aced5e9c",
+    "conclusion": "failure",
+    "assertion": "reject invalid price: 1000000000",
+    "exit_code": 1,
+    "deploy_staging": "skipped",
+    "deploy_cpanel": "skipped",
+    "pull_request_url": "https://github.com/nathyu-le/DevopQLYFood/pull/1",
+    "pr_state": "closed",
+    "merged": false
+  },
+  "provenance": "GitHub Actions job logs/artifacts and unedited Chrome screenshots; no individual team contribution inferred",
+  "scope": "Temporary Docker staging on a new GitHub-hosted runner; live cPanel serves PHP and its separate database"
+}

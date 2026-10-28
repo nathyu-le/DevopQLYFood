@@ -1,25 +1,33 @@
-# Kiến trúc Week 2 — đã kiểm chứng ngày 28/10/2026
+# Kiến trúc Week 2 — 28/10/2026
 
-Có hai môi trường riêng: Docker/Compose chạy để kiểm tra trên GitHub runner; source PHP của đúng commit đã qua test được triển khai bằng FTPS lên cPanel. Không có image Docker được triển khai lên hosting.
+Ba job dùng ba runner độc lập: CI build/test, staging triển khai đúng image đã test, rồi FTPS cập nhật website cPanel. Docker staging là môi trường tạm; live dùng PHP/DB trực tiếp trên hosting hiện có.
 
 ```mermaid
 flowchart TD
-    Commit["Push main"] --> Checks["Build + automated tests"]
-    subgraph CI["GitHub runner: môi trường tạm"]
-        Checks --> AppCI["App Apache/PHP container"]
-        AppCI --> DbCI["MariaDB container"]
-        DbCI --- Volume["Named volume: kiểm tra recreate"]
-        Checks --> Package["ZIP source của đúng commit"]
-    end
-    Package -->|"FTPS + xác minh TLS"| App["PHP trên cPanel"]
-    Browser["Trình duyệt"] -->|HTTPS| App
-    App --> DB["Database ứng dụng"]
+    Push["Push main"] --> CI["CI: build image và chạy tests"]
+    CI --> Image["Artifact image + image ID"]
+    CI --> Source["Artifact source + revision"]
+    Image --> Stage["Runner mới: load đúng image"]
+    Stage --> Compose["Compose app + MariaDB + volume"]
+    Compose --> Verify["Test CRUD, recreate và chụp staging"]
+    Verify --> Deploy["FTPS deploy source đã test"]
+    Source --> Deploy
+    Deploy --> Live["PHP + DB trực tiếp trên cPanel"]
+    Live --> Evidence["Health, revision và ảnh sau deploy"]
 ```
 
-- Compose có network và named volume. CI đã giữ cùng bản ghi qua recreate app + DB, rồi dọn stack tạm sau kiểm tra. Đây không phải volume của database cPanel.
-- DB trên hosting đã được health endpoint truy vấn bảng `dishes` thành công. Chưa ghi nhận phiên bản engine/OS/tài nguyên mới từ kiểm tra này.
-- FTP account được giới hạn vào thư mục dự án; client kiểm tra certificate TLS và chỉ gửi runtime source. Config thật, SQL, DB và `.htaccess` không nằm trong gói cập nhật.
-- Deploy có pre-check health và post-check health/revision. Đã có run pre-check thất bại dừng trước khi truyền file, và run từ push thành công.
-- Hosting có Terminal nhưng `docker` trả `command not found`. Sơ đồ không thể hiện container trên hosting; phần yêu cầu này chưa được chứng minh.
+| Môi trường | Được chạy | Dữ liệu và vòng đời |
+|---|---|---|
+| container-checks | Build app, lint/validation/regression, Compose HTTP/DB/persistence, package | DB test riêng, credentials ngẫu nhiên, dọn sau job |
+| deploy-staging | Tải artifact image, kiểm tra image ID, `up --no-build`, 17 checks và ảnh Chrome | DB riêng trên runner mới; giữ volume khi recreate, dọn sau khi lưu evidence |
+| deploy-cpanel / live | FTPS upload runtime source, health/revision và ảnh Chrome | Config và DB hosting giữ ngoài package; không dùng DB staging |
 
-[Run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900) · [Trước/sau](../evidence/week2/deploy-2026-10-28.md) · [Thiết lập](CICD_SETUP.md).
+`deploy-staging` cần `container-checks` success. `deploy-cpanel` cần cả hai job trên success và flag `CPANEL_DEPLOY_ENABLED=true`. PR không deploy. Run validation lỗi thật đã có cả hai job deploy skipped; nhánh demo không được merge.
+
+Staging so sánh image ID sau `docker load` với ID đã xuất ở CI, rồi dùng `--no-build`; không build lại app trên runner deploy. Image/source mang cùng commit revision. Staging chụp website live trước khi cập nhật, cPanel chụp lại sau cập nhật.
+
+FTPS xác minh certificate TLS; FTP account giới hạn thư mục dự án. Gói source không chứa config thật, SQL, DB, backup hoặc `.htaccess`. Upload dùng file tạm rồi rename và ghi REVISION cuối; chưa phải cơ chế đổi toàn bộ release nguyên tử hoặc rollback DB.
+
+Terminal cPanel từng trả `docker: command not found`; pipeline này không phụ thuộc Docker trên cPanel. Ảnh đề Week 2 không ghi phải chạy Docker ngay trên hosting. Thông số OS/engine/quota của gói mới chưa được suy ra từ kết quả CI hoặc ảnh hosting cũ.
+
+[Run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505) · [Minh chứng](../evidence/week2/completion-2026-10-28.md) · [Thiết lập](CICD_SETUP.md).

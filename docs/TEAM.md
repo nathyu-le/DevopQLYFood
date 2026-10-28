@@ -1,4 +1,4 @@
-# Thành viên và phân công Week 1
+# Thành viên và phân công theo tuần
 
 ## Thành viên
 
@@ -39,3 +39,15 @@ Huy chuẩn bị môi trường và quyền truy cập cần thiết cho Hải/T
 - Phân công trên áp dụng cho Week 1. Khi nhóm thống nhất công việc của tuần tiếp theo, bổ sung phần phân công tương ứng trong file này, giữ lại phân công của tuần trước.
 
 Mỗi người cần hiểu cấu trúc hệ thống, vị trí app/database và giải thích được phần việc của mình khi bảo vệ.
+
+## Week 2 — việc nhóm cần kiểm tra trước khi bảo vệ
+
+Tiếp nối vai trò Week 1 để chuẩn bị; bảng này là phân công rà soát, **không xác nhận từng người đã thực hiện các thao tác trong pipeline**. Run tự động và ảnh do Chrome trên runner tạo được ghi đúng nguồn; nhóm bổ sung kết quả cá nhân sau khi làm thật.
+
+| Thành viên | Phần cần nắm và rà soát | Sản phẩm kiểm tra |
+|---|---|---|
+| Lê Đình Nhật Huy | Docker/Compose, CI/CD, cấu hình cPanel và tài liệu | Giải thích được ba job, image ID, secrets và source deploy; rà README/checklist |
+| Nguyễn Phước Hải | Validation, CRUD và DB persistence | Đọc run pass/fail, đối chiếu JSON cùng bản ghi trước/sau recreate, ghi kết quả rà soát thật |
+| Lê Quang Tùng | Minh chứng và chuẩn bị demo | Kiểm tra ảnh/metadata, link run, bản dự phòng và kịch bản một người trình bày |
+
+[Checklist Week 2](WEEK2_CHECKLIST.md) · [Bộ minh chứng](../evidence/week2/completion-2026-10-28.md) · [Kịch bản một người](WEEK2_DEMO.md). Một người trình bày theo lựa chọn của nhóm; cả ba vẫn cần hiểu phần phụ trách khi được hỏi.

@@ -1,14 +1,18 @@
 # Week 2 — CI/CD lên cPanel
 
-**Đã chạy thành công ngày 28/10/2026:** [run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900), event push, commit `6583790`, attempt 1. Cả build/test và deploy qua; website có dòng mới và đúng revision. [Minh chứng](../evidence/week2/deploy-2026-10-28.md).
+**Đã kiểm chứng ngày 28/10/2026:** [run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505), event push, source `d18f6be`, attempt 1. Cả ba job success; có ảnh trước/sau và version đúng SHA. [Minh chứng](../evidence/week2/completion-2026-10-28.md) · [Kịch bản demo](WEEK2_DEMO.md).
 
 ## Luồng thực tế
 
-Push main → checkout → build Docker image → PHP lint/validation/regression → Compose HTTP/DB/persistence → kiểm tra gói source → artifact → FTPS upload → health/revision. [Sơ đồ](WEEK2_ARCHITECTURE.md).
+1. **container-checks:** checkout → build image → lint/14 validation/regression → Compose/17 HTTP-DB-persistence checks → kiểm tra gói source → lưu image + ID và source ZIP.
+2. **deploy-staging:** runner mới tải image artifact → load và so ID → chụp live trước cập nhật → Compose `--no-build` → 17 checks/recreate → ảnh staging + JSON persistence.
+3. **deploy-cpanel:** nhận source artifact cùng commit → FTPS upload → health/revision đúng SHA → ảnh live sau deploy.
 
-Docker chạy trên runner. cPanel chạy PHP và DB trực tiếp; ba lệnh Docker trong Terminal hosting trả command not found. Không triển khai VPS theo quyết định của nhóm.
+[Sơ đồ](WEEK2_ARCHITECTURE.md). Docker staging tạm được dọn sau job; cPanel chạy PHP/DB trực tiếp. Không triển khai VPS.
 
-Job deploy chỉ chạy trên main khi `CPANEL_DEPLOY_ENABLED=true`, có `needs: container-checks`. PR chỉ kiểm tra. Commit docs/evidence/Markdown được bỏ qua bởi container workflow; có thể Run workflow thủ công nếu cần. Thay đổi source/config chạy tự động.
+Staging chỉ chạy main, cần container-checks success. cPanel cần cả hai job success và `CPANEL_DEPLOY_ENABLED=true`. PR chỉ kiểm tra. Thay đổi docs/evidence/Markdown và workflow diagnostics được paths-ignore; thay đổi source/config chạy tự động. Có thể Run workflow thủ công trên main khi cần demo lại.
+
+[Run lỗi validation thật](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40635078470) fail ở assertion giá vượt giới hạn; hai job deploy skipped. [PR #1](https://github.com/nathyu-le/DevopQLYFood/pull/1) đã đóng không merge. PR còn có branch guard chặn deploy; dependency vào tests cũng áp dụng với main.
 
 ## Cấu hình để tái triển khai
 
@@ -28,7 +32,7 @@ Repo → Settings → Secrets and variables → Actions, dùng repository scope:
 | Secret | CPANEL_FTP_USER | Username FTP đầy đủ |
 | Secret | CPANEL_FTP_PASSWORD | Mật khẩu FTP riêng, nhập trực tiếp trong GitHub Secrets |
 
-Đặt flag ở repository scope để điều kiện job đọc được trước khi job chạy. Job dùng environment cpanel; không đặt duyệt thủ công từng lần nếu cần demo tự động sau push.
+Đặt flag ở repository scope để điều kiện job đọc được trước khi job chạy. Staging dùng environment staging, deploy hosting dùng environment cpanel; không đặt duyệt thủ công từng lần nếu cần demo tự động sau push.
 
 Mở Actions → Week 2 - Docker checks and cPanel deploy → Run workflow → main cho lần kiểm tra đầu. Sau đó push thay đổi source sẽ tự chạy.
 
@@ -59,8 +63,14 @@ Có workflow Hosting connection diagnostics để đọc certificate công khai 
 
 Với lỗi tạm và source/secrets đã đúng, có thể retry failed jobs của run; không cần chạy lại các job đã qua. Chỉ ghi deploy thành công khi job và public revision được xác minh.
 
-## Giới hạn rubric
+## Lấy minh chứng và tái demo
 
-Docker/Compose và volume persistence đã có kết quả trên runner. Source lên cPanel đã tự động cập nhật từ push. Chưa chứng minh container chạy trên hosting; phần yêu cầu đó cần môi trường đáp ứng hoặc xác nhận cách đánh giá từ giảng viên. Chưa tự đánh dấu toàn bộ Week 2 hoàn tất.
+Ở cuối run, tải các artifacts `week2-staging-evidence-<sha>` và `week2-live-evidence-<sha>`. Chúng chứa ảnh Chrome thật, health/revision và JSON persistence. Image/source giữ 7 ngày; log/ảnh giữ 14 ngày theo workflow. Bộ checkpoint hiện tại đã lưu ảnh/JSON/log chọn lọc trong [evidence Week 2](../evidence/week2/completion-2026-10-28.md).
+
+Để demo mới: thay một câu nhỏ trong login, commit/push main, theo dõi ba job rồi refresh login và version.php. Không chỉnh sửa mã validator lỗi trên main; dùng run lỗi/PR đã đóng để giải thích fail gate. Không cần vào cPanel chạy lệnh update.
+
+## Phạm vi checkpoint
+
+Đã có Docker/Compose, persistence, deploy image staging, source deploy cPanel và ảnh trước/sau theo ảnh đề Week 2. Staging không tồn tại liên tục; cPanel không chạy image Docker. Không mô tả DB staging thành DB live. Điểm thực tế do giảng viên đánh giá; [checklist](WEEK2_CHECKLIST.md) đối chiếu từng đầu ra.
 
 [GitHub Actions](https://docs.github.com/en/actions) · [cPanel FTP Accounts](https://docs.cpanel.net/cpanel/files/ftp-accounts/) · [Docker Compose](https://docs.docker.com/compose/).

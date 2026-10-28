@@ -1,30 +1,28 @@
 # Kế hoạch tiếp tục trên cPanel
 
-**Ngày 28/10/2026: CI/CD source lên hosting mới đã được kiểm chứng.** Không triển khai VPS theo quyết định của nhóm.
-
-## Trạng thái hiện tại
+**Checkpoint Week 2 ngày 28/10/2026 đã có bộ minh chứng kỹ thuật.** Tiếp tục hosting cPanel hiện có theo quyết định của nhóm.
 
 | Phần | Kết quả |
 |---|---|
-| App/DB hosting mới | Login/health/version/CSS/JS trả 200; health ok |
-| Docker và persistence | Build/test/Compose/recreate thành công trên runner |
-| FTPS | Đã cấu hình tài khoản riêng và hostname khớp certificate; TLS được xác minh |
-| Push → deploy | Run 40633267900 success ngay attempt 1, UI và revision thay đổi đúng commit |
-| Data/config khi update | Không có config thật/SQL/DB/.htaccess trong source package |
-| Docker trên hosting | Terminal báo command not found; chưa chứng minh container tại môi trường này |
+| CI | Build image, lint, 14 validation, regression, 17 container checks và package checks qua |
+| Docker staging | Runner mới tải image artifact, so image ID, chạy --no-build; CRUD/persistence qua và có ảnh |
+| Website cPanel | FTPS tự động từ push, health ok, revision d18f6be, có ảnh trước/sau |
+| Test thất bại | Run validation lỗi thật fail; hai job deploy skipped; PR demo đóng không merge |
+| Config và dữ liệu hosting | Không nằm trong source package; không chuyển dữ liệu từ CI sang hosting |
 
-[Trước/sau](../evidence/week2/deploy-2026-10-28.md) · [Kiến trúc](WEEK2_ARCHITECTURE.md) · [Cấu hình tái triển khai](CICD_SETUP.md).
+[Run thành công](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505) · [Bộ minh chứng](../evidence/week2/completion-2026-10-28.md) · [Kiến trúc](WEEK2_ARCHITECTURE.md) · [Runbook](CICD_SETUP.md).
 
-## Vận hành tiếp
+## Khi tiếp tục sửa app
 
-Tiếp tục thay đổi source trong cùng repo; push main sẽ test rồi deploy nếu đạt. Với lỗi host/network tạm, xác minh health và chỉ retry job lỗi; không bỏ test/TLS. Sao lưu dữ liệu/config riêng trước thay đổi DB hoặc migration; cập nhật source package không tự chuyển schema hoặc rollback DB.
+Push main tự chạy tests, deploy staging rồi mới cập nhật cPanel. Đối chiếu version.php với source commit của run. Commit chỉ đổi docs có thể giữ revision lần source deploy trước. Với lỗi mạng tạm, xác minh health và retry job lỗi; không bỏ test hoặc TLS.
 
-Week 1 đã có minh chứng trên cp1 cũ. Ảnh/thông số đó không chứng minh cấu hình gói mới. Không tự thay DNS, tài nguyên hoặc gói hosting trong quá trình cập nhật source.
+Pipeline chỉ cập nhật runtime source, chưa migration schema/rollback DB tự động. Sao lưu config và DB riêng trước khi thay đổi cấu trúc dữ liệu. Staging được dọn sau run; không dùng nó làm dịch vụ public chạy lâu dài.
 
-## Những mục còn thiếu
+## Checkpoint tiếp theo
 
-- Container trên môi trường triển khai nếu rubric yêu cầu: Docker trên CI chưa tự thay thế; cần khả năng hỗ trợ thực tế hoặc xác nhận cách đánh giá từ giảng viên.
-- Minh chứng OS/user/SSH/firewall Week 1 vẫn chưa được hoàn tất.
-- Nhóm bổ sung ảnh/video, xác nhận đóng góp thực tế; tiếp tục Week 3 theo checklist riêng sau khi chốt checkpoint.
+- Nhóm tập [kịch bản một người Week 2](WEEK2_DEMO.md), kiểm tra quyền mở repo và đường dẫn khi nộp.
+- Phần OS/user/SSH/firewall Week 1 còn thiếu giữ ở [checklist Week 1](WEEK1_CHECKLIST.md); không dùng Docker CI thay minh chứng hosting.
+- Week 3 triển khai monitoring, bảo mật, backup/restore và playbook theo [checklist](WEEK3_CHECKLIST.md). Chỉ đánh dấu sau khi chạy thật.
+- Week 4 tích hợp, demo và báo cáo theo [checklist](WEEK4_CHECKLIST.md).
 
-[Week 2 checklist](WEEK2_CHECKLIST.md) · [Lộ trình](ROADMAP.md).
+Ảnh cp1 Week 1 là lịch sử, không suy ra tài nguyên gói cPanel mới. Không tự thay gói hosting hoặc DNS trong đợt cập nhật này.

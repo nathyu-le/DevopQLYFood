@@ -1,37 +1,35 @@
 # DevopQLYFood · Website quản lý thực đơn quán ăn
 
-**DevOps Final Project 2026 · 4 tuần · Week 2 đang thực hiện**
+**DevOps Final Project 2026 · 4 tuần · Week 2: bộ đầu ra đã kiểm chứng**
 
 Ứng dụng **Bếp Nhà** dùng PHP và MySQL/MariaDB để quản trị thực đơn. Cả bốn tuần tiếp tục phát triển trên cùng repository.
 
-**Cập nhật 28/10/2026:** đã hoàn thành luồng **push main → build/test Docker → đóng gói source → FTPS deploy lên cPanel → kiểm tra health/revision**. [Run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900) tự chạy từ commit `6583790`, cả hai job thành công ngay attempt 1; website đã hiện dòng đăng nhập mới và đúng SHA. [Minh chứng trước/sau](evidence/week2/deploy-2026-10-28.md).
+**Cập nhật 28/10/2026:** đã kiểm chứng luồng **push main → build/test → lưu image → deploy image vào staging tạm → deploy source lên cPanel → health/revision và ảnh trước/sau**. [Run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505) có cả ba job thành công ngay attempt 1. [Bộ minh chứng đầy đủ](evidence/week2/completion-2026-10-28.md) · [Kịch bản một người trình bày](docs/WEEK2_DEMO.md).
 
-Docker/Compose và DB volume được kiểm tra trên runner GitHub Actions. Trên hosting hiện tại, ba lệnh Docker trả `command not found`; website chạy PHP/DB trực tiếp. Chưa chứng minh container chạy trên hosting và chưa coi đó là tiêu chí đã được giảng viên chấp thuận thay thế. Giữ hướng cPanel theo quyết định của nhóm.
+Docker staging chạy trên một runner mới, tải đúng image đã test và đối chiếu image ID trước khi chạy Compose. Website thật tiếp tục dùng PHP/DB trực tiếp trên **cPanel**; staging được dọn sau run. Không cần chuyển sang VPS để chạy luồng hiện tại.
 
 | Tuần | Nội dung | Tiến độ |
 |---|---|---|
 | Week 1 | Triển khai app/DB ban đầu | Có ảnh thêm/sửa/SELECT và logs hosting; OS/user/SSH/firewall còn thiếu, xem [checklist](docs/WEEK1_CHECKLIST.md) |
-| Week 2 | Docker/Compose và CI/CD | CI/CD source lên cPanel đã chạy tự động và kiểm chứng trước/sau; Docker/persistence đã chứng minh trên runner, chưa chạy container trên hosting |
+| Week 2 | Docker/Compose và CI/CD | CI/CD cPanel đã chạy; image deploy vào staging tạm, có persistence, ảnh trước/sau và run test lỗi |
 | Week 3 | Monitoring, bảo mật, backup/restore | Chưa triển khai, xem [checklist](docs/WEEK3_CHECKLIST.md) |
 | Week 4 | Demo tổng thể, xử lý sự cố, báo cáo | Chưa thực hiện, xem [checklist](docs/WEEK4_CHECKLIST.md) |
 
-**Nhóm:** Lê Đình Nhật Huy, Nguyễn Phước Hải, Lê Quang Tùng. [Phân công đã xác nhận](docs/TEAM.md).
+**Nhóm:** Lê Đình Nhật Huy, Nguyễn Phước Hải, Lê Quang Tùng. [Phân công và việc cần nhóm kiểm tra](docs/TEAM.md).
 
 ## Week 2: mở các phần này
 
 | Nội dung | Link |
 |---|---|
 | Chạy app + DB bằng Compose | [Docker setup](docs/DOCKER_SETUP.md) |
-| Kiểm tra Terminal gói mới, cấu hình pipeline cPanel | [CI/CD setup](docs/CICD_SETUP.md) |
-| Yêu cầu và mục chưa hoàn thành | [Week 2 checklist](docs/WEEK2_CHECKLIST.md) |
+| Cấu hình và vận hành pipeline cPanel | [CI/CD setup](docs/CICD_SETUP.md) |
+| Đối chiếu yêu cầu Week 2 | [Week 2 checklist](docs/WEEK2_CHECKLIST.md) |
 | Kết quả thực tế, logs và artifacts | [Evidence Week 2](evidence/week2/README.md) |
 | Hướng tiếp tục | [Deployment plan](docs/DEPLOYMENT_PLAN.md) · [Lộ trình 4 tuần](docs/ROADMAP.md) |
 
-[Run 40633267900](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267900), commit `6583790`: build/Compose/PHP lint, **14 validation checks**, **17 container checks**, regression và gói source qua; **deploy-cpanel success**. [Source checks cùng commit](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40633267716) cũng success. Xem [log và giới hạn](evidence/week2/README.md).
+[Run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505), source commit `d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a`: **14 validation checks**, **17 container checks** ở CI, regression và kiểm tra gói source qua; staging chạy lại **17 container checks**, giữ cùng bản ghi qua recreate; **deploy-cpanel success** và revision đúng SHA. [Source checks cùng commit](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997549) cũng success.
 
-**Kết quả Terminal đã nhận:** `docker --version`, `docker compose version` và `docker info --format '{{.ServerVersion}}'` đều trả `docker: command not found`. Shell hiện không tìm được Docker trong PATH của tài khoản; chưa thể kết luận Docker được phép cài/chạy hoặc daemon khả dụng. [Bản ghi đã lược thông tin tài khoản](evidence/week2/terminal-check-2026-10-28.md).
-
-FTPS đã được cấu hình và xác minh bằng run từ push. Tiếp tục dùng [hướng dẫn CI/CD](docs/CICD_SETUP.md) để tái triển khai và xử lý lỗi; Docker/Compose hiện chỉ được chứng minh trên runner, chưa có container trên hosting.
+[Run thử lỗi thật](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40635078470) fail tại assertion từ chối giá `1000000000`; hai job deploy bị skipped. [PR #1](https://github.com/nathyu-le/DevopQLYFood/pull/1) đã đóng, không merge. [Ảnh trước/sau và dữ liệu persistence](evidence/week2/completion-2026-10-28.md) đã lưu trong repo, dùng được khi artifacts hết hạn.
 
 ## Chức năng và phạm vi
 
@@ -62,7 +60,7 @@ Docker runtime và database tạm trên Actions tách khỏi database hosting; k
 
 ## Deploy cPanel và cấu hình riêng
 
-**Website mới:** [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/). Đã xác minh từ ngoài runner: login/health/version/CSS/JS HTTP 200; health `ok`, revision khớp commit `6583790`, CSS/JS khớp source và dòng mô tả mới xuất hiện. [Kiến trúc Week 2](docs/WEEK2_ARCHITECTURE.md).
+**Website mới:** [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/). Đã xác minh từ ngoài runner: login/health/version/CSS/JS HTTP 200; health `ok`, revision khớp source commit `d18f6be`, dòng mô tả mới xuất hiện và có ảnh Chrome sau deploy. [Kiến trúc Week 2](docs/WEEK2_ARCHITECTURE.md).
 
 Bản Week 1: [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/). URL này không chứng minh bản pipeline mới đã được upload hoặc đang chạy Docker.
 
@@ -70,7 +68,7 @@ Bản Week 1: [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/D
 
 Pipeline FTPS chỉ upload runtime source của đúng commit đã kiểm tra; không đưa config DB/admin, DB hoặc `.htaccess` vào gói cập nhật. Kết nối đã được cấu hình bằng GitHub Variables/Secrets và chạy thành công. [Cách tái triển khai và xử lý lỗi](docs/CICD_SETUP.md).
 
-Nếu giảng viên yêu cầu container chạy trên máy triển khai, Docker trên runner và source PHP trực tiếp trên cPanel chưa tự thay thế được tiêu chí đó. Chưa đánh dấu hoàn tất Week 2.
+Đã đối chiếu lại ảnh đề Week 2: cần Docker/Compose, persistence, CI/CD tự động, test fail và minh chứng trước/sau; ảnh đề không ghi bắt buộc Docker chạy ngay trên cPanel. Bộ đầu ra hiện đã có minh chứng cho các mục này. Khi trình bày, nói đúng staging tạm và cPanel là hai môi trường riêng. Các mục OS/user/SSH/firewall còn thiếu được giữ ở checklist Week 1; Week 3–4 chưa thực hiện.
 
 ## File chính trong repo
 
@@ -83,7 +81,8 @@ Nếu giảng viên yêu cầu container chạy trên máy triển khai, Docker 
 | `tools/setup-containers.py` | Tạo config/secrets riêng, giữ file hiện có |
 | `tools/package-cpanel.py`, `tools/deploy-cpanel.py` | Gói source có kiểm tra SHA và upload FTPS khi đã cấu hình |
 | `.github/workflows/source-checks.yml` | Giữ bộ kiểm tra PHP/validation/HTTP với MySQL của Week 1 |
-| `.github/workflows/container-pipeline.yml` | Docker build/test/persistence, artifact và deploy cPanel có điều kiện |
+| `.github/workflows/container-pipeline.yml` | Build/test, artifact, deploy image staging, deploy cPanel và ảnh tự động |
+| `tools/capture-evidence.py` | Chụp Chrome thật, kiểm tra health/revision và ghi metadata |
 | `tests/` | Validation, HTTP/MySQL, container và kiểm tra gói source |
 | `docs/`, `evidence/` | Hướng dẫn, checklist và kết quả thật theo tuần |
 

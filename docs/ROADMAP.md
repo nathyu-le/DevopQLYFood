@@ -4,7 +4,7 @@
 
 Cả Week 1–4 sử dụng [nathyu-le/DevopQLYFood](https://github.com/nathyu-le/DevopQLYFood). Source được phát triển tiếp trên cùng ứng dụng; tài liệu và minh chứng được cập nhật theo checkpoint. Không tạo bốn bản ứng dụng độc lập.
 
-**Cập nhật Week 2 ngày 28/10/2026:** build/test Docker trên runner và deploy source qua FTPS lên cPanel đã thành công từ push main. Run 40633267900 khớp commit 6583790 và giao diện/revision public. Hosting hiện báo Docker command not found, nên container trên hosting chưa được chứng minh. [Minh chứng](../evidence/week2/deploy-2026-10-28.md) · [Kiến trúc](WEEK2_ARCHITECTURE.md).
+**Cập nhật Week 2 ngày 28/10/2026:** [run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505) từ push main có cả ba job success: build/test → deploy đúng image vào staging tạm trên runner mới → FTPS cập nhật cPanel. Có ảnh trước/sau, version đúng SHA, JSON persistence và run validation lỗi thật có deploy skipped. [Bộ minh chứng](../evidence/week2/completion-2026-10-28.md) · [Kiến trúc](WEEK2_ARCHITECTURE.md) · [Demo một người](WEEK2_DEMO.md).
 
 Kết quả **Week 1**: Source PHP/MySQL, tài liệu và phân công đã có; kiểm tra source trên GitHub Actions đã thành công. Website đã có log HTTP 200 và [3 ảnh thêm/sửa/SELECT cùng bản ghi ID 9](../evidence/application/demo-2026-10-21.md) trên hosting cPanel; đã có ảnh server/domain và sơ đồ hosting, có PHP 8.2/quota và log chặn HTTP; OS/user/SSH/firewall tạm hoãn bổ sung khi chọn môi trường Week 2 vì cp1 không hỗ trợ Terminal theo người triển khai. Checklist Week 2–4 đã được đối chiếu với ba ảnh đề chi tiết ngày 21/10/2026; kết quả thực hiện mới được cập nhật trong checklist và evidence tương ứng.
 
@@ -15,7 +15,7 @@ Nguồn đối chiếu: đề Week 1 đã cung cấp trước đó; ảnh Week 2
 | Tuần | Trọng tâm theo đề | Đầu ra chính | Điểm tối đa / 10 | Trạng thái |
 |---|---|---|---:|---|
 | Week 1 | Infrastructure & Initial Deployment | Kiến trúc, server/network, app + DB chạy, README và phân công | 2,0 | Có minh chứng thêm/sửa và SELECT trên cPanel; có ảnh server/domain và sơ đồ hosting; có PHP 8.2/quota và log chặn HTTP; OS/user/SSH/firewall tạm hoãn bổ sung |
-| Week 2 | Containerization & CI/CD | Dockerfile, Compose, persistent volume, build–test–deploy từ commit mới | 2,5 | Docker/persistence trên runner qua; push → FTPS → UI/revision hosting thành công; container trên hosting chưa có |
+| Week 2 | Containerization & CI/CD | Dockerfile, Compose, persistent volume, build–test–deploy từ commit mới | 2,5 | Bộ đầu ra đã kiểm chứng: image staging, persistence, CI/CD cPanel, test fail và ảnh trước/sau |
 | Week 3 | Monitoring, Security & Reliability | Logs theo thời gian, dashboard CPU/RAM/health, alert đã thử, bảo mật, backup/restore, playbook draft ≥2 sự cố | 2,5 | Chưa bắt đầu triển khai |
 | Week 4 | Final Demo & Troubleshooting | Bản tích hợp Week 1–3, triển khai từ server sạch, release/tag, playbook ≥3 sự cố, paper và video | 3,0 | Chưa thực hiện |
 
@@ -45,7 +45,7 @@ Week 2 đã có cấu hình dưới đây; Week 3–4 vẫn là vị trí dự k
 | Week 3 | Cấu hình monitoring trong `monitoring/`; script backup/restore trong `tools/`; `docs/TROUBLESHOOTING.md` với ít nhất 2 sự cố |
 | Week 4 | Nâng playbook lên ít nhất 3 sự cố; báo cáo trong `report/`; deployment/operations guide hoàn chỉnh; release/tag và video trong chỉ mục `evidence/week4/` |
 
-Cấu hình có thể chuẩn bị trước khi chọn server; chỉ ghi triển khai hoàn tất khi chạy và có minh chứng. Workflow **Source checks (not deployment)** vẫn kiểm tra source với DB tạm. Workflow **Week 2 - Docker checks and cPanel deploy** bổ sung kiểm tra Docker và cấu hình FTPS lên cPanel; deploy đã được cấu hình và kiểm chứng. [Kết quả thực tế](../evidence/week2/README.md).
+Cấu hình có thể chuẩn bị trước khi chọn server; chỉ ghi triển khai hoàn tất khi chạy và có minh chứng. Workflow **Source checks (not deployment)** vẫn kiểm tra source với DB tạm. Workflow **Week 2 - Docker checks and cPanel deploy** kiểm tra image, deploy image staging trên runner mới, rồi deploy source lên cPanel; cả ba job đã thành công. [Kết quả thực tế](../evidence/week2/README.md).
 
 ## Điều kiện chung khi nộp và demo
 
@@ -68,6 +68,6 @@ Khi nộp checkpoint, ghi thêm commit SHA hoặc link commit trong chỉ mục 
 
 ## Từ Week 2 tiếp tục các checkpoint
 
-Nhóm dùng hosting cPanel mới theo quyết định hiện tại. Pipeline source đã chạy tự động và giữ config/DB ngoài gói cập nhật. [Runbook](CICD_SETUP.md) · [Bằng chứng](../evidence/week2/deploy-2026-10-28.md).
+Nhóm tiếp tục cPanel cho website thật. Docker image deploy vào staging tạm, DB staging khác DB hosting; sau run stack tạm được dọn. [Runbook](CICD_SETUP.md) · [Bằng chứng](../evidence/week2/completion-2026-10-28.md).
 
-Docker/Compose/persistence được xác minh trên CI. Chưa có Docker trên hosting hoặc xác nhận thay tiêu chí; phần OS/user/SSH/firewall Week 1 còn thiếu. Week 3–4 chưa được đánh dấu thực hiện chỉ vì Week 2 deploy đã thành công.
+Ảnh đề Week 2 đã được đọc lại: không ghi phải chạy Docker ngay trên cPanel. Bộ đầu ra kỹ thuật Week 2 đã có minh chứng; nhóm cần đọc hiểu và trình bày đúng kiến trúc. Phần OS/user/SSH/firewall Week 1 còn thiếu giữ riêng; Week 3–4 chưa được đánh dấu thực hiện.

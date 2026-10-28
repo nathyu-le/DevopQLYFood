@@ -1,0 +1,11 @@
+{
+  "label": "live-after",
+  "base_url": "https://khotrick.org/DevopQLYFood/public/",
+  "health": "ok",
+  "revision": "d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a",
+  "screenshot": "live-after-login.png",
+  "width": 1440,
+  "height": 1000,
+  "captured_at_unix": 1793163550,
+  "authenticated": false
+}

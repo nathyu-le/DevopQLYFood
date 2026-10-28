@@ -13,6 +13,6 @@ bash: docker: command not found
 
 **Quan sát:** Terminal chạy được các lệnh shell; shell không tìm được lệnh `docker` trong PATH của tài khoản ở thời điểm kiểm tra. Chưa kiểm chứng Docker daemon, Compose hoặc quyền chạy/cài Docker. Kết quả không đủ để khẳng định nhà cung cấp tuyệt đối không hỗ trợ Docker.
 
-**Hướng tiếp tục:** giữ cPanel theo quyết định của nhóm, kiểm tra FTP Accounts/explicit FTPS để cấu hình deploy source đã qua Docker CI. Chưa có deploy FTPS thành công; chưa ghi container đang chạy trên hosting hoặc Week 2 hoàn tất.
+**Tại thời điểm kiểm tra:** chưa cấu hình FTPS. **Cập nhật sau đó cùng ngày:** đã có run deploy image staging trên runner mới và FTPS source lên cPanel thành công, kèm ảnh trước/sau. [Bộ checkpoint mới](completion-2026-10-28.md). Kết quả này không có nghĩa Docker đã được cài/chạy trong cPanel; kiến trúc giữ hai môi trường riêng.
 
 [CI/CD setup](../../docs/CICD_SETUP.md) · [Week 2 evidence](README.md)

@@ -1,0 +1,18 @@
+{
+  "revision": "d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a",
+  "compose_project": "devopqlyfood_staging_ci",
+  "before_recreate": {
+    "id": 1,
+    "name": "Container CI d64df0c415dc1ed5563c",
+    "price": "50000",
+    "is_available": 0
+  },
+  "after_recreate": {
+    "id": 1,
+    "name": "Container CI d64df0c415dc1ed5563c",
+    "price": "50000",
+    "is_available": 0
+  },
+  "same_record_preserved": true,
+  "scope": "temporary Docker staging database, not cPanel"
+}

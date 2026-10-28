@@ -1,0 +1,11 @@
+{
+  "label": "staging",
+  "base_url": "http://127.0.0.1:8080/",
+  "health": "ok",
+  "revision": "d18f6be9b79e1ede812d5450cb34cd8ec4e0e70a",
+  "screenshot": "staging-login.png",
+  "width": 1440,
+  "height": 1000,
+  "captured_at_unix": 1793163491,
+  "authenticated": false
+}
