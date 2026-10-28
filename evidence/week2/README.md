@@ -29,6 +29,12 @@ Log chọn lọc, không chứa credentials: [ci-2026-10-28.log](ci-2026-10-28.l
 - `tested-image-145a500655e02178bdec386ed608f7d460310ebb`: image Docker đã qua kiểm tra, ID `12779846868`; không phải source upload lên File Manager.
 - `container-test-results-145a500655e02178bdec386ed608f7d460310ebb`: status/logs services, ID `12779757039`.
 
+## Cập nhật sau khi web mới chạy
+
+Người triển khai xác nhận website mới đã chạy tại [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/). Đây là xác nhận của người triển khai, chưa thay cho log health/CRUD độc lập hoặc demo tự động cập nhật từ commit. Ảnh FTP Accounts cho thấy tài khoản riêng đã được tạo; không đăng ảnh hoặc thông tin tài khoản vào repo.
+
+Bản sửa quyền file trong source ZIP có [run 40629412986](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40629412986), commit `751285c3632a69f0a0c6a02b0cdb6fbab8339ac6`: container-checks success, gồm kiểm tra quyền archive 0644; deploy-cpanel skipped. [Source checks cùng commit](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40629413009) success. Cấu hình kết nối trên GitHub vẫn là bước tiếp theo.
+
 ## Còn phải làm trên cPanel
 
 1. Đã chạy ba lệnh Docker trong Terminal: đều `command not found`. [Bản ghi lược thông tin tài khoản](terminal-check-2026-10-28.md); không đăng ảnh gốc.

@@ -43,12 +43,14 @@ docker info --format '{{.ServerVersion}}'
 
 Tiếp tục phương án deploy source FTPS lên cPanel. Bước cần xác nhận tiếp là **FTP Accounts** và explicit TLS; chưa bật deploy khi chưa có kết nối được cấu hình.
 
-## Cấu hình deploy source qua FTPS khi áp dụng
+## Cấu hình deploy source qua FTPS
+
+**Tiến độ mới:** người triển khai xác nhận website mới đã chạy; ảnh FTP Accounts cho thấy đã tạo tài khoản riêng. Chưa có lần đăng nhập FTPS hoặc deploy từ runner được xác minh. Tiếp tục cấu hình Secrets/Variables và chạy workflow; chưa đánh dấu deploy hoàn tất.
 
 1. Vào cPanel → **FTP Accounts**. Nếu không có mục này, xác nhận với nhà cung cấp xem gói mới có hỗ trợ **explicit FTP over TLS/FTPS** không. Phương án FTPS này không phụ thuộc Terminal.
 2. Tạo **tài khoản FTP riêng cho đồ án**, giới hạn Directory đúng `public_html/DevopQLYFood`. Không dùng tài khoản có quyền sửa toàn bộ website khác. Ghi FTP Server, username đầy đủ, port và kiểu TLS theo nhà cung cấp. Certificate phải hợp lệ với FTP hostname; không tắt kiểm tra certificate để chữa lỗi.
 3. Tài khoản bị giới hạn đúng thư mục trên thường dùng `CPANEL_FTP_ROOT=/`. Nếu dùng tài khoản có root khác, lấy đường dẫn FTP thực tế trỏ đến thư mục chứa `app/`, `public/`, `config/`; không suy ra từ đường dẫn cPanel.
-4. Trong GitHub repo → **Settings → Secrets and variables → Actions**, thêm các biến/secrets dưới đây. Cũng có thể lưu vào environment `cpanel`; nếu mục tiêu là deploy tự động thì không bật yêu cầu người duyệt từng lần.
+4. Trong GitHub repo → **Settings → Secrets and variables → Actions**, thêm vào **repository** các biến/secrets dưới đây. Đặt `CPANEL_DEPLOY_ENABLED` ở cấp repository vì điều kiện job được đánh giá trước khi job chạy; các trường kết nối cũng dùng repository scope trong hướng dẫn này. Điền mật khẩu FTP trực tiếp vào GitHub Secrets. Job dùng environment `cpanel`; nếu mục tiêu là deploy tự động thì không đặt yêu cầu duyệt thủ công cho từng lần.
 
 | Loại | Tên | Nội dung |
 |---|---|---|
@@ -56,7 +58,7 @@ Tiếp tục phương án deploy source FTPS lên cPanel. Bước cần xác nh�
 | Variable | `CPANEL_FTP_HOST` | FTP hostname đúng certificate do nhà cung cấp cung cấp, không thêm `ftp://` |
 | Variable | `CPANEL_FTP_PORT` | Port explicit FTPS, thường 21; script mặc định 21 |
 | Variable | `CPANEL_FTP_ROOT` | Root FTP trỏ đúng thư mục đồ án; `/` khi tài khoản bị giới hạn đúng `DevopQLYFood` |
-| Variable | `CPANEL_BASE_URL` | `https://thitruongmmo.com/DevopQLYFood/public/` |
+| Variable | `CPANEL_BASE_URL` | `https://khotrick.org/DevopQLYFood/public/` — URL hosting mới người triển khai xác nhận đã chạy |
 | Secret | `CPANEL_FTP_USER` | Username FTP đầy đủ |
 | Secret | `CPANEL_FTP_PASSWORD` | Mật khẩu tài khoản FTP riêng; nhập trực tiếp ở GitHub Secrets, không đưa vào chat/code |
 

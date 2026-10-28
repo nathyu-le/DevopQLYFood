@@ -60,6 +60,8 @@ Docker runtime và database tạm trên Actions tách khỏi database hosting; k
 
 ## Deploy cPanel và cấu hình riêng
 
+**Cập nhật sau cài mới:** người triển khai xác nhận website mới tại [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/) đã chạy. Tài khoản FTP riêng đã được tạo theo ảnh cung cấp; chưa có lần deploy FTPS từ Actions được xác minh. [Run 40629412986](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40629412986) của commit `751285c` qua kiểm tra Docker và đóng gói source; deploy-cpanel skipped. Phần giữ dữ liệu và thay đổi source tự động trên hosting vẫn cần demo.
+
 Bản Week 1: [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/). URL này không chứng minh bản pipeline mới đã được upload hoặc đang chạy Docker.
 
 [CPANEL_SETUP.md](docs/CPANEL_SETUP.md) hướng dẫn upload/config DB ban đầu. `config/config.example.php` chỉ là mẫu; **không commit `config/config.local.php`**, `.env` hoặc `.secrets/`. Đặt DocumentRoot vào `public/`; layout cPanel có thư mục cha cần giữ quy tắc bảo vệ trong `.htaccess` như hướng dẫn.
