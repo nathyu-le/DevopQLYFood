@@ -3,9 +3,9 @@ name: Week 2 - Docker checks and cPanel deploy
 on:
   push:
     branches: [main]
-    paths-ignore: ['docs/**', 'evidence/**', '*.md', 'architecture.png']
+    paths-ignore: ['docs/**', 'evidence/**', '*.md', 'architecture.png', '.github/workflows/hosting-diagnostics.yml']
   pull_request:
-    paths-ignore: ['docs/**', 'evidence/**', '*.md', 'architecture.png']
+    paths-ignore: ['docs/**', 'evidence/**', '*.md', 'architecture.png', '.github/workflows/hosting-diagnostics.yml']
   workflow_dispatch:
 
 permissions:
@@ -56,12 +56,16 @@ jobs:
           if-no-files-found: error
       - name: Save the tested Docker image as evidence
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        run: docker save "$APP_IMAGE" | gzip > app-image.tar.gz
+        run: |
+          docker save "$APP_IMAGE" | gzip > app-image.tar.gz
+          docker image inspect --format '{{.Id}}' "$APP_IMAGE" > image-id.txt
       - uses: actions/upload-artifact@v4
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         with:
           name: tested-image-${{ github.sha }}
-          path: app-image.tar.gz
+          path: |
+            app-image.tar.gz
+            image-id.txt
           retention-days: 7
           if-no-files-found: error
       - name: Capture container status and logs
@@ -80,8 +84,57 @@ jobs:
         if: always()
         run: docker compose down --volumes --remove-orphans
 
-  deploy-cpanel:
+
+  deploy-staging:
     needs: container-checks
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    environment: staging
+    env:
+      COMPOSE_PROJECT_NAME: devopqlyfood_staging_ci
+      APP_IMAGE: devopqlyfood:${{ github.sha }}
+      APP_REVISION: ${{ github.sha }}
+      APP_PORT: '8080'
+      RUN_CONTAINER_TESTS: '1'
+      CONTAINER_EVIDENCE_DIR: stage-evidence
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: tested-image-${{ github.sha }}
+      - name: Load and verify the exact image tested by CI
+        run: |
+          gzip -dc app-image.tar.gz | docker load
+          test "$(docker image inspect --format '{{.Id}}' "$APP_IMAGE")" = "$(cat image-id.txt)"
+          mkdir -p stage-evidence
+          cp image-id.txt stage-evidence/tested-image-id.txt
+      - name: Capture the live website before updating it
+        if: vars.CPANEL_DEPLOY_ENABLED == 'true'
+        env:
+          CPANEL_BASE_URL: ${{ vars.CPANEL_BASE_URL }}
+        run: python3 tools/capture-evidence.py --base-url "$CPANEL_BASE_URL" --label live-before --output-dir stage-evidence
+      - name: Deploy the tested image to temporary Docker staging
+        run: |
+          python3 tools/setup-containers.py
+          docker compose up -d --no-build --wait --wait-timeout 180
+      - name: Verify deployed image revision, CRUD and persistent volume
+        run: python3 tests/container_smoke.py
+      - name: Capture the actual container app
+        run: python3 tools/capture-evidence.py --base-url http://127.0.0.1:8080/ --label staging --output-dir stage-evidence --expected-revision "$APP_REVISION"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: week2-staging-evidence-${{ github.sha }}
+          path: stage-evidence/
+          retention-days: 14
+          if-no-files-found: warn
+      - name: Remove only the temporary staging stack
+        if: always()
+        run: docker compose down --volumes --remove-orphans
+
+  deploy-cpanel:
+    needs: [container-checks, deploy-staging]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.CPANEL_DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -102,3 +155,15 @@ jobs:
           CPANEL_FTP_PASSWORD: ${{ secrets.CPANEL_FTP_PASSWORD }}
           APP_REVISION: ${{ github.sha }}
         run: python3 tools/deploy-cpanel.py
+      - name: Capture the live website after deployment
+        env:
+          CPANEL_BASE_URL: ${{ vars.CPANEL_BASE_URL }}
+          APP_REVISION: ${{ github.sha }}
+        run: python3 tools/capture-evidence.py --base-url "$CPANEL_BASE_URL" --label live-after --output-dir live-evidence --expected-revision "$APP_REVISION"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: week2-live-evidence-${{ github.sha }}
+          path: live-evidence/
+          retention-days: 14
+          if-no-files-found: warn

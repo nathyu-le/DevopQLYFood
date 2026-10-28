@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <span class="story-foot">Quản lý thực đơn quán ăn</span>
     </section>
     <section class="login-form-panel">
-        <span class="eyebrow">CHÀO MỪNG TRỞ LẠI</span><h2>Vào bếp thôi.</h2><p class="muted">Đăng nhập để cập nhật món ăn và quản lý thực đơn của quán.</p>
+        <span class="eyebrow">CHÀO MỪNG TRỞ LẠI</span><h2>Vào bếp thôi.</h2><p class="muted">Đăng nhập để cập nhật món, giá và tình trạng phục vụ.</p>
         <?php if ($error): ?><div class="notice notice-error" role="alert"><?= e($error) ?></div><?php endif; ?>
         <form method="post" class="stack">
             <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">

@@ -92,6 +92,17 @@ def main():
         compose('up', '-d', '--no-build', '--force-recreate', '--wait', '--wait-timeout', '180')
         after = query(select)
         check(after == row, 'same ID, name, price and status survive recreation of app and DB')
+        evidence_directory = os.environ.get('CONTAINER_EVIDENCE_DIR')
+        if evidence_directory:
+            destination = Path(evidence_directory)
+            destination.mkdir(parents=True, exist_ok=True)
+            (destination / 'persistence.json').write_text(json.dumps({
+                'revision': os.environ['APP_REVISION'],
+                'compose_project': os.environ['COMPOSE_PROJECT_NAME'],
+                'before_recreate': row, 'after_recreate': after,
+                'same_record_preserved': after == row,
+                'scope': 'temporary Docker staging database, not cPanel',
+            }, ensure_ascii=False, indent=2) + '\n')
         csrf = login()
         _, body, _ = request('index.php?q=' + urllib.parse.quote(NAME))
         check(NAME in body and '50.000 đ' in body, 'the recreated web container reads the persistent record')
