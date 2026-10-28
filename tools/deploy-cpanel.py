@@ -43,7 +43,11 @@ def check_site(base, revision=None, stage='site check'):
     suffix = 'health.php' if revision is None else 'version.php'
     # Avoid a proxy serving a stale version response.
     request = urllib.request.Request(base + suffix + '?check=' + str(time.time_ns()),
-                                     headers={'Cache-Control': 'no-cache'})
+                                     headers={
+                                         'Cache-Control': 'no-cache',
+                                         'Accept': 'application/json',
+                                         'User-Agent': 'DevopQLYFood-CI/1.0 (+https://github.com/nathyu-le/DevopQLYFood)',
+                                     })
     try:
         with urllib.request.urlopen(request, timeout=20) as response:
             if response.status != 200:

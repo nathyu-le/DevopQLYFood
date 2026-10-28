@@ -65,8 +65,11 @@ def response(payload):
     stream.status = 200
     return stream
 
-with patch.object(deployer.urllib.request, 'urlopen', return_value=response(b'{"status":"ok"}')):
+with patch.object(deployer.urllib.request, 'urlopen', return_value=response(b'{"status":"ok"}')) as fetch:
     deployer.check_site('https://example.test/', stage='pre-deploy health')
+    request = fetch.call_args.args[0]
+    assert request.get_header('User-agent').startswith('DevopQLYFood-CI/')
+    assert request.get_header('Accept') == 'application/json'
 for status in (403, 404, 503):
     error = urllib.error.HTTPError('https://example.test/', status, 'PRIVATE_CREDENTIAL', {}, io.BytesIO(b'PRIVATE_RESPONSE'))
     with patch.object(deployer.urllib.request, 'urlopen', side_effect=error):
