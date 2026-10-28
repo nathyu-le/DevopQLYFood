@@ -1,10 +1,12 @@
-# Kiến trúc hosting hiện tại và phương án Ubuntu
+# Kiến trúc Week 1 — hosting cp1, ngày 21/10/2026
 
-**Cập nhật 21/10/2026:** ứng dụng đang truy cập tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/). Sơ đồ mô tả các phần đã có bằng chứng; thông số chưa biết được ghi rõ. [Ảnh Server Information và Domains](../evidence/server/README.md).
+**Minh chứng lịch sử Week 1:** ứng dụng đã được truy cập tại [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/). Sơ đồ mô tả các phần đã có bằng chứng; thông số chưa biết được ghi rõ. [Ảnh Server Information và Domains](../evidence/server/README.md).
 
-![Kiến trúc hosting cPanel hiện tại](../architecture.png)
+![Kiến trúc hosting cp1 ở Week 1](../evidence/week1/architecture.png)
 
-## Thành phần hiện tại
+Ảnh ghi nhận checkpoint Week 1. Hướng triển khai đang sử dụng được mô tả ở [kiến trúc Week 2](WEEK2_ARCHITECTURE.md); không suy ra thông số gói mới từ ảnh này.
+
+## Thành phần ghi nhận ở Week 1
 
 | Thành phần | Hiện trạng và bằng chứng | Chưa xác minh |
 |---|---|---|
@@ -30,8 +32,8 @@ Kiểm tra HTTP ngày 21/10/2026 thấy `database/schema.sql` và `README.md` �
 
 Repo có `.htaccess` đặt **cạnh `public/`** cho layout cPanel hiện tại, chặn mọi URL ngoài `public/`. Người triển khai đã upload; [kiểm tra HTTP sau upload](../evidence/server/http-protection-2026-10-21.md) xác nhận health/login/CSS 200, schema/README 403. Xem [CPANEL_SETUP.md](CPANEL_SETUP.md#bảo-vệ-layout-hiện-tại). Khi hosting cho phép, ưu tiên domain/subdomain riêng trỏ DocumentRoot trực tiếp vào `public/` và đặt thư mục riêng ngoài vùng web.
 
-## Phương án Ubuntu/VM/VPS tham chiếu
+## Tiếp tục sau Week 1
 
-[MANUAL_SETUP.md](MANUAL_SETUP.md) giữ hướng dẫn Ubuntu 24.04 nếu chọn môi trường đó để đáp ứng phần cài/cấu hình server và các tuần tiếp theo. Thiết kế tham chiếu dùng Apache/PHP cùng MySQL, DB loopback `127.0.0.1:3306`, source `/var/www/DevopQLYFood`, DocumentRoot `/var/www/DevopQLYFood/public`; SSH chỉ cho nguồn quản trị, DB không public. Các giá trị này **chưa phải hiện trạng hosting**.
+App đã chuyển sang hosting cPanel mới ở Week 2, có pipeline build/test, deploy image staging tạm và FTPS source lên website. [Kiến trúc Week 2](WEEK2_ARCHITECTURE.md) · [Cài đặt cPanel](CPANEL_SETUP.md) · [CI/CD](CICD_SETUP.md).
 
-Nhóm giữ cp1 để demo Week 1, tạm hoãn phần OS/user/SSH/firewall. Week 2 sẽ xem xét VPS hoặc hosting khác có khả năng thực hiện Docker/Compose và CI/CD theo [kế hoạch](DEPLOYMENT_PLAN.md). Docker/Compose, volumes, pipeline deploy, monitoring và backup/restore thuộc checkpoint sau. Khi đổi môi trường, cập nhật sơ đồ và thu bằng chứng mới.
+Phần OS/user/SSH/firewall Week 1 còn thiếu được giữ ở [checklist](WEEK1_CHECKLIST.md), không được đánh dấu hoàn tất bởi Docker staging. Các checkpoint sau theo [lộ trình](ROADMAP.md).

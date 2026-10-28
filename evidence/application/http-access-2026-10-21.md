@@ -25,4 +25,4 @@ Các request này chưa đăng nhập hoặc thử INSERT/UPDATE/DELETE; chưa c
 
 ## Minh chứng tiếp theo đã bổ sung
 
-Sau đợt kiểm tra HTTP này, đã nhận [3 ảnh thêm/sửa và SELECT của bản ghi ID 9](demo-2026-10-21.md): giá 45.000đ → 50.000đ và is_available 0 trong SQL. Log HTTP phía trên giữ nguyên phạm vi kiểm tra GET ban đầu. Bước tải lại/tìm kiếm và trạng thái web đầy đủ có thể bổ sung theo [kịch bản demo](../../docs/DEMO.md).
+Sau đợt kiểm tra HTTP này, đã nhận [3 ảnh thêm/sửa và SELECT của bản ghi ID 9](demo-2026-10-21.md): giá 45.000đ → 50.000đ và is_available 0 trong SQL. Log HTTP phía trên giữ nguyên phạm vi kiểm tra GET ban đầu. Bước tải lại/tìm kiếm và trạng thái web đầy đủ có thể bổ sung theo [kịch bản demo](../../docs/WEEK1_PRESENTATION.md).

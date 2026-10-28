@@ -29,7 +29,6 @@ Các trường: tên món, danh mục, giá VNĐ, mô tả, tình trạng. Khôn
 3. PHP Manual — Password hashing: https://www.php.net/manual/en/function.password-hash.php
 4. PHP Manual — Session security: https://www.php.net/manual/en/session.security.php
 5. MySQL 8.0 Reference Manual — CREATE TABLE: https://dev.mysql.com/doc/refman/8.0/en/create-table.html
-6. Apache HTTP Server — Virtual hosts: https://httpd.apache.org/docs/2.4/vhosts/
-7. Ubuntu Server — Firewall: https://documentation.ubuntu.com/server/how-to/security/firewalls/
+6. Apache HTTP Server — .htaccess: https://httpd.apache.org/docs/2.4/howto/htaccess.html
 
 Các nguồn này là tài liệu nền tảng triển khai, không phải nguồn của một website hoàn chỉnh được sao chép.

@@ -1,6 +1,6 @@
 # Minh chứng Week 1
 
-**Cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình admin trên hosting cPanel. Đã có [3 ảnh thêm/sửa và SELECT đối chiếu](../application/demo-2026-10-21.md) cùng món ID 9. Bộ ảnh xác nhận phần ghi/đọc DB. Nhóm dùng cp1 để trình bày tạm Week 1; người triển khai xác nhận gói này không hỗ trợ Terminal. Phần hạ tầng OS/user/SSH/firewall tạm hoãn bổ sung khi xem xét môi trường cho Week 2.
+**Cập nhật 21/10/2026:** người triển khai xác nhận website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được sau khi cấu hình admin trên hosting cPanel. Đã có [3 ảnh thêm/sửa và SELECT đối chiếu](../application/demo-2026-10-21.md) cùng món ID 9. Bộ ảnh xác nhận phần ghi/đọc DB. Nhóm dùng cp1 để trình bày tạm Week 1; người triển khai xác nhận gói này không hỗ trợ Terminal. Phần hạ tầng OS/user/SSH/firewall còn thiếu được giữ ở checklist Week 1. Hướng cPanel và pipeline Week 2 có minh chứng riêng.
 
 | Hạng mục | Trạng thái |
 |---|---|
@@ -17,10 +17,11 @@ Bản source được gửi để upload: commit `ca9ef4fcd9214266af681963caf207
 
 - [Thông tin server và quyền hosting](../server/README.md).
 - [Minh chứng app và DB cần thu](../application/README.md).
-- [Kịch bản demo](../../docs/DEMO.md).
+- [Kịch bản demo](../../docs/WEEK1_PRESENTATION.md).
 - [Hướng dẫn cPanel](../../docs/CPANEL_SETUP.md).
 - [Checklist Week 1](../../docs/WEEK1_CHECKLIST.md).
-- [Kế hoạch tiếp tục](../../docs/DEPLOYMENT_PLAN.md).
+- [Lộ trình tiếp tục](../../docs/ROADMAP.md).
+- [Sơ đồ checkpoint Week 1](architecture.png).
 
 Hải phụ trách kiểm tra chức năng/đối chiếu DB; Tùng phụ trách tổng hợp ảnh/log/video theo [phân công Week 1](../../docs/TEAM.md). Đây là phân công, chưa ghi nhận hai thành viên đã thực hiện demo.
 

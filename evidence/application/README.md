@@ -9,4 +9,4 @@
 
 Bộ ảnh chứng minh thao tác thêm/sửa và dữ liệu đối chiếu trong DB. Cột trạng thái web nằm ngoài phần ảnh chụp; trạng thái 0 được xác nhận từ SQL. Bước tải lại/tìm kiếm riêng, xóa món và video liên tục chưa được thể hiện trong bộ ảnh này.
 
-Tiếp theo: bổ sung ảnh web thấy rõ trạng thái của ID 9, bước tải lại/tìm kiếm hoặc video liền mạch theo [kịch bản demo](../../docs/DEMO.md); thu minh chứng hạ tầng tại [server/](../server/README.md). Ghi người thực hiện từng đầu việc theo công việc thật.
+Tiếp theo: bổ sung ảnh web thấy rõ trạng thái của ID 9, bước tải lại/tìm kiếm hoặc video liền mạch theo [kịch bản demo](../../docs/WEEK1_PRESENTATION.md); thu minh chứng hạ tầng tại [server/](../server/README.md). Ghi người thực hiện từng đầu việc theo công việc thật.

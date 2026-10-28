@@ -10,7 +10,7 @@
 
 [Sơ đồ](WEEK2_ARCHITECTURE.md). Docker staging tạm được dọn sau job; cPanel chạy PHP/DB trực tiếp. Không triển khai VPS.
 
-Staging chỉ chạy main, cần container-checks success. cPanel cần cả hai job success và `CPANEL_DEPLOY_ENABLED=true`. PR chỉ kiểm tra. Thay đổi docs/evidence/Markdown và workflow diagnostics được paths-ignore; thay đổi source/config chạy tự động. Có thể Run workflow thủ công trên main khi cần demo lại.
+Staging chỉ chạy main, cần container-checks success. cPanel cần cả hai job success và `CPANEL_DEPLOY_ENABLED=true`. PR chỉ kiểm tra. Thay đổi docs/evidence/Markdown được paths-ignore; thay đổi source/config chạy tự động. Có thể Run workflow thủ công trên main khi cần demo lại.
 
 [Run lỗi validation thật](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40635078470) fail ở assertion giá vượt giới hạn; hai job deploy skipped. [PR #1](https://github.com/nathyu-le/DevopQLYFood/pull/1) đã đóng không merge. PR còn có branch guard chặn deploy; dependency vào tests cũng áp dụng với main.
 
@@ -59,7 +59,7 @@ Script kiểm tra SHA của artifact, health trước upload và thư mục đí
 | HTTP 520 tại pre-check | Kiểm tra lại health, chỉ retry job lỗi sau khi endpoint về ok; không bỏ health gate |
 | CSS bị 403 sau giải nén thủ công | Sửa quyền file và chuẩn hóa ZIP; CSS/JS đã được xác minh 200 sau FTPS deploy |
 
-Có workflow Hosting connection diagnostics để đọc certificate công khai qua AUTH TLS, **không dùng FTP credentials hoặc truyền file**. Việc deploy dùng client riêng có xác minh certificate đầy đủ.
+Client deploy xác minh certificate TLS trước khi gửi credentials; giữ hostname khớp certificate như phần cấu hình phía trên.
 
 Với lỗi tạm và source/secrets đã đúng, có thể retry failed jobs của run; không cần chạy lại các job đã qua. Chỉ ghi deploy thành công khi job và public revision được xác minh.
 

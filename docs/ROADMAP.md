@@ -31,7 +31,7 @@ Nguồn đối chiếu: đề Week 1 đã cung cấp trước đó; ảnh Week 2
 | Theo dõi Week 4 | `docs/WEEK4_CHECKLIST.md` và `evidence/week4/` |
 | Source ứng dụng dùng chung | `app/`, `public/`, `config/`, `database/` |
 | Kiểm tra source / CI | `tests/`, `.github/workflows/` |
-| Sơ đồ và hướng dẫn triển khai | `architecture.png`, `docs/ARCHITECTURE.md`, `docs/MANUAL_SETUP.md` |
+| Sơ đồ và hướng dẫn triển khai | `docs/WEEK2_ARCHITECTURE.md`, `docs/CPANEL_SETUP.md`, `docs/CICD_SETUP.md`; sơ đồ cũ ở `evidence/week1/architecture.png` |
 
 Minh chứng Week 1 đã có chỗ dành cho `evidence/server/` và `evidence/application/`; `evidence/week1/README.md` dẫn đến hai thư mục đó để giữ nguyên các link hiện tại.
 

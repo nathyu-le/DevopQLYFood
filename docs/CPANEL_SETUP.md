@@ -1,14 +1,16 @@
 # Triển khai app PHP/MySQL trên hosting cPanel
 
-**Trạng thái ngày 21/10/2026:** website [thitruongmmo.com/DevopQLYFood/public/](https://thitruongmmo.com/DevopQLYFood/public/) đã truy cập được. Có [3 ảnh thêm/sửa/SELECT ID 9](../evidence/application/demo-2026-10-21.md) và [ảnh thông tin hosting](../evidence/server/README.md): gói cp1, Linux, Apache 2.4.67, MariaDB 10.11.16; domain root `/public_html`. Có thêm PHP 8.2 (Inherited), quota CPU 100% / RAM 600 MB / disk 1.000 MB; người triển khai xác nhận cp1 không hỗ trợ Terminal. Nhóm dùng gói hiện tại để demo Week 1 và tạm hoãn phần OS/user/SSH/firewall, xem xét chuyển môi trường khi làm Week 2.
+**Môi trường live hiện tại:** [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/). Hosting mới có Terminal; tại lần kiểm tra, shell không tìm thấy lệnh Docker. Website chạy PHP/DB trực tiếp, còn image Docker được deploy vào staging tạm trên GitHub runner.
+
+Tài liệu này dùng cho **cài đặt/cấu hình ban đầu**. Những lần cập nhật source tiếp theo dùng [pipeline FTPS](CICD_SETUP.md). [Ảnh thông số cp1 và thao tác app ngày 21/10/2026](../evidence/week1/README.md) là minh chứng Week 1, không phải cấu hình hosting mới.
 
 ## Source và thư mục
 
-Bản source đã cung cấp để upload: commit `ca9ef4fcd9214266af681963caf2076e44bc7767`. Upload ZIP vào Home Directory bằng File Manager rồi Extract; chọn domain/subdomain riêng có DocumentRoot trỏ vào `DevopQLYFood/public`. Chỉ `public/` được phục vụ ra web; cấu hình, SQL và các thư mục khác nằm ngoài DocumentRoot.
+Lấy source từ repository này để cài lần đầu. Upload ZIP vào Home Directory bằng File Manager rồi Extract; chọn domain/subdomain riêng có DocumentRoot trỏ vào `DevopQLYFood/public`. Chỉ `public/` được phục vụ ra web; cấu hình, SQL và các thư mục khác nằm ngoài DocumentRoot.
 
 Đường dẫn Home do hosting cấp có thể khác nhau. Nếu nhà cung cấp giới hạn DocumentRoot bên trong `public_html`, cần điều chỉnh cách đặt thư mục và các đường dẫn require theo môi trường; không coi việc mở được URL `/public` là đã bảo vệ thư mục cha. Ghi đường dẫn thật vào minh chứng trước khi hoàn thiện sơ đồ.
 
-URL đang dùng có dạng `/DevopQLYFood/public/`, Domains xác nhận domain root `/public_html`. Layout này cần chặn HTTP vào các thư mục cạnh `public/`. Trước bản sửa, schema/README trả HTTP 200; sau upload `.htaccess`, hai URL này trả 403, health/login/CSS vẫn trả 200. [Log](../evidence/server/http-protection-2026-10-21.md).
+Với layout dự án nằm dưới `public_html` và URL dạng `/DevopQLYFood/public/`, cần chặn HTTP vào các thư mục cạnh `public/`. Đợt kiểm tra Week 1 ghi nhận schema/README trả HTTP 200 trước bản sửa; sau upload `.htaccess`, hai URL trả 403, health/login/CSS vẫn trả 200. Khi cài gói mới, kiểm tra lại các URL để xác nhận quy tắc có hiệu lực. [Log](../evidence/server/http-protection-2026-10-21.md).
 
 ## Bảo vệ layout hiện tại
 
@@ -31,8 +33,8 @@ Quy tắc chạy trong thư mục dự án: chỉ cho phép HTTP với đường
 
 1. Tạo DB mới và user riêng trong Manage My Databases/MySQL Databases hoặc Database Wizard; ghi đầy đủ tên có prefix cPanel.
 2. Gán quyền SELECT, INSERT, UPDATE, DELETE cho tài khoản app. Import schema bằng phiên phpMyAdmin của cPanel có quyền tạo bảng.
-3. Chọn đúng DB trong phpMyAdmin, import `database/schema.sql`; tùy chọn import `database/seed.sql` một lần. File SQL gộp đã cung cấp gồm hai phần này; không import cả file gộp và seed riêng vì sẽ thêm dữ liệu mẫu hai lần.
-4. Domain hiện dùng PHP 8.2 (`ea-php82`, Inherited) theo ảnh MultiPHP Manager; ứng dụng cần pdo_mysql, mbstring và session. Hosting báo MariaDB `10.11.16-MariaDB-cll-lve`; ảnh thao tác app/SQL xác nhận thêm/sửa trên DB hosting. Bộ CI tự động riêng dùng MySQL 8.0; chưa có suite tự động chạy trên MariaDB hosting.
+3. Chọn đúng DB trong phpMyAdmin, import `database/schema.sql`; tùy chọn import `database/seed.sql` một lần. Không import seed lặp lại vì sẽ thêm dữ liệu mẫu nhiều lần.
+4. Chọn PHP 8.2 trở lên cho đúng domain; ứng dụng cần pdo_mysql, mbstring và session. Ảnh PHP/MariaDB ở Week 1 thuộc cp1 cũ; kiểm tra phiên bản gói mới trong cPanel trước khi ghi thông số. Source checks dùng MySQL 8.0 tạm, Docker CI/staging dùng MariaDB 10.11 tạm; chúng không phải DB hosting.
 
 ## Cấu hình cục bộ
 
@@ -45,9 +47,9 @@ Quy tắc chạy trong thư mục dự án: chỉ cho phép HTTP với đường
 ## Kiểm tra và ghi minh chứng
 
 1. Mở HTTPS và `/DevopQLYFood/public/health.php`; [log ngày 21/10/2026](../evidence/application/http-access-2026-10-21.md) đã ghi HTTP 200/status ok. Health xác nhận kết nối và đọc bảng; ảnh thao tác app/SELECT được lưu riêng.
-2. Theo [DEMO.md](DEMO.md): đăng nhập, thêm món mới, tải lại/tìm kiếm, SELECT cùng bản ghi, sửa giá/trạng thái và đối chiếu lại DB.
+2. Theo [Kịch bản Week 1](WEEK1_PRESENTATION.md): đăng nhập, thêm món mới, tải lại/tìm kiếm, SELECT cùng bản ghi, sửa giá/trạng thái và đối chiếu lại DB.
 3. Lưu ảnh/video có URL, ID bản ghi và ngày; ghi người thực hiện tại [evidence/week1/](../evidence/week1/README.md).
-4. Đã thu thông số cPanel/PHP/quota và DocumentRoot trong [thông tin server](../evidence/server/README.md). cp1 không hỗ trợ Terminal theo người triển khai; phần OS/user/SSH/firewall tạm hoãn, không yêu cầu tìm lại Terminal trên gói hiện tại.
+4. Thu thông số cPanel/PHP/quota/DocumentRoot của đúng gói đang dùng nếu cập nhật minh chứng. [Thông tin server Week 1](../evidence/server/README.md) thuộc cp1 cũ; phần OS/user/SSH/firewall còn thiếu được theo dõi riêng.
 5. Đối chiếu riêng yêu cầu cài Ubuntu Server/VM, EC2 hoặc VPS của đề. Có website chạy trên shared hosting chưa tự chứng minh nhóm đã thực hiện các bước quản trị hệ điều hành; chưa đánh dấu toàn bộ Week 1 hoàn tất.
 
 ## Tài liệu tham khảo

@@ -16,13 +16,8 @@
 
 Ảnh Chrome và JSON được tải trực tiếp từ artifacts run trên rồi đưa vào Git. Screenshot không chỉnh sửa, không đăng nhập admin. Source/image giữ 7 ngày và log/ảnh artifacts giữ 14 ngày theo workflow; các file checkpoint trong Git vẫn xem được sau đó.
 
-## Lịch sử trước checkpoint
+## Phạm vi bộ nộp
 
-- [CI ban đầu](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40604164827): Docker qua, deploy skipped khi chưa cấu hình. [Log](ci-2026-10-28.log).
-- [Regression quyền ZIP](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40629412986): CI qua, deploy chưa bật.
-- [Health 403](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40631292950): dừng trước FTP; đây là pre-deploy HTTP lỗi, không gọi là validation lỗi.
-- [FTPS source lần đầu](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40632576041): success sau retry health tạm.
-- [Push cập nhật UI 6583790](deploy-2026-10-28.md): run 40633267900 có hai job success; bản lịch sử trước khi bổ sung staging/ảnh tự động.
-- [Terminal hosting](terminal-check-2026-10-28.md): docker command not found; giữ cPanel, không triển khai VPS.
+Bộ checkpoint dùng run thành công và run validation lỗi được liên kết phía trên. Bộ kết quả cuối thay các bản log cấu hình ban đầu; có thể xem lại các lần thử trước trong lịch sử Git/GitHub Actions. Terminal cPanel từng trả docker command not found, vì vậy image được deploy ở staging tạm theo [kiến trúc](../../docs/WEEK2_ARCHITECTURE.md).
 
 Staging tạm không có URL public lâu dài; live chạy PHP/DB trực tiếp. JSON persistence thuộc staging, không phải cPanel. Ảnh đề Week 2 không yêu cầu Docker phải chạy ngay trên cPanel; [checklist](../../docs/WEEK2_CHECKLIST.md) đã sửa diễn giải cũ và đối chiếu từng mục. OS/user/SSH/firewall Week 1 và Week 3–4 vẫn theo checklist riêng.

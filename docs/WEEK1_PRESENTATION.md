@@ -1,6 +1,8 @@
 # Kịch bản trình bày Week 1 — một người trình bày
 
-Bản ngày 21/10/2026. Một người nói và thao tác xuyên suốt; thời lượng gợi ý khoảng 7–9 phút, tùy tốc độ demo. Đây là báo cáo tiến độ triển khai app/DB trên cp1; phần tự cài/cấu hình OS, SSH và firewall đang tạm hoãn theo [kế hoạch](DEPLOYMENT_PLAN.md), chưa có xác nhận giảng viên chấp thuận thay thế tiêu chí.
+Kịch bản checkpoint Week 1 ngày 21/10/2026; link và hướng tiếp tục được rà lại ngày 28/10/2026. Một người nói và thao tác xuyên suốt; thời lượng gợi ý khoảng 7–9 phút, tùy tốc độ demo. Đây là báo cáo tiến độ triển khai app/DB trên cp1; phần tự cài/cấu hình OS, SSH và firewall đang tạm hoãn theo [lộ trình](ROADMAP.md), chưa có xác nhận giảng viên chấp thuận thay thế tiêu chí.
+
+**Phạm vi:** thông số cp1, domain và ảnh trong kịch bản này thuộc Week 1. Buổi trình bày Week 2 dùng [WEEK2_DEMO.md](WEEK2_DEMO.md).
 
 **Cách dùng:** dòng **Mở / Thao tác** là chỉ dẫn, không đọc thành lời. Các đoạn trích sau **Lời đọc** là nội dung để đọc. Chỉ đọc lời xác nhận kết quả sau khi kết quả đó xuất hiện thật trên màn hình. Các câu hỏi ở cuối chỉ dùng khi thầy hỏi.
 
@@ -11,7 +13,7 @@ Mở sẵn các tab theo thứ tự:
 | Tab | Nội dung cần mở |
 |---|---|
 | 1 | [Repository và README](https://github.com/nathyu-le/DevopQLYFood) |
-| 2 | [Sơ đồ architecture.png](https://github.com/nathyu-le/DevopQLYFood/blob/main/architecture.png) |
+| 2 | [Sơ đồ architecture.png](https://github.com/nathyu-le/DevopQLYFood/blob/main/evidence/week1/architecture.png) |
 | 3 | [Thông tin hosting và ảnh cPanel](https://github.com/nathyu-le/DevopQLYFood/blob/main/evidence/server/README.md) |
 | 4 | [Website](https://thitruongmmo.com/DevopQLYFood/public/) — đăng nhập admin trước |
 | 5 | cPanel → phpMyAdmin → chọn đúng database ứng dụng → tab SQL; dùng tài khoản đang có, không ghi mật khẩu vào kịch bản |
@@ -69,7 +71,7 @@ Nếu đã tập trước và có trùng tên, đối chiếu đúng **ID vừa 
 >
 > Vì vậy trình duyệt làm việc với website, còn kết nối database được thực hiện ở phía PHP qua PDO. Nhóm chưa cấu hình reverse proxy riêng. Vị trí máy database, cổng database thực tế và đường dẫn lưu trữ cấp hệ điều hành chưa được nhóm xác minh, nên sơ đồ ghi rõ những phần đó.
 
-Không đọc loopback `127.0.0.1:3306` hoặc `/var/lib/mysql` thành hiện trạng hosting; đó chỉ là giá trị trong phương án Ubuntu tham chiếu.
+Không đọc loopback `127.0.0.1:3306` hoặc `/var/lib/mysql` thành hiện trạng hosting; các giá trị này chưa được xác minh cho cp1.
 
 ## 3. Môi trường hosting thực tế — khoảng 45 giây
 
@@ -163,13 +165,13 @@ Giữ món mới để thầy đối chiếu. Nếu thầy yêu cầu demo xóa,
 
 > Ngoài demo trực tiếp, nhóm đã lưu bộ ảnh và log trong repository. Bộ ảnh trước đó đối chiếu cùng bản ghi ID 9: thêm giá 45.000 đồng, sửa thành 50.000 đồng và SELECT xác nhận dữ liệu trong database.
 >
-> Source cũng đã có run GitHub Actions thành công, gồm kiểm tra cú pháp PHP, 14 kiểm tra validation và 19 kiểm tra tích hợp HTTP với MySQL. Đây là kiểm tra source trên môi trường tạm; database của hosting là MariaDB và đã có minh chứng thao tác riêng. Workflow hiện tại chưa phải pipeline tự động triển khai của Week 2.
+> Source cũng đã có run GitHub Actions thành công, gồm kiểm tra cú pháp PHP, 14 kiểm tra validation và 19 kiểm tra tích hợp HTTP với MySQL. Đây là kiểm tra source trên môi trường tạm; database của hosting là MariaDB và đã có minh chứng thao tác riêng. Run Week 1 này kiểm tra source, chưa triển khai ứng dụng; pipeline Week 2 được trình bày riêng trong WEEK2_DEMO.
 
 Không đọc kết quả CI thành bằng chứng đã tự deploy lên hosting.
 
 ## 7. Phần còn thiếu, kế hoạch tiếp theo và kết thúc — khoảng 55 giây
 
-**Mở:** [checklist Week 1](WEEK1_CHECKLIST.md), chỉ các dòng **Tạm hoãn**, sau đó [kế hoạch chuyển môi trường](DEPLOYMENT_PLAN.md).
+**Mở:** [checklist Week 1](WEEK1_CHECKLIST.md), chỉ các dòng **Tạm hoãn**, sau đó [lộ trình các checkpoint](ROADMAP.md).
 
 **Lời đọc:**
 
@@ -177,7 +179,7 @@ Không đọc kết quả CI thành bằng chứng đã tự deploy lên hosting
 >
 > Tuần này nhóm sử dụng cp1 để trình bày phần app và database đã triển khai. Nhóm xin ý kiến thầy về việc bổ sung phần hạ tầng khi chuyển môi trường trong giai đoạn Week 2.
 >
-> Sang Week 2, nhóm sẽ xem xét VPS hoặc hosting khác thực sự đáp ứng Docker, Compose và deploy tự động. Nhóm dự kiến dùng tiếp repository và source hiện tại, sao lưu dữ liệu trước khi chuyển, rồi thực hiện containerization và pipeline build, test, deploy.
+> Nhóm tiếp tục cùng repository và ứng dụng theo hướng cPanel. Phần containerization, persistence và pipeline build, test, deploy được theo dõi riêng ở checkpoint Week 2; phần hạ tầng Week 1 còn thiếu vẫn giữ trong checklist.
 >
 > Đó là phần báo cáo tiến độ và demo Week 1 của nhóm em. Em cảm ơn thầy và xin nhận câu hỏi, góp ý.
 
@@ -213,9 +215,9 @@ Không đọc kết quả CI thành bằng chứng đã tự deploy lên hosting
 
 > Có hỗ trợ AI khi khởi tạo source và tài liệu, được khai báo trong repository. Cấu hình ứng dụng và database thật được thực hiện trên hosting; kết quả kiểm tra và minh chứng đọc, ghi dữ liệu được lưu riêng. Nhóm cần hiểu và giải thích được phần source đang sử dụng.
 
-**Week 2 sẽ làm gì, có phải đổi ứng dụng không?**
+**Week 2 tiếp tục ở đâu, có phải đổi ứng dụng không?**
 
-> Nhóm tiếp tục cùng ứng dụng và repository, chọn môi trường phù hợp rồi đưa app cùng database vào Compose, bảo đảm dữ liệu được lưu bền vững và thiết lập pipeline tự động build, test, deploy từ commit mới.
+> Nhóm giữ cùng ứng dụng và repository. Week 2 đã có tài liệu riêng về Docker/Compose, persistence, image staging và tự động cập nhật cPanel. Xem checklist Week 2 và WEEK2_DEMO để trình bày checkpoint đó.
 
 ## Nếu demo trực tiếp gặp lỗi mạng hoặc lỗi kết nối
 

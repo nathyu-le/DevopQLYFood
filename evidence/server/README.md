@@ -1,4 +1,4 @@
-# Cấu hình hosting đang dùng — 21/10/2026
+# Minh chứng hosting Week 1 — 21/10/2026
 
 Nguồn: ảnh cPanel do người triển khai cung cấp để minh chứng Week 1, cùng kết quả HTTP độc lập. Số liệu quota thuộc tài khoản hosting; không suy ra CPU, RAM hay dung lượng vật lý của toàn server.
 
@@ -51,6 +51,8 @@ Nguồn: ảnh cPanel do người triển khai cung cấp để minh chứng Wee
 - Firewall/security group và port listening. Chặn URL bằng `.htaccess` không thay thế firewall hệ điều hành.
 - Đường dẫn OS đầy đủ, DB host/port và nơi lưu dữ liệu khi có quyền xem.
 
-**Quyết định ngày 21/10/2026:** người triển khai xác nhận cp1 không hỗ trợ Terminal và dùng gói này để demo tạm Week 1. Tạm dừng kiểm tra Terminal/SSH trên gói hiện tại; dự kiến bổ sung phần cài/cấu hình server và firewall khi chọn VPS hoặc hosting khác cho Week 2. Khả năng SSH riêng ngoài Terminal chưa được kiểm chứng. [Kế hoạch chuyển môi trường](../../docs/DEPLOYMENT_PLAN.md). Nếu chọn Ubuntu VM/VPS, dùng [MANUAL_SETUP.md](../../docs/MANUAL_SETUP.md) và lưu kết quả thật.
+**Phạm vi Week 1:** người triển khai xác nhận cp1 không hỗ trợ Terminal và dùng gói này để demo app/DB tạm. Chưa có bằng chứng hoàn tất OS/user/SSH/firewall.
+
+**Cập nhật hướng triển khai:** Week 2 dùng hosting cPanel mới, Docker staging tạm và FTPS tự động. Các ảnh ở trên chỉ chứng minh cp1 tại ngày chụp; không suy ra cấu hình gói mới. [Kiến trúc Week 2](../../docs/WEEK2_ARCHITECTURE.md) · [Lộ trình](../../docs/ROADMAP.md).
 
 Tham khảo: [cPanel MultiPHP Manager](https://docs.cpanel.net/cpanel/software/multiphp-manager-for-cpanel/), [Terminal](https://docs.cpanel.net/cpanel/advanced/terminal-in-cpanel/).
