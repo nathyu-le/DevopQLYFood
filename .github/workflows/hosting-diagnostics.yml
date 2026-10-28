@@ -1,0 +1,39 @@
+name: Hosting connection diagnostics
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/hosting-diagnostics.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-ftps-certificate:
+    if: vars.CPANEL_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    env:
+      FTP_HOST: ${{ vars.CPANEL_FTP_HOST }}
+      FTP_PORT: ${{ vars.CPANEL_FTP_PORT }}
+    steps:
+      - name: Inspect the public FTP service certificate without logging in
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$FTP_HOST" =~ ^[A-Za-z0-9][A-Za-z0-9.-]*$ ]]
+          FTP_PORT="${FTP_PORT:-21}"
+          [[ "$FTP_PORT" =~ ^[0-9]{1,5}$ ]]
+          certificate_output="$(mktemp)"
+          connection_output="$(mktemp)"
+          trap 'rm -f "$certificate_output" "$connection_output"' EXIT
+          # Read-only TLS inspection: no FTP username, password or file transfer.
+          # The deployment client separately keeps certificate verification enabled.
+          set +e
+          timeout 20s openssl s_client -starttls ftp -connect "$FTP_HOST:$FTP_PORT" -servername "$FTP_HOST" -showcerts </dev/null >"$certificate_output" 2>"$connection_output"
+          connection_status=$?
+          set -e
+          echo "TLS inspection exit status: $connection_status"
+          openssl x509 -in "$certificate_output" -noout -subject -issuer -dates -ext subjectAltName
+          sed -n '/verify error:/p; /Verification error:/p' "$connection_output"
