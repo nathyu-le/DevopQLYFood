@@ -144,7 +144,7 @@ function validate_dish(array $input): array
     if (!array_key_exists($values['category'], CATEGORIES)) {
         $errors['category'] = 'Vui lòng chọn danh mục hợp lệ.';
     }
-    if (!preg_match('/\A(?:0|[1-9][0-9]{0,8})\z/', $values['price'])) {
+    if (!preg_match('/\A(?:0|[1-9][0-9]{0,12})\z/', $values['price'])) {
         $errors['price'] = 'Giá phải là số nguyên từ 0 đến 999.999.999 đồng.';
     }
     if (mb_strlen($values['description']) > 1000) {
