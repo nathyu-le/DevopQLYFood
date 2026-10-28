@@ -4,6 +4,8 @@ import importlib.util
 import io
 from pathlib import Path
 import tempfile
+import urllib.error
+from unittest.mock import patch
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -57,3 +59,34 @@ with tempfile.TemporaryDirectory() as directory:
 print('PASS: cPanel package excludes config, secrets, database and .htaccess.')
 print('PASS: mismatched revisions and unsafe archive paths are rejected before upload.')
 print('PASS: all runtime files and REVISION use archive mode 0644, even with source mode 0600.')
+
+def response(payload):
+    stream = io.BytesIO(payload)
+    stream.status = 200
+    return stream
+
+with patch.object(deployer.urllib.request, 'urlopen', return_value=response(b'{"status":"ok"}')):
+    deployer.check_site('https://example.test/', stage='pre-deploy health')
+for status in (403, 404, 503):
+    error = urllib.error.HTTPError('https://example.test/', status, 'PRIVATE_CREDENTIAL', {}, io.BytesIO(b'PRIVATE_RESPONSE'))
+    with patch.object(deployer.urllib.request, 'urlopen', side_effect=error):
+        try:
+            deployer.check_site('https://example.test/', stage='pre-deploy health')
+            raise AssertionError('Unhealthy site accepted.')
+        except deployer.SiteCheckError as failure:
+            assert f'pre-deploy health: HTTP {status}' in str(failure)
+            assert 'PRIVATE_' not in str(failure)
+for payload in (b'<html>PRIVATE_RESPONSE</html>', b'{"status":"unavailable"}', b'[]'):
+    with patch.object(deployer.urllib.request, 'urlopen', return_value=response(payload)):
+        try:
+            deployer.check_site('https://example.test/', stage='pre-deploy health')
+            raise AssertionError('Invalid health response accepted.')
+        except deployer.SiteCheckError as failure:
+            assert 'PRIVATE_' not in str(failure)
+with patch.object(deployer.urllib.request, 'urlopen', return_value=response(b'{"revision":"wrong"}')):
+    try:
+        deployer.check_site('https://example.test/', revision, stage='post-deploy revision')
+        raise AssertionError('Wrong deployed revision accepted.')
+    except deployer.SiteCheckError as failure:
+        assert 'post-deploy revision' in str(failure)
+print('PASS: HTTP gates reject 403/404/503, invalid JSON/health and wrong revisions; logs contain only stage/status.')

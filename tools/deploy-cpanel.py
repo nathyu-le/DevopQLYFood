@@ -12,6 +12,7 @@ from pathlib import PurePosixPath
 import re
 import ssl
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import zipfile
@@ -35,18 +36,31 @@ def validated_entries(archive, revision):
         raise ValueError('Artifact revision does not match the workflow commit.')
     return sorted(name for name in names if name != 'REVISION') + ['REVISION']
 
-def check_site(base, revision=None):
+class SiteCheckError(RuntimeError):
+    """A safe, controlled diagnostic that contains no response body or secrets."""
+
+def check_site(base, revision=None, stage='site check'):
     suffix = 'health.php' if revision is None else 'version.php'
     # Avoid a proxy serving a stale version response.
     request = urllib.request.Request(base + suffix + '?check=' + str(time.time_ns()),
                                      headers={'Cache-Control': 'no-cache'})
-    with urllib.request.urlopen(request, timeout=20) as response:
-        if response.status != 200:
-            raise RuntimeError('Site check did not return HTTP 200.')
-        result = json.load(response)
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            if response.status != 200:
+                raise SiteCheckError(f'{stage}: HTTP {response.status}.')
+            try:
+                result = json.load(response)
+            except ValueError:
+                raise SiteCheckError(f'{stage}: HTTP 200, but the response is not JSON.') from None
+    except urllib.error.HTTPError as error:
+        raise SiteCheckError(f'{stage}: HTTP {error.code}.') from None
+    except urllib.error.URLError:
+        raise SiteCheckError(f'{stage}: unable to reach the HTTPS endpoint.') from None
+    if not isinstance(result, dict):
+        raise SiteCheckError(f'{stage}: unexpected JSON structure.')
     key, expected = ('status', 'ok') if revision is None else ('revision', revision)
     if result.get(key) != expected:
-        raise RuntimeError('Site health or revision does not match.')
+        raise SiteCheckError(f'{stage}: expected health status or commit revision does not match.')
 
 def main():
     required = ('CPANEL_FTP_HOST', 'CPANEL_FTP_USER', 'CPANEL_FTP_PASSWORD',
@@ -61,7 +75,8 @@ def main():
     remote_root = os.environ['CPANEL_FTP_ROOT']
     if not remote_root.startswith('/') or any(c in remote_root for c in ('\r', '\n', '\\')) or '..' in PurePosixPath(remote_root).parts:
         raise ValueError('Use an absolute FTP directory without parent traversal.')
-    check_site(base)  # Confirm the existing app is healthy before any upload.
+    check_site(base, stage='pre-deploy health')
+    print('Pre-deploy HTTP health check passed; starting FTPS transfer.', flush=True)
     with zipfile.ZipFile('dist/cpanel-release.zip') as archive:
         names = validated_entries(archive, revision)
         with ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=30) as ftp:
@@ -93,14 +108,17 @@ def main():
                 ftp.storbinary('STOR ' + temporary, io.BytesIO(archive.read(name)))
                 ftp.rename(temporary, filename)
             ftp.quit()
-    check_site(base)
-    check_site(base, revision)
+    print('FTPS source transfer completed; checking the deployed website.', flush=True)
+    check_site(base, stage='post-deploy health')
+    check_site(base, revision, stage='post-deploy revision')
     print('cPanel deployment passed HTTP health and exact commit revision checks.')
     print('Existing DB configuration, database and .htaccess were preserved.')
 
 if __name__ == '__main__':
     try:
         main()
+    except SiteCheckError as error:
+        raise SystemExit('cPanel deployment stopped: ' + str(error))
     except Exception as error:
         # FTP replies may contain account details. Keep error messages out of logs.
         raise SystemExit('cPanel deployment failed (' + type(error).__name__ + '). Check FTPS settings and the existing app; no deploy success is claimed.')
