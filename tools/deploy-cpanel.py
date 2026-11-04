@@ -11,6 +11,7 @@ import os
 from pathlib import PurePosixPath
 import re
 import ssl
+import subprocess
 import time
 import urllib.error
 import urllib.parse
@@ -45,6 +46,26 @@ def validated_entries(archive, revision):
 
 class SiteCheckError(RuntimeError):
     """A safe, controlled diagnostic that contains no response body or secrets."""
+
+def certificate_dns_names(host, port):
+    """Inspect public certificate metadata only; never authenticate this probe.
+
+    The deployment connection still uses create_default_context(). Names from
+    this unauthenticated inspection are diagnostics, never an automatic fallback.
+    """
+    try:
+        certificate = subprocess.run(
+            ['openssl', 's_client', '-connect', f'{host}:{port}',
+             '-servername', host, '-starttls', 'ftp', '-showcerts'],
+            input='', capture_output=True, text=True, timeout=12,
+        )
+        names = subprocess.run(
+            ['openssl', 'x509', '-noout', '-ext', 'subjectAltName'],
+            input=certificate.stdout, capture_output=True, text=True, timeout=3,
+        )
+        return sorted(set(re.findall(r'DNS:([A-Za-z0-9.*-]+)', names.stdout)))[:12]
+    except (OSError, subprocess.SubprocessError):
+        return []
 
 def check_site(base, revision=None, stage='site check'):
     suffix = 'health.php' if revision is None else 'version.php'
@@ -142,6 +163,16 @@ if __name__ == '__main__':
         main()
     except SiteCheckError as error:
         raise SystemExit('cPanel deployment stopped: ' + str(error))
+    except ssl.SSLCertVerificationError as error:
+        print('FTPS certificate verification failed before credentials were sent.', flush=True)
+        print('TLS verification code: ' + str(error.verify_code), flush=True)
+        names = certificate_dns_names(os.environ['CPANEL_FTP_HOST'],
+                                      os.environ.get('CPANEL_FTP_PORT') or '21')
+        if names:
+            print('Observed public certificate DNS names (not a trusted fallback): '
+                  + ', '.join(names), flush=True)
+        raise SystemExit('cPanel deployment stopped: configure the provider-confirmed '
+                         'FTPS hostname matching its certificate. TLS verification remains enabled.')
     except Exception as error:
         # FTP replies may contain account details. Keep error messages out of logs.
         raise SystemExit('cPanel deployment failed (' + type(error).__name__ + '). Check FTPS settings and the existing app; no deploy success is claimed.')
