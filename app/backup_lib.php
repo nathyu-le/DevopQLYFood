@@ -74,15 +74,13 @@ function backup_create(int $keep = 14): array
         $archive = ['format' => 'devopqlyfood-dishes-v1', 'created_at' => ops_time(), 'database' => $database,
             'row_count' => count($rows), 'sha256' => $digest, 'rows' => $rows];
         $name = 'menu-' . gmdate('Ymd-His') . '-' . bin2hex(random_bytes(4)) . '.json';
-        $temp = tempnam($directory, 'pending-');
-        file_put_contents($temp, json_encode($archive, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)); chmod($temp, 0600);
-        rename($temp, $directory . '/' . $name);
-        $snapshots = glob($directory . '/menu-*.json') ?: []; rsort($snapshots, SORT_STRING);
+        ops_write_json_atomic($directory . '/' . $name, $archive);
+        $snapshots = array_values(array_filter(glob($directory . '/menu-*.json') ?: [], static fn(string $f): bool => is_file($f) && !is_link($f)));
+        rsort($snapshots, SORT_STRING);
         foreach (array_slice($snapshots, $keep) as $old) { if (!is_link($old)) { unlink($old); } }
         ops_event('backup_created', ['row_count' => count($rows), 'sha256' => $digest]);
         $summary = ['file' => $name, 'row_count' => count($rows), 'sha256' => $digest, 'created_at' => $archive['created_at']];
-        file_put_contents(ops_directory() . '/backup-latest.json', json_encode($summary, JSON_THROW_ON_ERROR), LOCK_EX);
-        @chmod(ops_directory() . '/backup-latest.json', 0600);
+        ops_write_json_atomic(ops_directory() . '/backup-latest.json', $summary);
         return $summary;
     } finally { flock($guard, LOCK_UN); fclose($guard); }
 }

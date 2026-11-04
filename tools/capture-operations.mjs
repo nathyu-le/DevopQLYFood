@@ -49,4 +49,4 @@ try{
   await fs.writeFile(`week3-results/dashboard-${label}.png`,Buffer.from(screenshot.data,'base64'));
   await fs.writeFile(`week3-results/dashboard-${label}.json`,JSON.stringify({label,scope:'isolated Docker staging, not cPanel',base_url:base,revision:process.env.APP_REVISION,database_alert:state.result.value,captured_at:new Date().toISOString(),width:1440,height:1100},null,2));
   console.log(`Captured real dashboard: ${label}; database alert ${state.result.value}.`);
-}finally{if(ws)ws.close();chrome.kill('SIGTERM');await delay(300);await fs.rm(profile,{recursive:true,force:true});}
+}finally{if(ws)ws.close();chrome.kill('SIGTERM');await delay(300);await fs.rm(profile,{recursive:true,force:true,maxRetries:5,retryDelay:200});}

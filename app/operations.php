@@ -19,6 +19,19 @@ function ops_directory(): string
 
 function ops_time(): string { return gmdate('Y-m-d\TH:i:s\Z'); }
 
+function ops_write_json_atomic(string $path, array $value): void
+{
+    $encoded = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    if (strlen($encoded) > 33554432) { throw new RuntimeException('Snapshot exceeds the supported 32 MiB limit.'); }
+    $temp = tempnam(dirname($path), 'pending-');
+    if ($temp === false) { throw new RuntimeException('Temporary file unavailable.'); }
+    try {
+        if (file_put_contents($temp, $encoded) !== strlen($encoded) || !chmod($temp, 0600) || !rename($temp, $path)) {
+            throw new RuntimeException('Atomic storage write failed.');
+        }
+    } finally { if (is_file($temp)) { unlink($temp); } }
+}
+
 function ops_event(string $event, array $fields = []): void
 {
     try {
@@ -182,9 +195,7 @@ function ops_collect(?array $health = null): array
         $history = $state['history'] ?? []; $history[] = $sample;
         $state = ['sampled_at' => microtime(true), 'latest' => $sample, 'history' => array_slice($history, -360),
             'alerts' => $alerts, 'counter' => $counter];
-        $temp = tempnam($directory, 'state-');
-        file_put_contents($temp, json_encode($state, JSON_THROW_ON_ERROR)); chmod($temp, 0600);
-        rename($temp, $directory . '/state.json');
+        ops_write_json_atomic($directory . '/state.json', $state);
         return $state;
     } finally { flock($guard, LOCK_UN); fclose($guard); }
 }
