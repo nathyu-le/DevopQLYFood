@@ -86,7 +86,7 @@ function ops_register_request(): void
 
 function ops_read(string $path): ?string
 {
-    if (!is_readable($path)) { return null; }
+    if (!@is_readable($path)) { return null; }
     $data = @file_get_contents($path);
     return is_string($data) ? trim($data) : null;
 }

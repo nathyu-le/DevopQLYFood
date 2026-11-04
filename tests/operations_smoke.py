@@ -106,6 +106,11 @@ def main():
     check(count==2,'retention removes only old managed snapshots and keeps two newest in the exercise')
     ddl=php(PHP_DB+'try{$p->exec("CREATE TABLE week3_forbidden_probe (id INT)");echo json_encode(false);}catch(PDOException $e){echo json_encode(true);}')
     check(ddl,'application database user cannot create schema objects')
+    fallback=compose('exec','-T','--user','www-data','app','php','-d','open_basedir=/var/www/html','-r',
+        'require "app/operations.php";echo json_encode(ops_resources([]));')
+    fallback=json.loads(fallback.stdout)
+    check(fallback['cpu_percent'] is None and fallback['memory_source']=='PHP allocation, not account RAM',
+          'restricted hosting falls back honestly without warning output or invented CPU values')
     for _ in range(3): state();time.sleep(5.2)
     normal=state()
     check(normal['latest']['cpu_percent'] is not None and normal['latest']['memory_mb']>0,'CPU and RAM samples come from real OS/cgroup measurements')
