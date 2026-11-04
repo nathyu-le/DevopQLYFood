@@ -33,3 +33,9 @@ php tests/validation.php
 Test integration cần checkout sạch và database test riêng, các biến `TEST_DB_HOST`, `TEST_DB_PORT`, `TEST_DB_NAME`, `TEST_DB_USER`, `TEST_DB_PASSWORD`. Không in credentials hoặc dùng DB hosting đang chạy.
 
 Container tests chỉ dành cho stack Compose tạm có hậu tố `_ci` và `RUN_CONTAINER_TESTS=1`; workflow tự khởi tạo/dọn stack đó. Không chạy script recreate/cleanup CI với DB cần giữ. Xem [Docker setup](DOCKER_SETUP.md).
+
+## Week 3 thực nghiệm vận hành
+
+[Run 41768981566](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566), source `d690bc0`: 37 assertions trong operations_smoke, gồm auth/CSRF, backup/integrity/retention/restore, DDL denied, CPU/RAM thật và DB outage/alert/recovery. [Ảnh và JSON](../evidence/week3/README.md). Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
+
+`monitoring/check-firewall.sh` chỉ cấu hình UFW trên runner GitHub riêng. `tools/check-live-security.py` kiểm tra HTTP access control cPanel, không phải OS firewall. Không dùng DB live cho bài xóa/restore; fixture và project đều riêng.

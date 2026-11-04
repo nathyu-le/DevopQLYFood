@@ -4,7 +4,7 @@
 |---|---|---|
 | Week 1 | [week1](week1/README.md), [server](server/README.md), [application](application/README.md) | Có ảnh/log app + DB và hosting cũ; OS/user/SSH/firewall còn thiếu |
 | Week 2 | [Bộ checkpoint](week2/completion-2026-10-28.md), [chỉ mục](week2/README.md) | Đã kiểm chứng Docker/Compose, image staging, persistence, CI/CD cPanel, test fail và ảnh trước/sau |
-| Week 3 | [week3](week3/README.md) | Chưa có monitoring/security/backup/restore |
+| Week 3 | [week3](week3/README.md) | Có dashboard/alert, security staging, backup/restore và playbook; trạng thái live ghi trong chỉ mục |
 | Week 4 | [week4](week4/README.md) | Chưa có demo tổng thể/báo cáo cuối |
 
 **Week 2 ngày 28/10/2026:** [run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505), source `d18f6be`: container-checks → deploy-staging → deploy-cpanel cùng success. Staging tải đúng image artifact trên runner mới, lưu persistence và ảnh rồi dọn stack. Live tiếp tục PHP/DB trực tiếp trên cPanel. [Run lỗi validation thật](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40635078470) có hai deploy skipped; PR đã đóng không merge.

@@ -4,7 +4,9 @@ Website quản lý thực đơn quán ăn dùng PHP và MySQL/MariaDB. Một rep
 
 **Website live:** [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/).
 
-**Week 2 đã có bộ đầu ra kỹ thuật và minh chứng:** Docker/Compose, DB persistence, pipeline tự động và ảnh trước/sau. [Run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505) từ push source commit `d18f6be` có ba job success: **build/test → deploy image staging → deploy cPanel**. [Bộ minh chứng](evidence/week2/completion-2026-10-28.md) · [Checklist](docs/WEEK2_CHECKLIST.md) · [Kịch bản một người trình bày](docs/WEEK2_DEMO.md).
+**Week 3 ngày 4/11/2026:** đã có Ops Monitor, alert/logs, backup/restore và security/playbook; bài thực nghiệm staging đã kiểm chứng bằng ảnh và dữ liệu thật. Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager. [Minh chứng](evidence/week3/README.md) · [Checklist](docs/WEEK3_CHECKLIST.md) · [Demo một người](docs/WEEK3_DEMO.md).
+
+[Bộ checkpoint Week 2](evidence/week2/completion-2026-10-28.md) và minh chứng Week 1 được giữ riêng theo ngày/source commit.
 
 Docker staging chạy tạm trên một GitHub runner mới, tải đúng image đã test và so image ID trước khi chạy. Website thật dùng PHP/DB trực tiếp trên cPanel. Dữ liệu staging tách khỏi DB hosting và stack tạm được dọn sau run. [Sơ đồ Week 2](docs/WEEK2_ARCHITECTURE.md).
 
@@ -16,6 +18,8 @@ Docker staging chạy tạm trên một GitHub runner mới, tải đúng image 
 | Cấu hình FTPS, chạy và xử lý lỗi pipeline | [CICD_SETUP.md](docs/CICD_SETUP.md) |
 | Chạy app + MariaDB bằng Compose | [DOCKER_SETUP.md](docs/DOCKER_SETUP.md) |
 | Xem test và phạm vi kiểm chứng | [VERIFICATION.md](docs/VERIFICATION.md) |
+| Giám sát vận hành | [Ops Monitor](monitoring/README.md) |
+| Backup restore và xử lý sự cố | [Backup](docs/BACKUP_RESTORE.md) · [Playbook](docs/TROUBLESHOOTING.md) |
 
 Sau khi hosting và GitHub Secrets/Variables đã được cấu hình, push source lên main sẽ chạy tests, deploy staging rồi cập nhật cPanel bằng FTPS có xác minh TLS. Pipeline kiểm tra health/revision và tự chụp ảnh. Config hosting, SQL, DB và `.htaccess` không nằm trong gói cập nhật; thay schema cần kế hoạch và backup riêng.
 
@@ -41,7 +45,8 @@ App có đăng nhập quản trị, xem/tìm/lọc, thêm/sửa/xóa món và đ
 | `config/config.example.php` | Mẫu cấu hình không có credentials thật |
 | `database/` | Schema và seed |
 | `Dockerfile`, `docker-compose.yml`, `docker/` | Image, app/DB, network, secrets và volume |
-| `tools/` | Setup, package/deploy cPanel và chụp minh chứng |
+| `tools/` | Setup, package/deploy cPanel, uptime và chụp minh chứng |
+| `monitoring/` | Cấu hình/nguồn đo và firewall staging |
 | `.github/workflows/`, `tests/` | Source checks MySQL; build/test/deploy Docker staging và cPanel |
 | `docs/`, `evidence/` | Hướng dẫn, checklist và minh chứng theo tuần |
 
@@ -51,7 +56,7 @@ App có đăng nhập quản trị, xem/tìm/lọc, thêm/sửa/xóa món và đ
 |---|---|
 | Week 1 | App/DB và ảnh hosting cũ đã có; OS/user/SSH/firewall còn thiếu. [Checklist](docs/WEEK1_CHECKLIST.md) · [Evidence](evidence/week1/README.md) · [Kịch bản](docs/WEEK1_PRESENTATION.md) |
 | Week 2 | Bộ đầu ra đã kiểm chứng: image staging, persistence, CI/CD cPanel, test fail và ảnh trước/sau. [Evidence](evidence/week2/README.md) |
-| Week 3 | Monitoring, bảo mật, backup/restore chưa triển khai. [Checklist](docs/WEEK3_CHECKLIST.md) |
+| Week 3 | Source và staging đã kiểm chứng; deploy cPanel đang chờ FTPS/ZIP. [Checklist](docs/WEEK3_CHECKLIST.md) · [Evidence](evidence/week3/README.md) |
 | Week 4 | Demo tổng thể, xử lý sự cố và báo cáo chưa thực hiện. [Checklist](docs/WEEK4_CHECKLIST.md) |
 
 [Lộ trình](docs/ROADMAP.md) · [Chỉ mục minh chứng](evidence/README.md) · [Phân công](docs/TEAM.md).

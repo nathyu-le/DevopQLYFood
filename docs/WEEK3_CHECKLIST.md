@@ -1,53 +1,41 @@
-# Week 3 — Monitoring, Security & Reliability
+# Week 3 Monitoring Security và Reliability
 
-**Trạng thái: chưa bắt đầu triển khai.** Đã đối chiếu ảnh đề chi tiết “DEVOPS FINAL PROJECT — WEEK 3: Monitoring, Security & Reliability” (`1000003654.jpg`), ngày 21/10/2026. Mục tiêu: **Operate and Secure the Application**. Điểm tối đa: **2,5/10**, demo nhóm và bảo vệ kỹ thuật.
+**Cập nhật ngày 4 tháng 11 năm 2026:** Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
 
-## Mục tiêu
+Đối chiếu ảnh đề Week 3 đã cung cấp: monitoring CPU/RAM/health, dashboard và alert đã thử, logs theo thời gian, firewall/ports/secrets, backup/restore có đối chiếu và playbook ít nhất 2 sự cố. [Run kiểm chứng](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566) · [Ảnh và logs](../evidence/week3/README.md).
 
-Chứng minh có thể quan sát tình trạng hệ thống, phát hiện vấn đề, bảo vệ truy cập và khôi phục dữ liệu.
+## Đã có source và minh chứng staging
 
-## Logs và monitoring
+- [x] Dashboard Ops Monitor có CPU/RAM/health/DB latency, biểu đồ và mốc cập nhật; ghi rõ nguồn cgroup/OS/PHP, không dựng số liệu khi bị giới hạn quyền.
+- [x] Alert database_unavailable được kích hoạt bằng việc dừng MariaDB thật và phục hồi bằng khởi động lại; có ảnh normal/firing/recovered và lifecycle JSON.
+- [x] JSONL log có UTC/request ID/route/status/duration; dashboard lọc theo event và thời điểm. Không ghi credentials, form hoặc query string.
+- [x] UFW được cấu hình trên runner staging riêng; default deny incoming, loopback allowed, DB không publish. Có status thật và health check sau cấu hình.
+- [x] User app staging chỉ có bốn quyền CRUD; test CREATE TABLE bị từ chối. Script xử lý đúng mẫu database có dấu gạch dưới.
+- [x] Metrics API cần session admin; backup cần CSRF, có cooldown; restore không có HTTP action. File private ngoài public và không nằm trong source ZIP.
+- [x] Script backup/restore chạy thật, có retention, SHA256, atomic writes và quyền hạn chế.
+- [x] Backup món thử, xóa đúng fixture rồi restore; ID/values/timestamps và digest khớp. Confirmation sai/file hỏng bị chặn trước khi ghi.
+- [x] Playbook có ít nhất 2 sự cố; hiện có 3 trường hợp đã thực nghiệm hoặc phát hiện qua test.
+- [x] Hồ sơ có dashboard screenshots/config, security/ports checklist, scripts/logs và hướng dẫn một người demo.
 
-- [ ] Thu thập application logs, chỉ ra cách tra cứu lỗi theo thời gian; bổ sung web/DB logs khi cần xử lý sự cố.
-- [ ] Có dashboard thời gian thực cho CPU, RAM và health/status của Web/API; ghi công cụ và nguồn dữ liệu (Prometheus/Grafana, CloudWatch hoặc tương đương).
-- [ ] Có ít nhất một cảnh báo được cấu hình và **kiểm thử thực tế**, lưu bằng chứng kích hoạt/khôi phục.
-- [ ] Giải thích được nguồn metrics/logs và cách sử dụng khi xảy ra lỗi.
+Ảnh dashboard đã đăng nhập và raw JSON được bàn giao riêng để chủ repo xem trước; chưa công khai chúng trong Git khi chưa có xác nhận. Repo có source, log test chọn lọc và test summary.
 
-## Bảo mật cơ bản
+## Môi trường live và việc cần xác nhận
 
-- [ ] Xác minh ports, firewall/security group và quyền SSH trên môi trường thật; chỉ mở các cổng cần thiết, hạn chế truy cập database.
-- [ ] Secrets không hard-code hoặc đưa vào logs/video/repo.
-- [ ] Giải thích nơi lưu secrets và ai/dịch vụ nào có quyền truy cập.
-- [ ] DB user được phân quyền phù hợp; MySQL không public ngoài nhu cầu đã giải thích.
-- [ ] Ghi nhận cấu hình bảo mật đã áp dụng; không chỉ liệt kê kế hoạch.
+- [ ] Source Week 3 đã lên cPanel, route authentication/private paths đã được kiểm tra sau deploy. Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
+- [ ] Xác minh policy firewall/SSH/quyền DB và nguồn quota của đúng gói cPanel nếu dùng các mục đó để bảo vệ hạ tầng live. UFW staging không chứng minh cấu hình firewall của nhà cung cấp.
+- [ ] Nhóm mở thử đường dẫn bằng tài khoản nộp, tập demo, xác nhận đóng góp cá nhân thật và sẵn sàng giải thích nguồn metrics.
 
-## Backup, restore và sự cố
+Cron backup cPanel là cấu hình vận hành đề xuất, chưa được tự thiết lập bởi pipeline; đề yêu cầu script/retention và chạy restore có bằng chứng, các mục này đã được test ở staging. Uptime workflow chỉ probe health, không tự backup database live.
 
-- [ ] Có script backup và restore database chạy được; file backup lưu ở đường dẫn riêng, có chiến lược lưu trữ/thời gian giữ và quyền truy cập.
-- [ ] Backup dữ liệu thử nghiệm, thay đổi/xóa dữ liệu thử nghiệm, restore rồi đối chiếu bản ghi đã có trước đó để chứng minh phục hồi đúng.
-- [ ] Có troubleshooting playbook draft ít nhất **2 sự cố ở Week 3**; mỗi mục có triệu chứng, xác minh, nguyên nhân, khắc phục và xác nhận phục hồi. Week 4 mới nâng lên tối thiểu 3 sự cố có thật hoặc thực nghiệm.
-- [ ] Dừng app hoặc tạo lỗi có kiểm soát trên môi trường thử nghiệm, tra log theo thời gian và phục hồi dịch vụ.
-- [ ] Lưu ảnh/log/video và kết quả restore vào `evidence/week3/`.
+## Rubric và hồ sơ nộp
 
-## Trình tự live demo
-
-1. Mở dashboard khi hệ thống đang chạy, giải thích CPU/RAM và health check.
-2. Tạo tình huống cảnh báo, cho thấy notification hoặc state của alert; khôi phục rồi kiểm tra trạng thái.
-3. Dừng app hoặc tạo lỗi thử nghiệm, tìm log theo thời gian, xác định lỗi và phục hồi dịch vụ.
-4. Backup, thay đổi/xóa bản ghi thử nghiệm, restore và đối chiếu dữ liệu trước/sau. Chỉ dùng dữ liệu thử nghiệm cho thao tác mô phỏng xóa.
-
-## Hồ sơ nộp và rubric
-
-| Tiêu chí | Điểm theo đề | Sản phẩm / minh chứng |
+| Tiêu chí | Tối đa theo đề | Minh chứng |
 |---|---:|---|
-| Monitoring/metrics/logs/dashboard/alert | 0,8 | Dashboard screenshots + config, logs có mốc thời gian, alert đã thử |
-| Firewall, secrets, database access | 0,5 | Security/ports checklist và cấu hình đã xác minh |
-| Backup và restore có bằng chứng dữ liệu | 0,8 | Backup/restore scripts + logs, đối chiếu bản ghi |
-| Giải thích và xử lý sự cố | 0,4 | Incident playbook draft ≥2 sự cố, video/ảnh minh chứng demo |
-| **Tổng** | **2,5** | Link sản phẩm và minh chứng truy cập được |
+| Monitoring metrics logs dashboard alert | 0,8 | Config, ba ảnh, lifecycle JSON và application events |
+| Firewall secrets database access | 0,5 | UFW/Compose staging, DDL denied, session/CSRF/private files; scope cPanel ghi rõ |
+| Backup và restore có dữ liệu đối chiếu | 0,8 | Scripts, log, JSON before/delete/restore và digest |
+| Giải thích và xử lý sự cố | 0,4 | Playbook, run thực nghiệm và kịch bản demo |
 
-## Nơi cập nhật
+Tổng tối đa 2,5/10 theo đề; không tự dự đoán điểm đạt hoặc ghi giảng viên đã chấp nhận cách triển khai. Chỉ dùng dữ liệu thử khi mô phỏng xóa. Không đánh dấu các mục OS/user/SSH/firewall Week 1 hoặc Week 4 đã hoàn tất từ kết quả này.
 
-Cấu hình monitoring dự kiến trong `monitoring/`; công cụ backup/restore trong `tools/`; playbook dự kiến ở `docs/TROUBLESHOOTING.md`. Các file này sẽ được tạo khi thực hiện, chưa có trong phiên bản hiện tại.
-
-Xem [minh chứng Week 3](../evidence/week3/README.md) và bổ sung phân công tuần này vào [TEAM.md](TEAM.md) khi nhóm thống nhất.
+[Monitoring](../monitoring/README.md) · [Security](SECURITY.md) · [Backup restore](BACKUP_RESTORE.md) · [Playbook](TROUBLESHOOTING.md) · [Demo](WEEK3_DEMO.md).

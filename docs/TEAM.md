@@ -51,3 +51,9 @@ Tiếp nối vai trò Week 1 để chuẩn bị; bảng này là phân công rà
 | Lê Quang Tùng | Minh chứng và chuẩn bị demo | Kiểm tra ảnh/metadata, link run, bản dự phòng và kịch bản một người trình bày |
 
 [Checklist Week 2](WEEK2_CHECKLIST.md) · [Bộ minh chứng](../evidence/week2/completion-2026-10-28.md) · [Kịch bản một người](WEEK2_DEMO.md). Một người trình bày theo lựa chọn của nhóm; cả ba vẫn cần hiểu phần phụ trách khi được hỏi.
+
+## Week 3 rà soát trước bảo vệ
+
+Theo vai trò hiện có: Huy cần nắm luồng source/triển khai, nguồn metrics và cấu hình; Hải rà test alert và dữ liệu backup/restore; Tùng kiểm tra link/ảnh/log và chuẩn bị trình bày. Đây là trách nhiệm rà soát, không xác nhận từng người đã thực hiện các bước tự động trong CI.
+
+Nguồn ảnh là Chrome trên runner; tests và JSON do pipeline tạo. Nhóm ghi bổ sung đóng góp cá nhân sau khi làm thật. [Checklist Week 3](WEEK3_CHECKLIST.md) · [Minh chứng](../evidence/week3/README.md) · [Demo một người](WEEK3_DEMO.md).

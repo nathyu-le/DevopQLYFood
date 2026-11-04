@@ -1,0 +1,115 @@
+# Week 3 verified staging output; UTC timestamps. Environment and connection values omitted.
+# Run https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566
+# Source d690bc0295a00e709a98983a30e33523f8542765
+
+# container-checks
+2026-11-04T03:45:18.8118841Z PASS: accept a valid Vietnamese dish
+2026-11-04T03:45:18.8119463Z PASS: reject invalid price: -1
+2026-11-04T03:45:18.8119896Z PASS: reject invalid price: 1.5
+2026-11-04T03:45:18.8120225Z PASS: reject invalid price: 1e4
+2026-11-04T03:45:18.8120544Z PASS: reject invalid price: 45000abc
+2026-11-04T03:45:18.8120882Z PASS: reject invalid price: 1000000000
+2026-11-04T03:45:18.8121208Z PASS: accept zero price
+2026-11-04T03:45:18.8121482Z PASS: reject empty dish name
+2026-11-04T03:45:18.8122093Z PASS: enforce Unicode name limit
+2026-11-04T03:45:18.8122414Z PASS: reject unknown category
+2026-11-04T03:45:18.8122721Z PASS: reject unknown availability
+2026-11-04T03:45:18.8123051Z PASS: reject array input without type error
+2026-11-04T03:45:18.8123398Z PASS: escape HTML output
+2026-11-04T03:45:18.8123681Z PASS: validate record identifiers
+2026-11-04T03:45:18.8123993Z 14 validation checks passed.
+2026-11-04T03:45:19.1553729Z PASS: deliberately broken price validation exits 1 at the expected assertion.
+2026-11-04T03:45:35.1294358Z PASS: health check reaches MariaDB
+2026-11-04T03:45:35.1311003Z PASS: running image has the expected commit revision
+2026-11-04T03:45:35.1321123Z PASS: DocumentRoot excludes config/config.local.php
+2026-11-04T03:45:35.1330171Z PASS: DocumentRoot excludes database/schema.sql
+2026-11-04T03:45:35.1338462Z PASS: DocumentRoot excludes .secrets/admin_password
+2026-11-04T03:45:35.1346296Z PASS: DocumentRoot excludes README.md
+2026-11-04T03:45:35.1999105Z PASS: administrator can log in through Apache
+2026-11-04T03:45:35.2016446Z PASS: invalid CSRF blocks a write
+2026-11-04T03:45:35.3746154Z PASS: invalid price is absent from the real database
+2026-11-04T03:45:35.5037064Z PASS: HTTP create persists a dish in MariaDB
+2026-11-04T03:45:35.5061598Z PASS: reload and search read the inserted dish
+2026-11-04T03:45:35.5062524Z PASS: stored description is escaped
+2026-11-04T03:45:35.6358127Z PASS: HTTP update changes price and availability
+2026-11-04T03:45:48.4727856Z PASS: same ID, name, price and status survive recreation of app and DB
+2026-11-04T03:45:48.5406061Z PASS: administrator can log in through Apache
+2026-11-04T03:45:48.5437812Z PASS: the recreated web container reads the persistent record
+2026-11-04T03:45:48.6713203Z PASS: HTTP delete removes the test record
+2026-11-04T03:45:48.6713843Z 17 container checks passed; persistence verified.
+2026-11-04T03:45:49.0831069Z PASS: cPanel package excludes config, secrets, database and .htaccess.
+2026-11-04T03:45:49.0832194Z PASS: mismatched revisions and unsafe archive paths are rejected before upload.
+2026-11-04T03:45:49.0833128Z PASS: all runtime files and REVISION use archive mode 0644, even with source mode 0600.
+2026-11-04T03:45:49.0834374Z PASS: HTTP gates reject 403/404/503, invalid JSON/health and wrong revisions; logs contain only stage/status.
+
+# deploy-staging
+2026-11-04T03:47:01.4028253Z Captured live-before: health ok, revision 1b4f1b88820e33131e6c481c3c5f8f1e9f04479c, PNG 1440x1000.
+2026-11-04T03:47:18.8507207Z PASS: health check reaches MariaDB
+2026-11-04T03:47:18.8521129Z PASS: running image has the expected commit revision
+2026-11-04T03:47:18.8528960Z PASS: DocumentRoot excludes config/config.local.php
+2026-11-04T03:47:18.8536492Z PASS: DocumentRoot excludes database/schema.sql
+2026-11-04T03:47:18.8542894Z PASS: DocumentRoot excludes .secrets/admin_password
+2026-11-04T03:47:18.8548911Z PASS: DocumentRoot excludes README.md
+2026-11-04T03:47:18.9129488Z PASS: administrator can log in through Apache
+2026-11-04T03:47:18.9146901Z PASS: invalid CSRF blocks a write
+2026-11-04T03:47:19.0257863Z PASS: invalid price is absent from the real database
+2026-11-04T03:47:19.1429560Z PASS: HTTP create persists a dish in MariaDB
+2026-11-04T03:47:19.1455392Z PASS: reload and search read the inserted dish
+2026-11-04T03:47:19.1455702Z PASS: stored description is escaped
+2026-11-04T03:47:19.2605230Z PASS: HTTP update changes price and availability
+2026-11-04T03:47:32.0682317Z PASS: same ID, name, price and status survive recreation of app and DB
+2026-11-04T03:47:32.1287310Z PASS: administrator can log in through Apache
+2026-11-04T03:47:32.1313051Z PASS: the recreated web container reads the persistent record
+2026-11-04T03:47:32.2442856Z PASS: HTTP delete removes the test record
+2026-11-04T03:47:32.2443546Z 17 container checks passed; persistence verified.
+2026-11-04T03:47:33.0971272Z Captured staging: health ok, revision d690bc0295a00e709a98983a30e33523f8542765, PNG 1440x1000.
+2026-11-04T03:47:34.0994971Z PASS: database is internal; app port is bound to loopback only.
+2026-11-04T03:47:34.1124217Z PASS: UFW default-deny incoming, outbound allowed, DB deny rule and loopback health verified on disposable staging runner.
+2026-11-04T03:47:34.1808247Z PASS: anonymous visitors cannot read metrics or logs
+2026-11-04T03:47:34.1814606Z PASS: anonymous backup requests are rejected
+2026-11-04T03:47:34.2376884Z PASS: staging administrator can authenticate
+2026-11-04T03:47:34.2387004Z PASS: CSRF blocks backup writes
+2026-11-04T03:47:34.2396025Z PASS: restore has no HTTP control surface
+2026-11-04T03:47:34.3461539Z PASS: recovery exercise starts with an empty disposable database
+2026-11-04T03:47:34.6805729Z PASS: backup script captures all test rows with SHA256
+2026-11-04T03:47:34.7865792Z PASS: backup file mode 0600 and directory mode 0700 are enforced
+2026-11-04T03:47:34.7875395Z PASS: private backups cannot be downloaded over HTTP
+2026-11-04T03:47:35.0045283Z PASS: only the named test record is deleted to simulate data loss
+2026-11-04T03:47:35.2200843Z PASS: wrong database confirmation is refused without writing
+2026-11-04T03:47:35.5510249Z PASS: corrupt snapshot is refused before any DELETE or INSERT
+2026-11-04T03:47:35.7722862Z PASS: restore recreates exact IDs values and timestamps after deletion
+2026-11-04T03:47:39.3662019Z PASS: retention removes only old managed snapshots and keeps two newest in the exercise
+2026-11-04T03:47:39.4767880Z PASS: application database user cannot create schema objects
+2026-11-04T03:47:39.5860471Z PASS: restricted hosting falls back honestly without warning output or invented CPU values
+2026-11-04T03:47:39.5892616Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:47:44.7929950Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:47:49.9968780Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:47:55.2004411Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:47:55.2005689Z PASS: CPU and RAM samples come from real OS/cgroup measurements
+2026-11-04T03:47:55.2006042Z PASS: baseline database is healthy with no database alert
+2026-11-04T03:47:56.4343877Z Captured real dashboard: normal; database alert ok.
+2026-11-04T03:47:57.0775675Z PASS: stopping staging MariaDB causes a real HTTP 503
+2026-11-04T03:48:02.2802158Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:48:07.5053507Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:48:12.7154619Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:48:12.7155139Z PASS: two consecutive failed probes activate the database alert
+2026-11-04T03:48:12.7155616Z PASS: timestamped application logs record the database incident
+2026-11-04T03:48:13.8483927Z Captured real dashboard: firing; database alert firing.
+2026-11-04T03:48:25.0635436Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:48:30.2673197Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:48:35.4712332Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:48:35.4725876Z PASS: restarting DB restores HTTP health and resolves the alert
+2026-11-04T03:48:35.5788173Z PASS: incident recovery preserves restored data
+2026-11-04T03:48:35.5822173Z PASS: authenticated collector responds while probing real DB
+2026-11-04T03:48:35.5826380Z PASS: metrics and logs omit credentials and request query content
+2026-11-04T03:48:35.5826947Z PASS: metrics and logs omit credentials and request query content
+2026-11-04T03:48:35.5827443Z PASS: metrics and logs omit credentials and request query content
+2026-11-04T03:48:36.6137910Z Captured real dashboard: recovered; database alert ok.
+2026-11-04T03:48:36.9512210Z 37 Week 3 checks passed; outage alert and restore verified.
+
+# cPanel deploy result
+2026-11-04T03:48:50.0824036Z Pre-deploy HTTP health check passed; starting FTPS transfer.
+2026-11-04T03:48:50.1071085Z FTPS control connection attempt 1/3.
+2026-11-04T03:49:22.3608006Z FTPS control connection attempt 2/3.
+2026-11-04T03:49:56.5502555Z FTPS control connection attempt 3/3.
+2026-11-04T03:50:26.7402825Z cPanel deployment failed (TimeoutError). Check FTPS settings and the existing app; no deploy success is claimed.

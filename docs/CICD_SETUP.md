@@ -34,7 +34,7 @@ Repo → Settings → Secrets and variables → Actions, dùng repository scope:
 
 Đặt flag ở repository scope để điều kiện job đọc được trước khi job chạy. Staging dùng environment staging, deploy hosting dùng environment cpanel; không đặt duyệt thủ công từng lần nếu cần demo tự động sau push.
 
-Mở Actions → Week 2 - Docker checks and cPanel deploy → Run workflow → main cho lần kiểm tra đầu. Sau đó push thay đổi source sẽ tự chạy.
+Mở Actions → Docker checks and cPanel deploy → Run workflow → main cho lần kiểm tra đầu. Sau đó push thay đổi source sẽ tự chạy.
 
 ## Source và dữ liệu được xử lý thế nào?
 
@@ -74,3 +74,9 @@ Với lỗi tạm và source/secrets đã đúng, có thể retry failed jobs c�
 Đã có Docker/Compose, persistence, deploy image staging, source deploy cPanel và ảnh trước/sau theo ảnh đề Week 2. Staging không tồn tại liên tục; cPanel không chạy image Docker. Không mô tả DB staging thành DB live. Điểm thực tế do giảng viên đánh giá; [checklist](WEEK2_CHECKLIST.md) đối chiếu từng đầu ra.
 
 [GitHub Actions](https://docs.github.com/en/actions) · [cPanel FTP Accounts](https://docs.cpanel.net/cpanel/files/ftp-accounts/) · [Docker Compose](https://docs.docker.com/compose/).
+
+## Các bước Week 3
+
+Sau CRUD/persistence ở staging, workflow cấu hình/check UFW và chạy operations_smoke: backup → xóa fixture → restore → stop/start DB → alert lifecycle → ảnh Chrome thật. Deploy cPanel vẫn cần toàn bộ staging qua. Shared libraries/assets được upload trước bootstrap/controllers, REVISION cuối; đây chưa phải đổi release nguyên tử. Kết nối FTPS có retry TCP giới hạn, không retry sai credentials và không bỏ TLS.
+
+Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager. [Theo dõi và minh chứng](../evidence/week3/README.md). Uptime workflow công khai chỉ probe health khoảng mỗi 5 phút, không có mật khẩu admin.

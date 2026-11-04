@@ -83,3 +83,9 @@ Tài liệu chính thức: [PHP Docker image](https://github.com/docker-library/
 ## Minh chứng đã chạy
 
 [Run 40634997505](https://github.com/nathyu-le/DevopQLYFood/actions/runs/40634997505) build/test image, chuyển artifact sang runner staging mới và đối chiếu image ID; 17 checks staging qua. [JSON persistence](../evidence/week2/persistence-2026-10-28.json) có cùng bản ghi trước/sau recreate. [Ảnh staging và trước/sau live](../evidence/week2/completion-2026-10-28.md) được lưu riêng; không phải DB hosting.
+
+## Bổ sung Week 3
+
+App có quota 1 CPU và RAM 256 MB, DB RAM 512 MB trong Compose; đây không phải quota cPanel. Volume operations_data giữ var/operations và snapshot private qua recreate app. Không xóa volume của môi trường cần giữ dữ liệu.
+
+Mục Vận hành yêu cầu đăng nhập quản trị. [Monitoring](../monitoring/README.md) · [Backup restore](BACKUP_RESTORE.md) · [Security](SECURITY.md). DB test trong Actions dùng tên restaurant_menu_ci; bài restore chỉ chạy với DB thử có xác nhận. Script init quyền DB chỉ chạy trên volume mới; không xóa volume cũ để cập nhật grants.

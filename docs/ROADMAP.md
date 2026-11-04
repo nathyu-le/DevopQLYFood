@@ -16,7 +16,7 @@ Nguồn đối chiếu: đề Week 1 đã cung cấp trước đó; ảnh Week 2
 |---|---|---|---:|---|
 | Week 1 | Infrastructure & Initial Deployment | Kiến trúc, server/network, app + DB chạy, README và phân công | 2,0 | Có minh chứng thêm/sửa và SELECT trên cPanel; có ảnh server/domain và sơ đồ hosting; có PHP 8.2/quota và log chặn HTTP; OS/user/SSH/firewall tạm hoãn bổ sung |
 | Week 2 | Containerization & CI/CD | Dockerfile, Compose, persistent volume, build–test–deploy từ commit mới | 2,5 | Bộ đầu ra đã kiểm chứng: image staging, persistence, CI/CD cPanel, test fail và ảnh trước/sau |
-| Week 3 | Monitoring, Security & Reliability | Logs theo thời gian, dashboard CPU/RAM/health, alert đã thử, bảo mật, backup/restore, playbook draft ≥2 sự cố | 2,5 | Chưa bắt đầu triển khai |
+| Week 3 | Monitoring, Security & Reliability | Logs, dashboard, alert, security, backup/restore và playbook | 2,5 | Đã kiểm chứng staging; cPanel chờ cập nhật do FTPS timeout |
 | Week 4 | Final Demo & Troubleshooting | Bản tích hợp Week 1–3, triển khai từ server sạch, release/tag, playbook ≥3 sự cố, paper và video | 3,0 | Chưa thực hiện |
 
 ## Mỗi tuần cập nhật ở đâu?
@@ -37,12 +37,12 @@ Minh chứng Week 1 đã có chỗ dành cho `evidence/server/` và `evidence/ap
 
 ## Cấu hình theo các tuần
 
-Week 2 đã có cấu hình dưới đây; Week 3–4 vẫn là vị trí dự kiến:
+Week 2 và Week 3 đã có cấu hình dưới đây; Week 4 vẫn là phần dự kiến:
 
-| Checkpoint | Cấu hình / công cụ dự kiến bổ sung |
+| Checkpoint | Cấu hình và công cụ |
 |---|---|
 | Week 2 | `Dockerfile`, `docker-compose.yml`, `.dockerignore`, workflow build–test–deploy trong `.github/workflows/` |
-| Week 3 | Cấu hình monitoring trong `monitoring/`; script backup/restore trong `tools/`; `docs/TROUBLESHOOTING.md` với ít nhất 2 sự cố |
+| Week 3 | Ops Monitor trong app/public, tài liệu và UFW trong monitoring; app/backup.php, app/restore.php; playbook 3 trường hợp |
 | Week 4 | Nâng playbook lên ít nhất 3 sự cố; báo cáo trong `report/`; deployment/operations guide hoàn chỉnh; release/tag và video trong chỉ mục `evidence/week4/` |
 
 Cấu hình có thể chuẩn bị trước khi chọn server; chỉ ghi triển khai hoàn tất khi chạy và có minh chứng. Workflow **Source checks (not deployment)** vẫn kiểm tra source với DB tạm. Workflow **Week 2 - Docker checks and cPanel deploy** kiểm tra image, deploy image staging trên runner mới, rồi deploy source lên cPanel; cả ba job đã thành công. [Kết quả thực tế](../evidence/week2/README.md).
@@ -70,4 +70,8 @@ Khi nộp checkpoint, ghi thêm commit SHA hoặc link commit trong chỉ mục 
 
 Nhóm tiếp tục cPanel cho website thật. Docker image deploy vào staging tạm, DB staging khác DB hosting; sau run stack tạm được dọn. [Runbook](CICD_SETUP.md) · [Bằng chứng](../evidence/week2/completion-2026-10-28.md).
 
-Ảnh đề Week 2 đã được đọc lại: không ghi phải chạy Docker ngay trên cPanel. Bộ đầu ra kỹ thuật Week 2 đã có minh chứng; nhóm cần đọc hiểu và trình bày đúng kiến trúc. Phần OS/user/SSH/firewall Week 1 còn thiếu giữ riêng; Week 3–4 chưa được đánh dấu thực hiện.
+Ảnh đề Week 2 đã được đọc lại: không ghi phải chạy Docker ngay trên cPanel. Bộ đầu ra kỹ thuật Week 2 đã có minh chứng; nhóm cần đọc hiểu và trình bày đúng kiến trúc. Phần OS/user/SSH/firewall Week 1 còn thiếu giữ riêng; Week 3 đã có bộ source và minh chứng staging theo checklist riêng; Week 4 chưa thực hiện.
+
+## Cập nhật checkpoint Week 3
+
+Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager. [Minh chứng](../evidence/week3/README.md) · [Kịch bản](WEEK3_DEMO.md). Các mục hạ tầng live chưa xác minh được giữ riêng; không dùng ảnh cp1 cũ hoặc firewall runner để tự đánh dấu chúng đã hoàn tất.
