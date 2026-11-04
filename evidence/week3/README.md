@@ -1,6 +1,6 @@
 # Minh chứng Week 3 ngày 4 tháng 11 năm 2026
 
-**Trạng thái:** Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
+**Trạng thái:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live.
 
 Source [d690bc0](https://github.com/nathyu-le/DevopQLYFood/commit/d690bc0295a00e709a98983a30e33523f8542765) · [Pipeline 41768981566](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566) · [Source checks](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981563). Staging là môi trường Docker thử riêng trên runner, không phải DB cPanel.
 
@@ -28,7 +28,7 @@ Gói minh chứng bàn giao gồm dashboard-normal.png, dashboard-firing.png, da
 
 UFW đã được cấu hình/check trên runner staging riêng: default deny incoming, allow outgoing, loopback allowed và deny DB port; Compose không publish DB và bind app 127.0.0.1. Không gọi đó là firewall cPanel. Firewall/SSH/quota của hosting do nhà cung cấp quản lý; chưa có bằng chứng policy riêng từ gói hiện tại.
 
-Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
+Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live.
 
 Để cập nhật thủ công: upload ZIP runtime Week 3 vào đúng thư mục DevopQLYFood đang chứa app/config/public, Extract và ghi đè source. ZIP chỉ có app/public và REVISION; giữ config.local.php, database và .htaccess đang có. Sau upload, mở Vận hành, kiểm tra health/version và đối chiếu source commit ở đầu trang.
 
@@ -36,10 +36,25 @@ FTPS đã timeout trước đăng nhập qua các lần thử có giới hạn. 
 
 Uptime workflow probe health khoảng 5 phút/lần; chưa tự cấu hình cron backup hosting. Backup có thể chạy CLI/nút trong dashboard sau khi source có trên hosting; restore bài thực nghiệm chỉ dành DB test/CI. [Checklist](../../docs/WEEK3_CHECKLIST.md) · [Demo một người](../../docs/WEEK3_DEMO.md).
 
-## Kiểm tra tiếp kết nối triển khai
+## Trước lần cập nhật thủ công: các kết nối triển khai bị lỗi
 
 Đã retry riêng job deploy của cùng run/source; job `126380548499` vẫn timeout ở cả ba lần kết nối FTPS trước đăng nhập. Health website vẫn OK, revision live vẫn là bản trước Week 3; route `ops-api.php` chưa có trên live tại lần kiểm tra.
 
 Đăng nhập cPanel qua biểu mẫu bảo mật đã tới trang Tools, nhưng khi mở File Manager, dịch vụ hủy phiên và hiển thị: “Your IP address has changed. Please log in again.” Không đổi cấu hình bảo vệ phiên hoặc gửi credentials vào repo. Vì phiên điều khiển từ xa không dùng tiếp được, chưa có thao tác upload/ghi đè source trên hosting.
 
 Cách cập nhật hiện có là upload gói runtime Week 3 bằng File Manager trong phiên cPanel trên máy người triển khai, Extract vào đúng thư mục dự án rồi kiểm tra health/version/Vận hành. Gói ZIP giữ nguyên source đã qua test, không chứa config local hoặc database.
+
+## Sau khi người triển khai upload gói Week 3
+
+Kiểm tra lúc **11:20 ngày 04/11/2026** trên website thật: [kết quả HTTP](live-http-checks-2026-11-04.json).
+
+| Kiểm tra | Kết quả |
+|---|---|
+| health.php | HTTP 200, status ok |
+| version.php | HTTP 200, revision d690bc0 khớp gói source đã test |
+| CSS và JS operations | Cả hai HTTP 200 |
+| ops-api.php không đăng nhập | HTTP 401 |
+| operations.php không đăng nhập | Chuyển về login.php |
+| State, config và schema qua HTTP | Cả ba HTTP 403; không đọc nội dung private |
+
+Phương thức triển khai là **upload thủ công qua cPanel do người triển khai thực hiện**. Không ghi lần này thành FTPS pipeline success. Kết quả kiểm tra sau đăng nhập và tạo backup trên live còn cần xác minh; 37 assertions của staging được giữ đúng phạm vi staging.

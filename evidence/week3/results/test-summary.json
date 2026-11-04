@@ -47,6 +47,11 @@
   "corruption_blocked": true,
   "database_alert_fired": true,
   "database_alert_recovered": true,
-  "cpanel_deployed": false,
-  "screenshots": "prepared for owner review; not published in Git"
+  "cpanel_deployed": true,
+  "screenshots": "prepared for owner review; not published in Git",
+  "deployment_method": "manual_cpanel_upload",
+  "ftps_pipeline_deployed": false,
+  "live_http_security_checks_passed": 7,
+  "authenticated_live_dashboard_verified": false,
+  "live_backup_verified": false
 }

@@ -9,7 +9,7 @@
 | Staging runner tạm | App chỉ bind 127.0.0.1:8080; không có port DB được publish | Compose config được kiểm tra tự động; health qua loopback |
 | Network Compose | MariaDB 3306 chỉ dành cho app cùng network; không expose ra host | Không có ports trên service db |
 | Staging OS firewall | Default deny incoming, allow outgoing, cho loopback, deny TCP 3306 | monitoring/check-firewall.sh cấu hình UFW trên runner riêng và lưu status verbose |
-| cPanel live | Website HTTPS 443 theo URL public | Công cụ FTPS giữ xác minh TLS; lần deploy này timeout trước đăng nhập nên chưa tới bước kiểm tra HTTP của source mới |
+| cPanel live | Website HTTPS 443 theo URL public | Đã upload source thủ công; 7 HTTP checks qua: assets 200, metrics anonymous 401, dashboard về login và private paths 403. Pipeline FTPS vẫn timeout trước đăng nhập |
 | cPanel OS firewall, SSH và DB network policy | Do nhà cung cấp shared hosting quản lý | Chưa có quyền root/ảnh policy được xác minh; không ghi UFW của runner thành firewall cPanel |
 
 Script firewall chỉ cho chạy khi GITHUB_ACTIONS=true và Compose project `_ci`. Không chạy nó trong shared cPanel và không thay firewall của máy chủ nhiều khách hàng. Không cần thuê VPS cho luồng hiện tại.
@@ -34,3 +34,5 @@ File init `docker/20-app-grants.sh` chỉ chạy khi volume DB mới được kh
 `tools/check-live-security.py` kiểm tra assets mới HTTP 200, anonymous metrics HTTP 401, dashboard chuyển về login và private paths 403/404 trên layout /public/. Script không đọc private response bodies, không dùng credentials admin và không được gọi là kiểm tra firewall OS.
 
 [Minh chứng](../evidence/week3/README.md) · [Cấu hình giám sát](../monitoring/README.md) · [Backup](BACKUP_RESTORE.md).
+
+Kiểm tra sau upload ngày 4/11/2026 đã chạy trên website thật: [kết quả HTTP](../evidence/week3/live-http-checks-2026-11-04.json). Chưa xác minh dashboard và backup bằng phiên quản trị live; không thay thế bằng kết quả staging.

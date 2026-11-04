@@ -1,6 +1,6 @@
 # Week 3 Kịch bản một người trình bày
 
-Thời lượng khoảng 7 đến 10 phút. Mỗi phần có link chiếu, thao tác và lời đọc. Dashboard live chỉ dùng sau khi source Week 3 đã được cập nhật và kiểm tra; hiện lần deploy tự động đang bị timeout FTPS. Khi chưa cập nhật hosting, trình bày bằng bộ minh chứng staging và nói rõ môi trường.
+Thời lượng khoảng 7 đến 10 phút. Mỗi phần có link chiếu, thao tác và lời đọc. Source Week 3 đã lên hosting bằng upload thủ công; health/revision và 7 kiểm tra đường dẫn HTTP đã qua. Trước buổi demo cần đăng nhập Vận hành và thử nút backup; các thao tác quản trị này chưa được xác minh trên live. Nếu chưa kiểm tra được, dùng bộ minh chứng staging và nói rõ môi trường. Pipeline FTPS vẫn đang lỗi.
 
 Ba ảnh dashboard và JSON gốc nằm trong gói `Week3_MinhChung.zip` bàn giao riêng; tải và giải nén trước buổi. Chỉ mục trong repo dẫn tới kết quả CI và log chọn lọc. Không dừng DB hoặc thử xóa dữ liệu live để minh họa.
 
@@ -42,7 +42,7 @@ Ba ảnh dashboard và JSON gốc nằm trong gói `Week3_MinhChung.zip` bàn gi
 
 **Thao tác:** chỉ UFW staging, DB không publish port, API anonymous 401 và private paths bị chặn. Mở hai sự cố đầu trong playbook; nếu được hỏi thêm, trình bày bug quyền DB đã được test bắt và sửa.
 
-**Lời đọc:** “Trên runner staging riêng, nhóm đặt firewall default deny incoming, giữ loopback để demo và không publish port database. User app chỉ có bốn quyền CRUD; test chứng minh không tạo được bảng. Source có bảo vệ đăng nhập, CSRF và đường dẫn private; cần kiểm tra lại trên cPanel sau khi cập nhật. Firewall hệ điều hành của hosting do nhà cung cấp quản lý, không được gọi UFW của runner là firewall cPanel.”
+**Lời đọc:** “Trên runner staging riêng, nhóm đặt firewall default deny incoming, giữ loopback để demo và không publish port database. User app chỉ có bốn quyền CRUD; test chứng minh không tạo được bảng. Trên cPanel đã kiểm tra metrics anonymous trả 401, dashboard chuyển về login và các đường dẫn private trả 403. Các thao tác sau đăng nhập cần được kiểm tra riêng trước buổi demo. Firewall hệ điều hành của hosting do nhà cung cấp quản lý, không được gọi UFW của runner là firewall cPanel.”
 
 “Playbook có hướng xác minh, nguyên nhân, khắc phục và xác nhận phục hồi cho lỗi DB không khả dụng và mất dữ liệu thử. Hồ sơ nộp gồm dashboard screenshots/config, security checklist, scripts/logs backup restore và minh chứng xử lý sự cố. Các phần đánh giá vẫn cần trình bày đúng môi trường và nguồn số liệu.”
 

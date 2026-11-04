@@ -1,6 +1,6 @@
 # Week 3 Monitoring Security và Reliability
 
-**Cập nhật ngày 4 tháng 11 năm 2026:** Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
+**Cập nhật ngày 4 tháng 11 năm 2026:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live.
 
 Đối chiếu ảnh đề Week 3 đã cung cấp: monitoring CPU/RAM/health, dashboard và alert đã thử, logs theo thời gian, firewall/ports/secrets, backup/restore có đối chiếu và playbook ít nhất 2 sự cố. [Run kiểm chứng](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566) · [Ảnh và logs](../evidence/week3/README.md).
 
@@ -21,7 +21,8 @@
 
 ## Môi trường live và việc cần xác nhận
 
-- [ ] Source Week 3 đã lên cPanel, route authentication/private paths đã được kiểm tra sau deploy. Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
+- [x] Source Week 3 đã lên cPanel bằng upload thủ công; health/revision đúng và 7 kiểm tra HTTP qua: assets 200, metrics anonymous 401, dashboard về login, private paths 403. [Kết quả live](../evidence/week3/live-http-checks-2026-11-04.json).
+- [ ] Xác minh dashboard sau đăng nhập, số liệu/logs và nút backup bằng phiên quản trị trên cPanel; chưa dùng kiểm tra anonymous để kết luận các thao tác này đã qua.
 - [ ] Xác minh policy firewall/SSH/quyền DB và nguồn quota của đúng gói cPanel nếu dùng các mục đó để bảo vệ hạ tầng live. UFW staging không chứng minh cấu hình firewall của nhà cung cấp.
 - [ ] Nhóm mở thử đường dẫn bằng tài khoản nộp, tập demo, xác nhận đóng góp cá nhân thật và sẵn sàng giải thích nguồn metrics.
 

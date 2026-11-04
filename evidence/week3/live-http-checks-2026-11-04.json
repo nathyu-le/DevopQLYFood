@@ -1,0 +1,59 @@
+{
+  "checked_at_utc": "2026-11-04T04:20:48.720195+00:00",
+  "checked_at_local": "11:20 ngày 04/11/2026",
+  "base_url": "https://khotrick.org/DevopQLYFood/public/",
+  "source_commit": "d690bc0295a00e709a98983a30e33523f8542765",
+  "deployment_method": "manual_cpanel_upload_reported_by_owner_and_revision_verified",
+  "health_revision_checks": [
+    {
+      "path": "health.php",
+      "status": 200,
+      "result": {
+        "status": "ok"
+      }
+    },
+    {
+      "path": "version.php",
+      "status": 200,
+      "result": {
+        "revision": "d690bc0295a00e709a98983a30e33523f8542765"
+      }
+    }
+  ],
+  "security_scope": "live cPanel HTTP access controls, not OS firewall",
+  "security_checks": [
+    {
+      "route": "assets/operations.css",
+      "status": 200
+    },
+    {
+      "route": "assets/operations.js",
+      "status": 200
+    },
+    {
+      "route": "ops-api.php",
+      "status": 401
+    },
+    {
+      "route": "operations.php",
+      "anonymous_redirect": "login.php"
+    },
+    {
+      "route": "var/operations/state.json",
+      "status": 403
+    },
+    {
+      "route": "config/config.local.php",
+      "status": 403
+    },
+    {
+      "route": "database/schema.sql",
+      "status": 403
+    }
+  ],
+  "http_security_checks_passed": 7,
+  "authenticated_dashboard_verified": false,
+  "live_backup_verified": false,
+  "ftps_pipeline_deployed": false,
+  "private_response_bodies_read": false
+}

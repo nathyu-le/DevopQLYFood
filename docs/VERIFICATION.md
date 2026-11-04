@@ -36,6 +36,6 @@ Container tests chỉ dành cho stack Compose tạm có hậu tố `_ci` và `RU
 
 ## Week 3 thực nghiệm vận hành
 
-[Run 41768981566](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566), source `d690bc0`: 37 assertions trong operations_smoke, gồm auth/CSRF, backup/integrity/retention/restore, DDL denied, CPU/RAM thật và DB outage/alert/recovery. [Ảnh và JSON](../evidence/week3/README.md). Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối FTPS. Website live chưa được xác nhận chạy source Week 3. Có ZIP cập nhật để upload bằng File Manager.
+[Run 41768981566](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566), source `d690bc0`: 37 assertions trong operations_smoke, gồm auth/CSRF, backup/integrity/retention/restore, DDL denied, CPU/RAM thật và DB outage/alert/recovery. [Ảnh và JSON](../evidence/week3/README.md). Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live.
 
 `monitoring/check-firewall.sh` chỉ cấu hình UFW trên runner GitHub riêng. `tools/check-live-security.py` kiểm tra HTTP access control cPanel, không phải OS firewall. Không dùng DB live cho bài xóa/restore; fixture và project đều riêng.
