@@ -125,7 +125,7 @@ function ops_resources(array $previous): array
     $used = null; $limit = null; $memorySource = 'unavailable';
     $cgUsed = ops_read('/sys/fs/cgroup/memory.current');
     $cgMax = ops_read('/sys/fs/cgroup/memory.max');
-    if ($cgUsed !== null && $cgMax !== null && ctype_digit($cgUsed) && ctype_digit($cgMax) && (float) $cgMax > 0) {
+    if ($cgUsed !== null && $cgMax !== null && preg_match('/\A[0-9]+\z/', $cgUsed) && preg_match('/\A[0-9]+\z/', $cgMax) && (float) $cgMax > 0) {
         $used = (float) $cgUsed; $limit = (float) $cgMax; $memorySource = 'cgroup memory';
     } elseif (($mem = ops_read('/proc/meminfo')) !== null
         && preg_match('/MemTotal:\s+(\d+)/', $mem, $total) && preg_match('/MemAvailable:\s+(\d+)/', $mem, $available)) {

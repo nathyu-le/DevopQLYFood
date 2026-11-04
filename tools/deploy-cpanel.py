@@ -91,9 +91,20 @@ def main():
     with zipfile.ZipFile('dist/cpanel-release.zip') as archive:
         names = validated_entries(archive, revision)
         with ftplib.FTP_TLS(context=ssl.create_default_context(), timeout=30) as ftp:
-            ftp.connect(os.environ['CPANEL_FTP_HOST'], int(os.environ.get('CPANEL_FTP_PORT') or '21'))
+            for attempt in range(3):
+                print(f'FTPS control connection attempt {attempt + 1}/3.', flush=True)
+                try:
+                    ftp.connect(os.environ['CPANEL_FTP_HOST'], int(os.environ.get('CPANEL_FTP_PORT') or '21'))
+                    break
+                except OSError:
+                    ftp.close()
+                    if attempt == 2:
+                        raise
+                    time.sleep(2 * (attempt + 1))
+            print('FTPS control connected; authenticating with verified TLS.', flush=True)
             ftp.login(os.environ['CPANEL_FTP_USER'], os.environ['CPANEL_FTP_PASSWORD'])
             ftp.prot_p()  # Encrypt the data channel too; never fall back to plain FTP.
+            print('FTPS authenticated; encrypted data channel enabled.', flush=True)
             ftp.cwd(remote_root)
             origin = ftp.pwd()
             for directory in ('app', 'public', 'config'):
@@ -103,6 +114,7 @@ def main():
             ftp.voidcmd('TYPE I')
             if ftp.size('config/config.local.php') is None:
                 raise ValueError('Existing hosting DB/admin config is required and will be preserved.')
+            print('FTPS destination verified; uploading runtime files.', flush=True)
             for name in names:
                 parent = PurePosixPath(name).parent
                 ftp.cwd(origin)
