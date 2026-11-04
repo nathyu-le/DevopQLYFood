@@ -7,7 +7,7 @@ require_admin();
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Demo trực tiếp Week 3 · Bếp Nhà</title>
 <link rel="stylesheet" href="assets/operations.css?v=2"><link rel="stylesheet" href="assets/demo.css?v=1">
-<script src="assets/demo.js?v=2" defer></script></head><body><main>
+<script src="assets/demo.js?v=3" defer></script></head><body><main>
 <header><div><a class="brand" href="index.php">BẾP NHÀ <span>DEMO WEEK 3</span></a><h1>Demo trực tiếp</h1><p>Tự bấm từng bước để kiểm tra backup, restore và phục hồi dịch vụ.</p></div><nav><a href="operations.php">Dashboard</a><a href="index.php">Thực đơn</a></nav></header>
 <p class="scope">Cơ sở dữ liệu SQLite thử riêng trên hosting cPanel · Cảnh báo sau 2 mẫu lỗi · Phục hồi sau 2 mẫu tốt</p>
 <div id="message" class="banner" role="status">Bắt đầu bằng nút 1 Tạo dữ liệu thử.</div>

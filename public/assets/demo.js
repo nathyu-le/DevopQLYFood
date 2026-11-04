@@ -1,7 +1,7 @@
 'use strict';
 const $=id=>document.getElementById(id);
 const stamp=x=>new Date(x).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour12:false});
-let busy=false, current=null;
+let busy=false, refreshing=false, generation=0, current=null;
 const names={demo_data_created:'Đã tạo món thử',demo_backup_created:'Đã tạo backup',demo_data_deleted:'Đã xóa dữ liệu thử',demo_restore_verified:'Restore khớp backup',demo_database_disconnected:'Đã ngắt kết nối DB demo',demo_database_reconnected:'Đã phục hồi kết nối',demo_auto_reconnected:'Đã tự phục hồi kết nối',demo_alert_transition:'Cảnh báo đổi trạng thái'};
 function row(body,values){const tr=document.createElement('tr');for(const value of values){const td=document.createElement('td');td.textContent=String(value);tr.append(td);}body.append(tr);}
 function empty(body,text){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=4;td.className='empty';td.textContent=text;tr.append(td);body.append(tr);}
@@ -26,12 +26,24 @@ function render(data){
  else if(state==='pending'){$('message').className='banner bad';$('message').textContent='Đã phát hiện lỗi. Chờ mẫu lỗi tiếp theo để cảnh báo chuyển sang FIRING.';}
  else if(online){$('message').className='banner';$('message').textContent=data.restored?'Dữ liệu restore đã khớp backup. Tiếp tục thử tạo lỗi và phục hồi kết nối.':'Database demo đang hoạt động. Thực hiện lần lượt các nút theo số.';}
 }
-async function refresh(){if(busy)return;busy=true;try{const response=await fetch('demo-api.php',{cache:'no-store'});if(response.status===401){location.href='login.php';return;}if(!response.ok)throw Error('Chưa lấy được trạng thái demo.');const data=await response.json();const health=await fetch('demo-health.php',{cache:'no-store'});$('demo-http').textContent=String(health.status);busy=false;render(data);}catch(e){$('message').className='banner bad';$('message').textContent=e.message;}finally{busy=false;}}
+async function refresh(){
+ if(busy||refreshing)return;
+ refreshing=true;const started=generation;
+ try{
+  const response=await fetch('demo-api.php',{cache:'no-store'});
+  if(response.status===401){location.href='login.php';return;}
+  if(!response.ok)throw Error('Chưa lấy được trạng thái demo.');
+  const data=await response.json(),health=await fetch('demo-health.php',{cache:'no-store'});
+  if(!busy&&started===generation){$('demo-http').textContent=String(health.status);render(data);}
+ }catch(e){if(!busy&&started===generation){$('message').className='banner bad';$('message').textContent=e.message;}}
+ finally{refreshing=false;}
+}
 for(const button of document.querySelectorAll('[data-action]:not([data-action="download"])'))button.addEventListener('click',async()=>{
- if(busy)return;busy=true;for(const b of document.querySelectorAll('[data-action]'))b.disabled=true;
+ if(busy)return;busy=true;generation++;for(const b of document.querySelectorAll('[data-action]'))b.disabled=true;
  try{const action=button.dataset.action,response=await fetch('demo-api.php',{method:'POST',body:new URLSearchParams({action,csrf:$('demo-csrf').value})});if(response.status===401){location.href='login.php';return;}if(!response.ok){const err=await response.json();throw Error(err.error||'Thao tác chưa hoàn tất.');}
- await response.json();
- busy=false;await refresh();
+ const data=await response.json();
+ const health=await fetch('demo-health.php',{cache:'no-store'});
+ $('demo-http').textContent=String(health.status);busy=false;render(data);await refresh();
  }catch(e){$('message').className='banner bad';$('message').textContent=e.message;if(current){busy=false;for(const b of document.querySelectorAll('[data-action]'))b.disabled=false;}}finally{busy=false;}
 });
 refresh();setInterval(refresh,5000);

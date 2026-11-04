@@ -38,6 +38,8 @@ jobs:
         run: docker run --rm --entrypoint sh "$APP_IMAGE" -c 'find app public config /usr/local/bin/configure-container.php -name "*.php" -print0 | xargs -0 -n1 php -l'
       - name: Check input validation with the image runtime
         run: docker run --rm --entrypoint php --mount "type=bind,src=$PWD,dst=/checks,readonly" "$APP_IMAGE" /checks/tests/validation.php
+      - name: Verify demo actions during background polling
+        run: node tests/demo_client.mjs
       - name: Prove a real regression fails its test
         run: python3 tests/verify_gate.py
       - name: Start Apache, PHP and MariaDB
