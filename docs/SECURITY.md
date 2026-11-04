@@ -9,7 +9,7 @@
 | Staging runner tạm | App chỉ bind 127.0.0.1:8080; không có port DB được publish | Compose config được kiểm tra tự động; health qua loopback |
 | Network Compose | MariaDB 3306 chỉ dành cho app cùng network; không expose ra host | Không có ports trên service db |
 | Staging OS firewall | Default deny incoming, allow outgoing, cho loopback, deny TCP 3306 | monitoring/check-firewall.sh cấu hình UFW trên runner riêng và lưu status verbose |
-| cPanel live | Website HTTPS 443 theo URL public | Đã upload source thủ công; 7 HTTP checks qua: assets 200, metrics anonymous 401, dashboard về login và private paths 403. Pipeline FTPS vẫn timeout trước đăng nhập |
+| cPanel live | Website HTTPS 443 theo URL public | Đã upload source thủ công; 7 HTTP checks qua: assets 200, metrics anonymous 401, dashboard về login và private paths 403. FTPS đã deploy thành công source a0e5914 trong run 41785933275; health/revision và 7 HTTP checks qua |
 | cPanel OS firewall, SSH và DB network policy | Do nhà cung cấp shared hosting quản lý | Chưa có quyền root/ảnh policy được xác minh; không ghi UFW của runner thành firewall cPanel |
 
 Script firewall chỉ cho chạy khi GITHUB_ACTIONS=true và Compose project `_ci`. Không chạy nó trong shared cPanel và không thay firewall của máy chủ nhiều khách hàng. Không cần thuê VPS cho luồng hiện tại.

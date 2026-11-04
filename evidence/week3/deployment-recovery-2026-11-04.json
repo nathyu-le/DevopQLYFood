@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-11-04T13:36:41+07:00",
+  "run_id": 41785933275,
+  "run_url": "https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275",
+  "source_commit": "a0e59141018bdf2c571d5ac8f25805e1e581ff1a",
+  "trigger": "push",
+  "jobs": {
+    "container-checks": "success",
+    "deploy-staging": "success",
+    "deploy-cpanel": "success"
+  },
+  "source_checks_run": 41785933364,
+  "source_checks": "success",
+  "staging_week3_checks_passed": 37,
+  "deployment": {
+    "tls_certificate_verification": "enabled on control and data channels",
+    "authenticated": true,
+    "runtime_transfer_completed": true,
+    "health": "ok",
+    "exact_revision_check": "passed",
+    "existing_config_database_htaccess": "preserved"
+  },
+  "live_security_checks_passed": 7,
+  "live_dashboard": {
+    "revision_prefix": "a0e59141018b",
+    "log_apply": "verified with no-match filter",
+    "log_enter": "form submission verified",
+    "log_reset": "clears filters and displays logs"
+  },
+  "private_dashboard_screenshots_and_telemetry": "not included"
+}

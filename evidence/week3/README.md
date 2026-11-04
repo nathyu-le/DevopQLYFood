@@ -1,6 +1,6 @@
 # Minh chứng Week 3 ngày 4 tháng 11 năm 2026
 
-**Trạng thái:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS vẫn lỗi.
+**Trạng thái:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS đã được khôi phục trong [run 41785933275](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275): cả ba job thành công; source `a0e5914`, health/revision và 7 kiểm tra HTTP đều qua. Xác minh TLS vẫn bật trên cả hai kênh FTP.
 
 Source [d690bc0](https://github.com/nathyu-le/DevopQLYFood/commit/d690bc0295a00e709a98983a30e33523f8542765) · [Pipeline 41768981566](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566) · [Source checks](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981563). Staging là môi trường Docker thử riêng trên runner, không phải DB cPanel.
 
@@ -28,11 +28,11 @@ Gói minh chứng bàn giao gồm dashboard-normal.png, dashboard-firing.png, da
 
 UFW đã được cấu hình/check trên runner staging riêng: default deny incoming, allow outgoing, loopback allowed và deny DB port; Compose không publish DB và bind app 127.0.0.1. Không gọi đó là firewall cPanel. Firewall/SSH/quota của hosting do nhà cung cấp quản lý; chưa có bằng chứng policy riêng từ gói hiện tại.
 
-Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS vẫn lỗi.
+Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS đã được khôi phục trong [run 41785933275](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275): cả ba job thành công; source `a0e5914`, health/revision và 7 kiểm tra HTTP đều qua. Xác minh TLS vẫn bật trên cả hai kênh FTP.
 
 Để cập nhật thủ công: upload ZIP runtime Week 3 vào đúng thư mục DevopQLYFood đang chứa app/config/public, Extract và ghi đè source. ZIP chỉ có app/public và REVISION; giữ config.local.php, database và .htaccess đang có. Sau upload, mở Vận hành, kiểm tra health/version và đối chiếu source commit ở đầu trang.
 
-FTPS đã timeout trước đăng nhập qua các lần thử có giới hạn. Khi hosting khôi phục dịch vụ hoặc cấp endpoint đúng, cập nhật Variables/Secrets trực tiếp trong GitHub và retry job deploy; không gửi password qua issue/log, không tắt TLS. Upload tay là phương án đưa source lên trong lúc dịch vụ FTP gián đoạn, không được ghi thành pipeline deploy success.
+Nguyên nhân gián đoạn đã xác minh: địa chỉ FTP cũ bị timeout; địa chỉ kết nối hiện tại dùng chứng chỉ mang tên dịch vụ đã cấu hình trước đó. Đã tách CPANEL_FTP_HOST (địa chỉ kết nối) và CPANEL_FTP_TLS_HOST (danh tính TLS), xác minh chứng chỉ trên cả hai kênh rồi deploy thành công. Không tự chọn hostname theo chứng chỉ, không gửi password vào issue/log và không tắt TLS. Lần upload tay trước đó vẫn được giữ đúng là minh chứng thủ công.
 
 Uptime workflow probe health khoảng 5 phút/lần; chưa tự cấu hình cron backup hosting. Backup có thể chạy CLI/nút trong dashboard sau khi source có trên hosting; restore bài thực nghiệm chỉ dành DB test/CI. [Checklist](../../docs/WEEK3_CHECKLIST.md) · [Demo một người](../../docs/WEEK3_DEMO.md).
 
@@ -70,3 +70,9 @@ Phương thức triển khai là **upload thủ công qua cPanel do người tri
 - CPU/RAM live ghi rõ OS visible to PHP; may be shared host. Đây không phải số đo quota riêng hoặc mức dùng riêng của app; không dùng nó để chứng minh gói cPanel đã vượt RAM.
 
 Ảnh dashboard live được bàn giao riêng cho chủ repo. Repo chỉ lưu kết quả kiểm tra tổng hợp, không chứa ảnh đăng nhập, raw telemetry, tên snapshot, digest của dữ liệu live hoặc nội dung backup. Các bài dừng DB và xóa/restore tiếp tục dùng bằng chứng staging riêng, không mô phỏng mất dữ liệu trên website live.
+
+## Khôi phục triển khai tự động lúc 13:35 ngày 04/11/2026
+
+[Run 41785933275](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275) từ push commit `a0e59141018bdf2c571d5ac8f25805e1e581ff1a` đã có cả ba job thành công. Staging qua 37 kiểm tra Week 3; cPanel xác minh TLS, upload source, đối chiếu health/revision và qua 7 HTTP security checks. Config hosting, database và .htaccess được giữ nguyên. [Kết quả tổng hợp](deployment-recovery-2026-11-04.json).
+
+Đã kiểm tra dashboard trên website thật sau deploy: revision a0e5914; nút Lọc áp dụng điều kiện, Enter gửi bộ lọc, không có kết quả thì có thông báo, Xóa lọc xóa điều kiện và hiện lại nhật ký. Đây là kiểm tra giao diện trong phiên quản trị; ảnh và raw telemetry được giữ riêng.

@@ -1,6 +1,6 @@
 # Week 3 Kịch bản một người trình bày
 
-Thời lượng khoảng 7 đến 10 phút. Mỗi phần có link chiếu, thao tác và lời đọc. Source Week 3 đã lên hosting bằng upload thủ công; health/revision và 7 kiểm tra đường dẫn HTTP đã qua. Đã đăng nhập Vận hành, kiểm tra số liệu/biểu đồ, lọc log và tạo backup thành công trên live ngày 4/11/2026. CPU/RAM hiện mang nhãn OS visible to PHP; may be shared host, không phải quota riêng của tài khoản. Trước buổi demo mở lại trang; dùng bộ minh chứng staging để trình bày cảnh báo và restore có đối chiếu. Pipeline FTPS vẫn đang lỗi.
+Thời lượng khoảng 7 đến 10 phút. Mỗi phần có link chiếu, thao tác và lời đọc. Source Week 3 đã lên hosting bằng upload thủ công; health/revision và 7 kiểm tra đường dẫn HTTP đã qua. Đã đăng nhập Vận hành, kiểm tra số liệu/biểu đồ, lọc log và tạo backup thành công trên live ngày 4/11/2026. CPU/RAM hiện mang nhãn OS visible to PHP; may be shared host, không phải quota riêng của tài khoản. Trước buổi demo mở lại trang; dùng bộ minh chứng staging để trình bày cảnh báo và restore có đối chiếu. Pipeline FTPS đã được khôi phục trong [run 41785933275](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275): cả ba job thành công; source `a0e5914`, health/revision và 7 kiểm tra HTTP đều qua. Xác minh TLS vẫn bật trên cả hai kênh FTP.
 
 Ba ảnh dashboard và JSON gốc nằm trong gói `Week3_MinhChung.zip` bàn giao riêng; tải và giải nén trước buổi. Chỉ mục trong repo dẫn tới kết quả CI và log chọn lọc. Không dừng DB hoặc thử xóa dữ liệu live để minh họa.
 

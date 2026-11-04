@@ -1,6 +1,6 @@
 # Week 3 Monitoring Security và Reliability
 
-**Cập nhật ngày 4 tháng 11 năm 2026:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS vẫn lỗi.
+**Cập nhật ngày 4 tháng 11 năm 2026:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS đã được khôi phục trong [run 41785933275](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275): cả ba job thành công; source `a0e5914`, health/revision và 7 kiểm tra HTTP đều qua. Xác minh TLS vẫn bật trên cả hai kênh FTP.
 
 Đối chiếu ảnh đề Week 3 đã cung cấp: monitoring CPU/RAM/health, dashboard và alert đã thử, logs theo thời gian, firewall/ports/secrets, backup/restore có đối chiếu và playbook ít nhất 2 sự cố. [Run kiểm chứng](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566) · [Ảnh và logs](../evidence/week3/README.md).
 
@@ -21,6 +21,7 @@
 
 ## Môi trường live và việc cần xác nhận
 
+- [x] [Pipeline khôi phục](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275) đã chạy thành công đủ container-checks, deploy-staging và deploy-cpanel; kiểm tra source a0e5914, health/revision và 7 HTTP security checks.
 - [x] Source Week 3 đã lên cPanel bằng upload thủ công; health/revision đúng và 7 kiểm tra HTTP qua: assets 200, metrics anonymous 401, dashboard về login, private paths 403. [Kết quả live](../evidence/week3/live-http-checks-2026-11-04.json).
 - [x] Đã đăng nhập dashboard trên cPanel, thấy mẫu cập nhật/biểu đồ, DB hoạt động, lọc log theo backup_created và thời gian; bấm Tạo backup thành công và có log tương ứng. [Kiểm tra live](../evidence/week3/live-operations-checks-2026-11-04.json). CPU/RAM lấy từ OS có thể dùng chung, không phải mức dùng riêng của app/tài khoản.
 - [ ] Xác minh policy firewall/SSH/quyền DB và nguồn quota của đúng gói cPanel nếu dùng các mục đó để bảo vệ hạ tầng live. UFW staging không chứng minh cấu hình firewall của nhà cung cấp.
