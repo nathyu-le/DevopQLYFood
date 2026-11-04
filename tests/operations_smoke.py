@@ -22,6 +22,16 @@ def check(condition, message):
     CHECKS.append(message)
     print('PASS: ' + message, flush=True)
 
+def demo(stage, data):
+    """Print selected disposable-fixture results for a live technical demo."""
+    print('DEMO_' + stage + ' ' + json.dumps(data, ensure_ascii=False), flush=True)
+
+def demo_rows(values):
+    # All rows belong to the freshly created, guarded *_ci database. Still keep
+    # the console view to the fields the presenter needs; never print config.
+    fields = ('id', 'name', 'price', 'is_available')
+    return [{key: row[key] for key in fields} for row in values]
+
 def compose(*args, success=True):
     result = subprocess.run(['docker', 'compose', *args], cwd=ROOT, text=True, capture_output=True)
     if success and result.returncode:
@@ -47,6 +57,8 @@ def main():
         or not os.environ.get('DB_NAME', '').endswith('_ci')):
         raise SystemExit('Only isolated CI project and *_ci DB are allowed.')
     OUT.mkdir(exist_ok=True)
+    demo('SCOPE', {'environment': 'isolated Docker staging',
+                   'revision': os.environ['APP_REVISION']})
     base='http://127.0.0.1:'+os.environ.get('APP_PORT','8080')+'/'
     password=(ROOT/'.secrets/admin_password').read_text().strip()
     client=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
@@ -81,14 +93,19 @@ def main():
     name='Week3 recovery '+secrets.token_hex(6)
     dish_id=php(PHP_DB+'$q=$p->prepare("INSERT INTO dishes (name,category,price,description,is_available) VALUES (?,\'main\',45000,\'Isolated recovery fixture\',1)");$q->execute([$argv[1]]);echo json_encode((int)$p->lastInsertId());',name)
     before=rows()
+    demo('BEFORE_DELETE', {'rows': demo_rows(before)})
     created=compose('exec','-T','--user','www-data','app','php','app/backup.php','--keep=14')
     backup=json.loads(created.stdout)
     check(backup['row_count']==1,'backup script captures all test rows with SHA256')
+    demo('BACKUP_CREATED', {'row_count': backup['row_count'],
+                            'sha256': backup['sha256']})
     permissions=php('require "/var/www/html/app/backup_lib.php";$f=backup_directory()."/".$argv[1];echo json_encode(["file"=>fileperms($f)&0777,"directory"=>fileperms(backup_directory())&0777]);',backup['file'])
     check(permissions=={'file':384,'directory':448},'backup file mode 0600 and directory mode 0700 are enforced')
     check(request('var/backups/'+backup['file'])[0] in (403,404),'private backups cannot be downloaded over HTTP')
     php(PHP_DB+'$q=$p->prepare("DELETE FROM dishes WHERE id=? AND name=?");$q->execute([$argv[1],$argv[2]]);echo json_encode(true);',dish_id,name)
-    check(rows()==[],'only the named test record is deleted to simulate data loss')
+    after_delete=rows()
+    check(after_delete==[],'only the named test record is deleted to simulate data loss')
+    demo('AFTER_DELETE', {'rows': demo_rows(after_delete)})
     wrong=compose('exec','-T','--user','www-data','app','php','app/restore.php','--file='+backup['file'],'--confirm-db=wrong_ci',success=False)
     check(wrong.returncode!=0 and rows()==[],'wrong database confirmation is refused without writing')
     tampered=php('require "/var/www/html/app/backup_lib.php";$f=backup_directory()."/".$argv[1];$a=json_decode(file_get_contents($f),true);$a["sha256"]=str_repeat("0",64);$name="menu-20000101-000000-deadbeef.json";file_put_contents(backup_directory()."/".$name,json_encode($a));echo json_encode($name);',backup['file'])
@@ -97,6 +114,7 @@ def main():
     restored=compose('exec','-T','--user','www-data','app','php','app/restore.php','--file='+backup['file'],'--confirm-db='+os.environ['DB_NAME'])
     after=rows()
     check(json.loads(restored.stdout)['verified'] and before==after,'restore recreates exact IDs values and timestamps after deletion')
+    demo('AFTER_RESTORE', {'rows': demo_rows(after), 'all_rows_match': before==after})
     save('backup-restore.json',{'scope':'isolated Docker staging test database, not cPanel','revision':os.environ['APP_REVISION'],
         'before':before,'after_delete':[],'after_restore':after,'all_rows_match':before==after,
         'sha256':backup['sha256'],'permissions':permissions,'wrong_confirmation_blocked':True,'corruption_blocked':True})
@@ -115,19 +133,29 @@ def main():
     normal=state()
     check(normal['latest']['cpu_percent'] is not None and normal['latest']['memory_mb']>0,'CPU and RAM samples come from real OS/cgroup measurements')
     check(normal['latest']['health']=='ok' and normal['alerts']['database_unavailable']['state']=='ok','baseline database is healthy with no database alert')
+    demo('ALERT_NORMAL', {'health': normal['latest']['health'],
+                          'state': normal['alerts']['database_unavailable']['state']})
     capture('normal')
     outage = None
     try:
         compose('stop','db')
-        check(request('health.php')[0]==503,'stopping staging MariaDB causes a real HTTP 503')
+        outage_status=request('health.php')[0]
+        check(outage_status==503,'stopping staging MariaDB causes a real HTTP 503')
         for _ in range(3):time.sleep(5.2);outage=state()
         check(outage['alerts']['database_unavailable']['state']=='firing','two consecutive failed probes activate the database alert')
+        demo('ALERT_FIRING', {'http_status': outage_status,
+                              'health': outage['latest']['health'],
+                              'state': outage['alerts']['database_unavailable']['state']})
         check(any(x.get('event')=='database_unavailable' for x in outage['logs']),'timestamped application logs record the database incident')
         capture('firing')
     finally:
         compose('up','-d','--no-build','--wait','--wait-timeout','180','db')
     for _ in range(3):time.sleep(5.2);recovered=state()
-    check(request('health.php')[0]==200 and recovered['alerts']['database_unavailable']['state']=='ok','restarting DB restores HTTP health and resolves the alert')
+    recovered_status=request('health.php')[0]
+    check(recovered_status==200 and recovered['alerts']['database_unavailable']['state']=='ok','restarting DB restores HTTP health and resolves the alert')
+    demo('ALERT_RECOVERED', {'http_status': recovered_status,
+                            'health': recovered['latest']['health'],
+                            'state': recovered['alerts']['database_unavailable']['state']})
     check(rows()==before,'incident recovery preserves restored data')
     request('index.php?q=W3_SECRET_LOG_PROBE')
     final=state()
