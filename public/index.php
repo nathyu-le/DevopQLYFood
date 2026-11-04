@@ -101,6 +101,7 @@ unset($_SESSION['flash']);
         <a class="brand" href="index.php"><?= icon('leaf') ?><span>Bếp Nhà<span class="brand-sub">MENU MANAGER</span></span></a>
         <span class="nav-label">KHÔNG GIAN QUẢN LÝ</span>
         <a class="nav-item active" href="index.php" aria-current="page"><?= icon('menu') ?> Thực đơn</a>
+        <a class="nav-item" href="operations.php"><?= icon('check') ?> Vận hành</a>
         <div class="sidebar-note"><?= icon('bowl') ?><strong>Món ngon bắt đầu từ<br>một thực đơn chỉn chu.</strong><p>Cập nhật hôm nay.<br>Sẵn sàng phục vụ.</p></div>
         <form method="post" action="logout.php" class="logout-form"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><button class="nav-item" type="submit"><?= icon('logout') ?> Đăng xuất</button></form>
     </aside>

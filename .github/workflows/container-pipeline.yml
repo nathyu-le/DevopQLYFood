@@ -1,4 +1,4 @@
-name: Week 2 - Docker checks and cPanel deploy
+name: Docker checks and cPanel deploy
 
 on:
   push:
@@ -25,6 +25,7 @@ jobs:
       APP_REVISION: ${{ github.sha }}
       APP_PORT: '8080'
       RUN_CONTAINER_TESTS: '1'
+      DB_NAME: restaurant_menu_ci
     steps:
       - uses: actions/checkout@v4
       - name: Generate disposable credentials
@@ -97,6 +98,8 @@ jobs:
       APP_REVISION: ${{ github.sha }}
       APP_PORT: '8080'
       RUN_CONTAINER_TESTS: '1'
+      RUN_OPERATIONS_TESTS: '1'
+      DB_NAME: restaurant_menu_ci
       CONTAINER_EVIDENCE_DIR: stage-evidence
     steps:
       - uses: actions/checkout@v4
@@ -122,6 +125,17 @@ jobs:
         run: python3 tests/container_smoke.py
       - name: Capture the actual container app
         run: python3 tools/capture-evidence.py --base-url http://127.0.0.1:8080/ --label staging --output-dir stage-evidence --expected-revision "$APP_REVISION"
+      - name: Verify staging firewall and private DB ports
+        run: bash monitoring/check-firewall.sh
+      - name: Prove monitoring alert recovery and backup restore
+        run: python3 tests/operations_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: week3-operations-evidence-${{ github.sha }}
+          path: week3-results/
+          retention-days: 30
+          if-no-files-found: warn
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -160,6 +174,18 @@ jobs:
           CPANEL_BASE_URL: ${{ vars.CPANEL_BASE_URL }}
           APP_REVISION: ${{ github.sha }}
         run: python3 tools/capture-evidence.py --base-url "$CPANEL_BASE_URL" --label live-after --output-dir live-evidence --expected-revision "$APP_REVISION"
+      - name: Verify live metrics authentication and private HTTP paths
+        env:
+          CPANEL_BASE_URL: ${{ vars.CPANEL_BASE_URL }}
+          APP_REVISION: ${{ github.sha }}
+        run: python3 tools/check-live-security.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: week3-live-security-${{ github.sha }}
+          path: live-security-results/
+          retention-days: 30
+          if-no-files-found: warn
       - uses: actions/upload-artifact@v4
         if: always()
         with:

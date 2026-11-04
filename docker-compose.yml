@@ -7,6 +7,8 @@ services:
         APP_REVISION: ${APP_REVISION:-local}
     restart: unless-stopped
     init: true
+    mem_limit: 256m
+    cpus: 1.0
     environment:
       DB_HOST: db
       DB_PORT: "3306"
@@ -16,6 +18,8 @@ services:
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
       ADMIN_PASSWORD_FILE: /run/secrets/admin_password
     secrets: [db_password, admin_password]
+    volumes:
+      - operations_data:/var/www/html/var
     ports:
       - "${APP_BIND:-127.0.0.1}:${APP_PORT:-8080}:80"
     depends_on:
@@ -26,6 +30,7 @@ services:
   db:
     image: mariadb:10.11
     restart: unless-stopped
+    mem_limit: 512m
     environment:
       MARIADB_DATABASE: ${DB_NAME:-restaurant_menu}
       MARIADB_USER: ${DB_USER:-menu_app}
@@ -49,6 +54,7 @@ networks:
 
 volumes:
   db_data:
+  operations_data:
 
 secrets:
   db_password:

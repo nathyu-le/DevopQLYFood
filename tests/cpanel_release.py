@@ -23,6 +23,8 @@ with tempfile.TemporaryDirectory() as directory:
     root = Path(directory)
     fixtures = {
         'app/bootstrap.php': '<?php // app', 'public/version.php': '<?php // version',
+        'app/operations.php': '<?php // dependency', 'public/operations.php': '<?php // dashboard',
+        'public/index.php': '<?php // menu',
         'public/assets/app.css': 'body {}', 'config/config.local.php': 'PRIVATE_CONFIG',
         '.secrets/password': 'PRIVATE_PASSWORD', 'database/schema.sql': 'PRIVATE_DB',
         '.htaccess': 'EXISTING_HOSTING_RULES', 'README.md': 'not runtime',
@@ -35,7 +37,8 @@ with tempfile.TemporaryDirectory() as directory:
     packager.package(root, output, revision)
     with zipfile.ZipFile(output) as archive:
         names = deployer.validated_entries(archive, revision)
-        assert set(names) == {'app/bootstrap.php', 'public/version.php', 'public/assets/app.css', 'REVISION'}
+        assert set(names) == {'app/bootstrap.php', 'app/operations.php', 'public/operations.php', 'public/index.php', 'public/version.php', 'public/assets/app.css', 'REVISION'}
+        assert names.index('app/operations.php') < names.index('app/bootstrap.php') < names.index('public/operations.php') < names.index('public/index.php')
         assert names[-1] == 'REVISION'
         assert b'PRIVATE_' not in b''.join(archive.read(name) for name in names)
         assert all((archive.getinfo(name).external_attr >> 16) & 0o777 == 0o644 for name in names)

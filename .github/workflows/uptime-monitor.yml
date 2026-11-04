@@ -1,0 +1,34 @@
+name: Week 3 - Public uptime monitor
+
+on:
+  schedule:
+    - cron: '3-58/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/check-uptime.py', '.github/workflows/uptime-monitor.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-uptime
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    if: vars.CPANEL_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check live health without credentials
+        env:
+          CPANEL_BASE_URL: ${{ vars.CPANEL_BASE_URL }}
+        run: python3 tools/check-uptime.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: uptime-${{ github.run_id }}
+          path: uptime-results/
+          retention-days: 7

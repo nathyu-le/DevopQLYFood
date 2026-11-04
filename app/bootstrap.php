@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 const APP_ROOT = __DIR__ . '/..';
+require_once __DIR__ . '/operations.php';
+ops_register_request();
 const CATEGORIES = [
     'main' => 'Món chính',
     'starter' => 'Khai vị',
@@ -14,6 +16,7 @@ ini_set('log_errors', '1');
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 set_exception_handler(static function (Throwable $exception): void {
+    ops_event('unhandled_exception', ['exception' => get_class($exception)]);
     // Do not log exception messages: they may contain connection details or user data.
     error_log('Restaurant Menu: unhandled ' . get_class($exception));
     http_response_code(500);

@@ -21,5 +21,9 @@ __pycache__/
 /deployment.env
 /deployment-state/
 /container-test-results/
+/var/
+/week3-results/
+/uptime-results/
+/live-security-results/
 *.tar.gz
 /dist/

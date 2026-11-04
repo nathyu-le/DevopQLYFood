@@ -34,7 +34,14 @@ def validated_entries(archive, revision):
             raise ValueError('Unexpected file in the release.')
     if archive.read('REVISION').decode().strip() != revision:
         raise ValueError('Artifact revision does not match the workflow commit.')
-    return sorted(name for name in names if name != 'REVISION') + ['REVISION']
+    def priority(name):
+        if name == 'REVISION': return (4, name)
+        if name == 'public/index.php': return (3, name)
+        if name.startswith('public/') and name.endswith('.php'): return (2, name)
+        if name == 'app/bootstrap.php': return (1, name)
+        return (0, name)
+    # Shared libraries/assets precede the bootstrap/controllers that require them.
+    return sorted(names, key=priority)
 
 class SiteCheckError(RuntimeError):
     """A safe, controlled diagnostic that contains no response body or secrets."""
