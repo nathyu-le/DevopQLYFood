@@ -35,3 +35,11 @@ Staging và source checks đã qua; deploy cPanel đang bị timeout kết nối
 FTPS đã timeout trước đăng nhập qua các lần thử có giới hạn. Khi hosting khôi phục dịch vụ hoặc cấp endpoint đúng, cập nhật Variables/Secrets trực tiếp trong GitHub và retry job deploy; không gửi password qua issue/log, không tắt TLS. Upload tay là phương án đưa source lên trong lúc dịch vụ FTP gián đoạn, không được ghi thành pipeline deploy success.
 
 Uptime workflow probe health khoảng 5 phút/lần; chưa tự cấu hình cron backup hosting. Backup có thể chạy CLI/nút trong dashboard sau khi source có trên hosting; restore bài thực nghiệm chỉ dành DB test/CI. [Checklist](../../docs/WEEK3_CHECKLIST.md) · [Demo một người](../../docs/WEEK3_DEMO.md).
+
+## Kiểm tra tiếp kết nối triển khai
+
+Đã retry riêng job deploy của cùng run/source; job `126380548499` vẫn timeout ở cả ba lần kết nối FTPS trước đăng nhập. Health website vẫn OK, revision live vẫn là bản trước Week 3; route `ops-api.php` chưa có trên live tại lần kiểm tra.
+
+Đăng nhập cPanel qua biểu mẫu bảo mật đã tới trang Tools, nhưng khi mở File Manager, dịch vụ hủy phiên và hiển thị: “Your IP address has changed. Please log in again.” Không đổi cấu hình bảo vệ phiên hoặc gửi credentials vào repo. Vì phiên điều khiển từ xa không dùng tiếp được, chưa có thao tác upload/ghi đè source trên hosting.
+
+Cách cập nhật hiện có là upload gói runtime Week 3 bằng File Manager trong phiên cPanel trên máy người triển khai, Extract vào đúng thư mục dự án rồi kiểm tra health/version/Vận hành. Gói ZIP giữ nguyên source đã qua test, không chứa config local hoặc database.
