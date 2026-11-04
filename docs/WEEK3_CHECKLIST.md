@@ -11,7 +11,7 @@
 - [x] JSONL log có UTC/request ID/route/status/duration; dashboard lọc theo event và thời điểm. Không ghi credentials, form hoặc query string.
 - [x] UFW được cấu hình trên runner staging riêng; default deny incoming, loopback allowed, DB không publish. Có status thật và health check sau cấu hình.
 - [x] User app staging chỉ có bốn quyền CRUD; test CREATE TABLE bị từ chối. Script xử lý đúng mẫu database có dấu gạch dưới.
-- [x] Metrics API cần session admin; backup cần CSRF, có cooldown; restore không có HTTP action. File private ngoài public và không nằm trong source ZIP.
+- [x] Metrics API cần session admin; backup cần CSRF, có cooldown; restore MariaDB chính không có HTTP action; trang demo có restore SQLite riêng với auth/CSRF và kiểm tra snapshot. File private ngoài public và không nằm trong source ZIP.
 - [x] Script backup/restore chạy thật, có retention, SHA256, atomic writes và quyền hạn chế.
 - [x] Backup món thử, xóa đúng fixture rồi restore; ID/values/timestamps và digest khớp. Confirmation sai/file hỏng bị chặn trước khi ghi.
 - [x] Playbook có ít nhất 2 sự cố; hiện có 3 trường hợp đã thực nghiệm hoặc phát hiện qua test.

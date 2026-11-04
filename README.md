@@ -10,6 +10,8 @@ Website quản lý thực đơn quán ăn dùng PHP và MySQL/MariaDB. Một rep
 
 Docker staging chạy tạm trên một GitHub runner mới, tải đúng image đã test và so image ID trước khi chạy. Website thật dùng PHP/DB trực tiếp trên cPanel. Dữ liệu staging tách khỏi DB hosting và stack tạm được dọn sau run. [Sơ đồ Week 2](docs/WEEK2_ARCHITECTURE.md).
 
+**Demo trực tiếp Week 3 trên cPanel:** [mở trang demo](https://khotrick.org/DevopQLYFood/public/demo.php) để bấm tạo món thử → backup/tải file → xóa → restore → tạo lỗi → phục hồi kết nối. Trang này dùng database SQLite thử riêng trên cùng hosting. [Kịch bản 6 bước](docs/WEEK3_DEMO.md).
+
 ## Chạy và cập nhật
 
 | Việc cần làm | Hướng dẫn |

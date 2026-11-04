@@ -27,7 +27,7 @@ File init `docker/20-app-grants.sh` chỉ chạy khi volume DB mới được kh
 - GitHub Secrets giữ FTP_USER và FTP_PASSWORD. Variables giữ tham số không phải mật khẩu; không công khai hostname/tài khoản FTP trong evidence.
 - Docker đọc password từ `.secrets/` bị loại khỏi Git/build context. PHP tạo config riêng ngoài DocumentRoot. Không tái sử dụng password CI cho live.
 - Config DB/admin live ở config/config.local.php, không nằm trong gói cập nhật. Backup và state/logs ở var, bị loại khỏi Git/source ZIP và chặn HTTP.
-- Dashboard/API metrics yêu cầu session quản trị. Nút backup cần CSRF và có cooldown; restore không có HTTP action.
+- Dashboard/API metrics yêu cầu session quản trị. Nút backup cần CSRF và có cooldown; restore MariaDB chính không có HTTP action; trang demo có restore SQLite riêng với auth/CSRF và kiểm tra snapshot.
 - Session cookie HttpOnly, SameSite Lax, Secure khi HTTPS; CSP, frame protection và no-store được giữ từ ứng dụng.
 - Logs chỉ có trường allowlist; không in PDO message, form, query string, password hoặc dump DB. API public health chỉ trả ok/unavailable.
 
@@ -35,4 +35,4 @@ File init `docker/20-app-grants.sh` chỉ chạy khi volume DB mới được kh
 
 [Minh chứng](../evidence/week3/README.md) · [Cấu hình giám sát](../monitoring/README.md) · [Backup](BACKUP_RESTORE.md).
 
-Kiểm tra sau upload ngày 4/11/2026 đã chạy trên website thật: [kết quả HTTP](../evidence/week3/live-http-checks-2026-11-04.json). Đã xác minh dashboard sau đăng nhập, lọc log và nút backup trên live: [kiểm tra vận hành](../evidence/week3/live-operations-checks-2026-11-04.json). Bài dừng DB và xóa/restore vẫn chỉ chạy ở staging thử riêng.
+Kiểm tra sau upload ngày 4/11/2026 đã chạy trên website thật: [kết quả HTTP](../evidence/week3/live-http-checks-2026-11-04.json). Đã xác minh dashboard sau đăng nhập, lọc log và nút backup trên live: [kiểm tra vận hành](../evidence/week3/live-operations-checks-2026-11-04.json). Bài dừng MariaDB chính vẫn chạy ở staging riêng. Trang Demo trực tiếp bổ sung bài backup/xóa/restore và ngắt đường dẫn database SQLite thử ngay trên cPanel; dữ liệu MariaDB chính giữ nguyên.

@@ -28,7 +28,7 @@ SHA256 dùng phát hiện sai lệch dữ liệu, không mã hóa backup. Cần 
 
 ## Restore an toàn cho bài thực nghiệm
 
-`app/restore.php` chỉ chạy CLI; HTTP không có restore action. Để không xóa dữ liệu người dùng thật, script yêu cầu database đích kết thúc `_test` hoặc `_ci` và xác nhận tên khớp hoàn toàn. Không chạy bài xóa/restore vào DB live.
+`app/restore.php` của MariaDB chính chỉ chạy CLI; ops-api.php không có restore action. Để không xóa dữ liệu người dùng thật, script yêu cầu database đích kết thúc `_test` hoặc `_ci` và xác nhận tên khớp hoàn toàn. Không chạy bài xóa/restore vào DB live.
 
 Trên stack thử riêng đã import schema và cấu hình DB test:
 
@@ -52,3 +52,9 @@ Thay filename bằng snapshot thực tế đã tạo. Chỉ nhận basename đú
 6. Thử retention và ghi JSON kết quả; không upload bản backup hoặc dữ liệu live.
 
 Phần restore production chưa có cơ chế tự ghi đè DB live; checkpoint dùng DB thử riêng theo đề. Khi cần phục hồi thật phải có kế hoạch riêng, backup hiện trạng và quyền phù hợp. [Minh chứng](../evidence/week3/README.md) · [Playbook](TROUBLESHOOTING.md).
+
+## Demo tương tác ngay trên cPanel
+
+Trang `public/demo.php` dùng một database SQLite riêng tại `var/classroom-demo/demo.sqlite`. Quản trị bấm tạo món thử, backup, tải snapshot, xóa và restore trực tiếp. Đây là phạm vi demo riêng, không gọi `backup_restore()` của MariaDB chính. Snapshot demo có định dạng và demo_id riêng, chỉ nhận một fixture đúng schema với SHA256 khớp; snapshot hỏng bị chặn trước khi ghi. Restore dùng transaction, so digest trước khi commit.
+
+Tải snapshot demo qua form POST tới demo-api.php, cần session quản trị và CSRF; không nhận đường dẫn file tùy ý hoặc file upload. Bộ mẫu này giữ snapshot mới nhất của lượt demo; chiến lược 14 snapshot vẫn áp dụng cho backup MariaDB chính. Ngắt kết nối bằng đổi tên file SQLite demo trong khóa độc quyền; khôi phục tên file để phục hồi. Health demo trả HTTP 503/200 thực tế, bộ cảnh báo dùng hai mẫu liên tiếp. Tự phục hồi sau 3 phút nếu bỏ quên. [Kịch bản một người](WEEK3_DEMO.md).
