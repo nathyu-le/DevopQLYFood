@@ -129,6 +129,8 @@ jobs:
         run: bash monitoring/check-firewall.sh
       - name: Prove monitoring alert recovery and backup restore
         run: python3 tests/operations_smoke.py
+      - name: Verify interactive demo isolation and recovery
+        run: python3 tests/demo_smoke.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

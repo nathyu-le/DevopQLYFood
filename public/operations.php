@@ -15,7 +15,7 @@ require_admin();
 <main>
     <header>
         <div><a class="brand" href="index.php">BẾP NHÀ <span>VẬN HÀNH</span></a><h1>Sức khỏe hệ thống</h1><p>Theo dõi tài nguyên, database và sự kiện của ứng dụng.</p></div>
-        <nav><a href="index.php">Thực đơn</a><form action="logout.php" method="post"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><button class="logout" type="submit">Đăng xuất</button></form></nav>
+        <nav><a href="demo.php">Demo trực tiếp</a><a href="index.php">Thực đơn</a><form action="logout.php" method="post"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><button class="logout" type="submit">Đăng xuất</button></form></nav>
     </header>
     <section class="status-line"><span class="live-dot"></span><strong>Cập nhật mỗi 5 giây khi mở trang</strong><span id="updated">Đang lấy dữ liệu…</span></section>
     <div id="alert-banner" class="banner" role="status">Đang kiểm tra các cảnh báo.</div>
