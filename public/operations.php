@@ -8,8 +8,8 @@ require_admin();
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Vận hành · Bếp Nhà</title>
-    <link rel="stylesheet" href="assets/operations.css">
-    <script src="assets/operations.js" defer></script>
+    <link rel="stylesheet" href="assets/operations.css?v=2">
+    <script src="assets/operations.js?v=2" defer></script>
 </head>
 <body>
 <main>
@@ -33,7 +33,19 @@ require_admin();
         <article><div class="section-head"><h2>Cảnh báo</h2><span id="alert-state">—</span></div><div id="alerts"></div><p class="chart-note">Firing sau 2 mẫu lỗi liên tiếp; phục hồi sau 2 mẫu tốt. CPU/RAM: ngưỡng 85%.</p></article>
         <article><div class="section-head"><h2>Backup gần nhất</h2><button id="backup-button" type="button">Tạo backup</button></div><p id="backup-status">Chưa lấy thông tin backup.</p><p class="chart-note">Lưu riêng với quyền hạn chế; giữ 14 snapshot mới nhất. Restore chỉ chạy bằng CLI trên DB thử có xác nhận.</p><input type="hidden" id="ops-csrf" value="<?= e(csrf_token()) ?>"></article>
     </section>
-    <section class="log-section"><div class="section-head"><h2>Nhật ký ứng dụng</h2><div class="filters"><input id="log-filter" aria-label="Lọc sự kiện" placeholder="Lọc sự kiện hoặc request ID"><input id="log-since" type="datetime-local" aria-label="Xem log từ thời điểm"></div></div><div class="table-wrap"><table><thead><tr><th>Thời gian</th><th>Sự kiện</th><th>Chi tiết</th></tr></thead><tbody id="logs"></tbody></table></div><p class="chart-note">100 dòng mới nhất; thời gian hiển thị Việt Nam. Không ghi mật khẩu, nội dung form hoặc query string.</p></section>
+    <section class="log-section">
+        <div class="section-head">
+            <h2>Nhật ký ứng dụng</h2>
+            <form id="log-filters" class="filters" role="search" aria-label="Lọc nhật ký ứng dụng">
+                <input id="log-filter" aria-label="Lọc sự kiện" placeholder="Lọc sự kiện hoặc request ID">
+                <input id="log-since" type="datetime-local" aria-label="Xem log từ thời điểm">
+                <button id="log-apply" type="submit">Lọc</button>
+                <button id="log-reset" class="button-secondary" type="reset">Xóa lọc</button>
+            </form>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Thời gian</th><th>Sự kiện</th><th>Chi tiết</th></tr></thead><tbody id="logs"></tbody></table></div>
+        <p class="chart-note">100 dòng mới nhất; thời gian hiển thị Việt Nam. Nhập điều kiện rồi bấm Lọc hoặc nhấn Enter. Không ghi mật khẩu, nội dung form hoặc query string.</p>
+    </section>
     <footer><span id="revision">Revision: —</span><span>Ops Monitor · Week 3</span></footer>
 </main>
 </body></html>

@@ -1,5 +1,6 @@
 'use strict';
 let snapshot = null;
+let logFilters = {query: '', since: 0};
 const byId = id => document.getElementById(id);
 const time = value => new Date(value).toLocaleString('vi-VN', {timeZone: 'Asia/Ho_Chi_Minh', hour12: false});
 const number = (value, unit) => Number.isFinite(value) ? `${value.toFixed(1)}${unit}` : 'Chưa có';
@@ -20,9 +21,14 @@ function chart(id, history, key, color) {
 }
 function logs() {
   if (!snapshot) return;
-  const query=byId('log-filter').value.toLowerCase(), since=byId('log-since').value ? new Date(byId('log-since').value+'+07:00').getTime() : 0;
+  const {query, since}=logFilters;
   const body=byId('logs'); body.replaceChildren();
-  snapshot.logs.slice().reverse().filter(row => JSON.stringify(row).toLowerCase().includes(query) && new Date(row.time).getTime()>=since).forEach(row => {
+  const rows=snapshot.logs.slice().reverse().filter(row => JSON.stringify(row).toLowerCase().includes(query) && new Date(row.time).getTime()>=since);
+  if (!rows.length) {
+    const tr=document.createElement('tr'), td=document.createElement('td');
+    td.colSpan=3;td.className='empty-log';td.textContent='Không có nhật ký phù hợp với bộ lọc.';tr.append(td);body.append(tr);
+  }
+  rows.forEach(row => {
     const tr=document.createElement('tr');const {time:stamp,event,...fields}=row;
     for (const text of [time(stamp),event,JSON.stringify(fields)]) { const td=document.createElement('td');td.textContent=text;tr.append(td); }
     body.append(tr);
@@ -59,7 +65,16 @@ async function refresh() {
   catch(error){byId('alert-banner').className='banner bad';byId('alert-banner').textContent=error.message;}
   finally{busy=false;}
 }
-byId('log-filter').addEventListener('input',logs);byId('log-since').addEventListener('input',logs);
+byId('log-filters').addEventListener('submit',event=>{
+  event.preventDefault();
+  const value=byId('log-since').value;
+  logFilters={query:byId('log-filter').value.trim().toLowerCase(),since:value ? new Date(value+'+07:00').getTime() : 0};
+  logs();
+});
+byId('log-filters').addEventListener('reset',()=>{
+  logFilters={query:'',since:0};
+  logs();
+});
 byId('backup-button').addEventListener('click',async()=>{
   const button=byId('backup-button');button.disabled=true;
   try {
