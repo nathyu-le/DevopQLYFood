@@ -1,6 +1,6 @@
 # Minh chứng Week 3 ngày 4 tháng 11 năm 2026
 
-**Trạng thái:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live.
+**Trạng thái:** Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS vẫn lỗi.
 
 Source [d690bc0](https://github.com/nathyu-le/DevopQLYFood/commit/d690bc0295a00e709a98983a30e33523f8542765) · [Pipeline 41768981566](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981566) · [Source checks](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41768981563). Staging là môi trường Docker thử riêng trên runner, không phải DB cPanel.
 
@@ -28,7 +28,7 @@ Gói minh chứng bàn giao gồm dashboard-normal.png, dashboard-firing.png, da
 
 UFW đã được cấu hình/check trên runner staging riêng: default deny incoming, allow outgoing, loopback allowed và deny DB port; Compose không publish DB và bind app 127.0.0.1. Không gọi đó là firewall cPanel. Firewall/SSH/quota của hosting do nhà cung cấp quản lý; chưa có bằng chứng policy riêng từ gói hiện tại.
 
-Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live.
+Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS vẫn lỗi.
 
 Để cập nhật thủ công: upload ZIP runtime Week 3 vào đúng thư mục DevopQLYFood đang chứa app/config/public, Extract và ghi đè source. ZIP chỉ có app/public và REVISION; giữ config.local.php, database và .htaccess đang có. Sau upload, mở Vận hành, kiểm tra health/version và đối chiếu source commit ở đầu trang.
 
@@ -57,4 +57,16 @@ Kiểm tra lúc **11:20 ngày 04/11/2026** trên website thật: [kết quả HT
 | operations.php không đăng nhập | Chuyển về login.php |
 | State, config và schema qua HTTP | Cả ba HTTP 403; không đọc nội dung private |
 
-Phương thức triển khai là **upload thủ công qua cPanel do người triển khai thực hiện**. Không ghi lần này thành FTPS pipeline success. Kết quả kiểm tra sau đăng nhập và tạo backup trên live còn cần xác minh; 37 assertions của staging được giữ đúng phạm vi staging.
+Phương thức triển khai là **upload thủ công qua cPanel do người triển khai thực hiện**. Không ghi lần này thành FTPS pipeline success. Bước kiểm tra sau đăng nhập đã được bổ sung ở phần tiếp theo; 37 assertions của staging được giữ đúng phạm vi staging.
+
+## Kiểm tra dashboard và backup bằng phiên quản trị live
+
+Đã xác minh lúc **11:34 ngày 04/11/2026**: [kết quả tổng hợp](live-operations-checks-2026-11-04.json).
+
+- Phiên quản trị mở được Vận hành; source hiển thị revision d690bc0295a0.
+- Mẫu thời gian thay đổi khi polling, biểu đồ có dữ liệu, database báo hoạt động và trạng thái cảnh báo hiển thị OK tại thời điểm kiểm tra.
+- Bấm Tạo backup thành công: UI có tóm tắt snapshot và ứng dụng ghi backup_created cùng POST thành công. Không tải hoặc công khai snapshot live.
+- Lọc backup_created và mốc thời gian trên UI trả đúng sự kiện backup tương ứng.
+- CPU/RAM live ghi rõ OS visible to PHP; may be shared host. Đây không phải số đo quota riêng hoặc mức dùng riêng của app; không dùng nó để chứng minh gói cPanel đã vượt RAM.
+
+Ảnh dashboard live được bàn giao riêng cho chủ repo. Repo chỉ lưu kết quả kiểm tra tổng hợp, không chứa ảnh đăng nhập, raw telemetry, tên snapshot, digest của dữ liệu live hoặc nội dung backup. Các bài dừng DB và xóa/restore tiếp tục dùng bằng chứng staging riêng, không mô phỏng mất dữ liệu trên website live.

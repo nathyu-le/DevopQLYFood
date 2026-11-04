@@ -16,7 +16,7 @@ Nguồn đối chiếu: đề Week 1 đã cung cấp trước đó; ảnh Week 2
 |---|---|---|---:|---|
 | Week 1 | Infrastructure & Initial Deployment | Kiến trúc, server/network, app + DB chạy, README và phân công | 2,0 | Có minh chứng thêm/sửa và SELECT trên cPanel; có ảnh server/domain và sơ đồ hosting; có PHP 8.2/quota và log chặn HTTP; OS/user/SSH/firewall tạm hoãn bổ sung |
 | Week 2 | Containerization & CI/CD | Dockerfile, Compose, persistent volume, build–test–deploy từ commit mới | 2,5 | Bộ đầu ra đã kiểm chứng: image staging, persistence, CI/CD cPanel, test fail và ảnh trước/sau |
-| Week 3 | Monitoring, Security & Reliability | Logs, dashboard, alert, security, backup/restore và playbook | 2,5 | Đã kiểm chứng staging; cPanel đã cập nhật thủ công, health/revision/7 HTTP checks qua; dashboard đăng nhập còn cần xác minh |
+| Week 3 | Monitoring, Security & Reliability | Logs, dashboard, alert, security, backup/restore và playbook | 2,5 | Đã kiểm chứng staging; cPanel đã cập nhật thủ công, health/revision/7 HTTP checks qua; dashboard đăng nhập, lọc log và tạo backup live đã xác minh |
 | Week 4 | Final Demo & Troubleshooting | Bản tích hợp Week 1–3, triển khai từ server sạch, release/tag, playbook ≥3 sự cố, paper và video | 3,0 | Chưa thực hiện |
 
 ## Mỗi tuần cập nhật ở đâu?
@@ -74,4 +74,4 @@ Nhóm tiếp tục cPanel cho website thật. Docker image deploy vào staging t
 
 ## Cập nhật checkpoint Week 3
 
-Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live. [Minh chứng](../evidence/week3/README.md) · [Kịch bản](WEEK3_DEMO.md). Các mục hạ tầng live chưa xác minh được giữ riêng; không dùng ảnh cp1 cũ hoặc firewall runner để tự đánh dấu chúng đã hoàn tất.
+Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS vẫn lỗi. [Minh chứng](../evidence/week3/README.md) · [Kịch bản](WEEK3_DEMO.md). Các mục hạ tầng live chưa xác minh được giữ riêng; không dùng ảnh cp1 cũ hoặc firewall runner để tự đánh dấu chúng đã hoàn tất.

@@ -4,7 +4,7 @@ Website quản lý thực đơn quán ăn dùng PHP và MySQL/MariaDB. Một rep
 
 **Website live:** [khotrick.org/DevopQLYFood/public/](https://khotrick.org/DevopQLYFood/public/).
 
-**Week 3 ngày 4/11/2026:** đã có Ops Monitor, alert/logs, backup/restore và security/playbook; bài thực nghiệm staging đã kiểm chứng bằng ảnh và dữ liệu thật. Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Pipeline FTPS vẫn lỗi; chưa xác minh dashboard/backup bằng phiên quản trị trên live. [Minh chứng](evidence/week3/README.md) · [Checklist](docs/WEEK3_CHECKLIST.md) · [Demo một người](docs/WEEK3_DEMO.md).
+**Week 3 ngày 4/11/2026:** đã có Ops Monitor, alert/logs, backup/restore và security/playbook; bài thực nghiệm staging đã kiểm chứng bằng ảnh và dữ liệu thật. Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS vẫn lỗi. [Minh chứng](evidence/week3/README.md) · [Checklist](docs/WEEK3_CHECKLIST.md) · [Demo một người](docs/WEEK3_DEMO.md).
 
 [Bộ checkpoint Week 2](evidence/week2/completion-2026-10-28.md) và minh chứng Week 1 được giữ riêng theo ngày/source commit.
 
@@ -56,7 +56,7 @@ App có đăng nhập quản trị, xem/tìm/lọc, thêm/sửa/xóa món và đ
 |---|---|
 | Week 1 | App/DB và ảnh hosting cũ đã có; OS/user/SSH/firewall còn thiếu. [Checklist](docs/WEEK1_CHECKLIST.md) · [Evidence](evidence/week1/README.md) · [Kịch bản](docs/WEEK1_PRESENTATION.md) |
 | Week 2 | Bộ đầu ra đã kiểm chứng: image staging, persistence, CI/CD cPanel, test fail và ảnh trước/sau. [Evidence](evidence/week2/README.md) |
-| Week 3 | Staging đã kiểm chứng; source đã lên cPanel bằng upload thủ công và qua health/revision/7 kiểm tra HTTP. Dashboard sau đăng nhập còn cần xác minh. [Checklist](docs/WEEK3_CHECKLIST.md) · [Evidence](evidence/week3/README.md) |
+| Week 3 | Staging đã kiểm chứng; source đã lên cPanel bằng upload thủ công và qua health/revision/7 kiểm tra HTTP. Dashboard sau đăng nhập, lọc log và tạo backup trên hosting đã kiểm tra thành công. [Checklist](docs/WEEK3_CHECKLIST.md) · [Evidence](evidence/week3/README.md) |
 | Week 4 | Demo tổng thể, xử lý sự cố và báo cáo chưa thực hiện. [Checklist](docs/WEEK4_CHECKLIST.md) |
 
 [Lộ trình](docs/ROADMAP.md) · [Chỉ mục minh chứng](evidence/README.md) · [Phân công](docs/TEAM.md).

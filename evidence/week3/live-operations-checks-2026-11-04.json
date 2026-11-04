@@ -1,0 +1,26 @@
+{
+  "checked_at_utc": "2026-11-04T04:34:25.993403+00:00",
+  "checked_at_local": "11:34 ngày 04/11/2026",
+  "base_url": "https://khotrick.org/DevopQLYFood/public/",
+  "source_revision_displayed": "d690bc0295a0",
+  "method": "authenticated browser UI, owner-provided sign-in",
+  "checks": {
+    "authenticated_dashboard_rendered": true,
+    "sample_timestamp_updated": true,
+    "charts_rendered_with_data": true,
+    "database_healthy": true,
+    "alert_state_displayed": true,
+    "create_backup_completed": true,
+    "backup_created_event_visible": true,
+    "backup_post_success_visible_in_log": true,
+    "event_filter_verified": true,
+    "time_filter_verified": true
+  },
+  "cpu_memory_scope": "OS visible to PHP; may be shared host; not account quota or per-application usage",
+  "database_rows_modified": false,
+  "production_restore_attempted": false,
+  "production_outage_simulated": false,
+  "raw_telemetry_or_backup_in_repository": false,
+  "ftps_pipeline_deployed": false,
+  "provider_firewall_verified": false
+}

@@ -1,6 +1,6 @@
 # Week 3 Kịch bản một người trình bày
 
-Thời lượng khoảng 7 đến 10 phút. Mỗi phần có link chiếu, thao tác và lời đọc. Source Week 3 đã lên hosting bằng upload thủ công; health/revision và 7 kiểm tra đường dẫn HTTP đã qua. Trước buổi demo cần đăng nhập Vận hành và thử nút backup; các thao tác quản trị này chưa được xác minh trên live. Nếu chưa kiểm tra được, dùng bộ minh chứng staging và nói rõ môi trường. Pipeline FTPS vẫn đang lỗi.
+Thời lượng khoảng 7 đến 10 phút. Mỗi phần có link chiếu, thao tác và lời đọc. Source Week 3 đã lên hosting bằng upload thủ công; health/revision và 7 kiểm tra đường dẫn HTTP đã qua. Đã đăng nhập Vận hành, kiểm tra số liệu/biểu đồ, lọc log và tạo backup thành công trên live ngày 4/11/2026. CPU/RAM hiện mang nhãn OS visible to PHP; may be shared host, không phải quota riêng của tài khoản. Trước buổi demo mở lại trang; dùng bộ minh chứng staging để trình bày cảnh báo và restore có đối chiếu. Pipeline FTPS vẫn đang lỗi.
 
 Ba ảnh dashboard và JSON gốc nằm trong gói `Week3_MinhChung.zip` bàn giao riêng; tải và giải nén trước buổi. Chỉ mục trong repo dẫn tới kết quả CI và log chọn lọc. Không dừng DB hoặc thử xóa dữ liệu live để minh họa.
 
@@ -42,7 +42,7 @@ Ba ảnh dashboard và JSON gốc nằm trong gói `Week3_MinhChung.zip` bàn gi
 
 **Thao tác:** chỉ UFW staging, DB không publish port, API anonymous 401 và private paths bị chặn. Mở hai sự cố đầu trong playbook; nếu được hỏi thêm, trình bày bug quyền DB đã được test bắt và sửa.
 
-**Lời đọc:** “Trên runner staging riêng, nhóm đặt firewall default deny incoming, giữ loopback để demo và không publish port database. User app chỉ có bốn quyền CRUD; test chứng minh không tạo được bảng. Trên cPanel đã kiểm tra metrics anonymous trả 401, dashboard chuyển về login và các đường dẫn private trả 403. Các thao tác sau đăng nhập cần được kiểm tra riêng trước buổi demo. Firewall hệ điều hành của hosting do nhà cung cấp quản lý, không được gọi UFW của runner là firewall cPanel.”
+**Lời đọc:** “Trên runner staging riêng, nhóm đặt firewall default deny incoming, giữ loopback để demo và không publish port database. User app chỉ có bốn quyền CRUD; test chứng minh không tạo được bảng. Trên cPanel đã kiểm tra metrics anonymous trả 401, dashboard chuyển về login và các đường dẫn private trả 403. Dashboard sau đăng nhập và tạo backup đã được thử thành công; nguồn CPU/RAM live là OS có thể dùng chung, không phải quota tài khoản. Firewall hệ điều hành của hosting do nhà cung cấp quản lý, không được gọi UFW của runner là firewall cPanel.”
 
 “Playbook có hướng xác minh, nguyên nhân, khắc phục và xác nhận phục hồi cho lỗi DB không khả dụng và mất dữ liệu thử. Hồ sơ nộp gồm dashboard screenshots/config, security checklist, scripts/logs backup restore và minh chứng xử lý sự cố. Các phần đánh giá vẫn cần trình bày đúng môi trường và nguồn số liệu.”
 
@@ -52,3 +52,7 @@ Ba ảnh dashboard và JSON gốc nằm trong gói `Week3_MinhChung.zip` bàn gi
 - Có backup tự động theo ngày trên cPanel chưa? Script và retention đã có; không ghi cron hosting đã cấu hình khi chưa có bằng chứng. Có thể chạy CLI hoặc nút backup; lịch GitHub hiện chỉ probe health.
 - Vì sao không restore DB live khi demo? Đề yêu cầu chỉ dùng dữ liệu thử khi mô phỏng xóa. Script có guard DB test/CI và không có restore action qua HTTP.
 - Có phải app chạy Docker trên cPanel không? Không. Docker staging ở GitHub runner; live cPanel tiếp tục PHP/DB trực tiếp.
+
+## Minh chứng live sau đăng nhập
+
+[Biên bản kiểm tra dashboard và backup](../evidence/week3/live-operations-checks-2026-11-04.json). Ảnh chụp live được bàn giao riêng, chưa công khai trong repo. CPU/RAM hiển thị lớn hơn giới hạn gói cPanel có thể do phạm vi OS dùng chung; khi trình bày phải chỉ đúng nhãn nguồn đo và không gọi đó là mức tiêu thụ của website.

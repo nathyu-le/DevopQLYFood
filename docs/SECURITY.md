@@ -35,4 +35,4 @@ File init `docker/20-app-grants.sh` chỉ chạy khi volume DB mới được kh
 
 [Minh chứng](../evidence/week3/README.md) · [Cấu hình giám sát](../monitoring/README.md) · [Backup](BACKUP_RESTORE.md).
 
-Kiểm tra sau upload ngày 4/11/2026 đã chạy trên website thật: [kết quả HTTP](../evidence/week3/live-http-checks-2026-11-04.json). Chưa xác minh dashboard và backup bằng phiên quản trị live; không thay thế bằng kết quả staging.
+Kiểm tra sau upload ngày 4/11/2026 đã chạy trên website thật: [kết quả HTTP](../evidence/week3/live-http-checks-2026-11-04.json). Đã xác minh dashboard sau đăng nhập, lọc log và nút backup trên live: [kiểm tra vận hành](../evidence/week3/live-operations-checks-2026-11-04.json). Bài dừng DB và xóa/restore vẫn chỉ chạy ở staging thử riêng.

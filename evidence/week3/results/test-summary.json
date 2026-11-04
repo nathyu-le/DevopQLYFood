@@ -52,6 +52,8 @@
   "deployment_method": "manual_cpanel_upload",
   "ftps_pipeline_deployed": false,
   "live_http_security_checks_passed": 7,
-  "authenticated_live_dashboard_verified": false,
-  "live_backup_verified": false
+  "authenticated_live_dashboard_verified": true,
+  "live_backup_verified": true,
+  "live_log_filters_verified": true,
+  "live_cpu_memory_scope": "OS visible to PHP; may be shared host; not account quota or per-application usage"
 }
