@@ -162,6 +162,7 @@ jobs:
       - name: Deploy tested source to the existing cPanel website
         env:
           CPANEL_FTP_HOST: ${{ vars.CPANEL_FTP_HOST }}
+          CPANEL_FTP_TLS_HOST: ${{ vars.CPANEL_FTP_TLS_HOST }}
           CPANEL_FTP_PORT: ${{ vars.CPANEL_FTP_PORT }}
           CPANEL_FTP_ROOT: ${{ vars.CPANEL_FTP_ROOT }}
           CPANEL_BASE_URL: ${{ vars.CPANEL_BASE_URL }}

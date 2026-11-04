@@ -47,7 +47,16 @@ def validated_entries(archive, revision):
 class SiteCheckError(RuntimeError):
     """A safe, controlled diagnostic that contains no response body or secrets."""
 
-def certificate_dns_names(host, port):
+def connect_ftps_control(ftp, address, port, tls_hostname=None):
+    """Connect to the service address and retain its configured TLS identity.
+
+    FTP_TLS uses host as server_hostname on both control and data sockets.
+    This supports a provider's connection alias without disabling verification.
+    """
+    ftp.connect(address, port)
+    ftp.host = tls_hostname or address
+
+def certificate_dns_names(host, port, tls_hostname=None):
     """Inspect public certificate metadata only; never authenticate this probe.
 
     The deployment connection still uses create_default_context(). Names from
@@ -56,7 +65,7 @@ def certificate_dns_names(host, port):
     try:
         certificate = subprocess.run(
             ['openssl', 's_client', '-connect', f'{host}:{port}',
-             '-servername', host, '-starttls', 'ftp', '-showcerts'],
+             '-servername', tls_hostname or host, '-starttls', 'ftp', '-showcerts'],
             input='', capture_output=True, text=True, timeout=12,
         )
         names = subprocess.run(
@@ -100,6 +109,9 @@ def main():
     if any(not os.environ.get(key) for key in required):
         raise ValueError('Missing required cPanel deployment settings.')
     revision = os.environ['APP_REVISION']
+    tls_hostname = os.environ.get('CPANEL_FTP_TLS_HOST') or os.environ['CPANEL_FTP_HOST']
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9.-]{0,252}', tls_hostname):
+        raise ValueError('Use a DNS hostname for the configured FTPS certificate identity.')
     base = os.environ['CPANEL_BASE_URL'].rstrip('/') + '/'
     url = urllib.parse.urlsplit(base)
     if url.scheme != 'https' or not url.hostname or url.username or url.password or url.query or url.fragment:
@@ -115,7 +127,9 @@ def main():
             for attempt in range(3):
                 print(f'FTPS control connection attempt {attempt + 1}/3.', flush=True)
                 try:
-                    ftp.connect(os.environ['CPANEL_FTP_HOST'], int(os.environ.get('CPANEL_FTP_PORT') or '21'))
+                    connect_ftps_control(ftp, os.environ['CPANEL_FTP_HOST'],
+                                         int(os.environ.get('CPANEL_FTP_PORT') or '21'),
+                                         tls_hostname)
                     break
                 except OSError:
                     ftp.close()
@@ -167,7 +181,8 @@ if __name__ == '__main__':
         print('FTPS certificate verification failed before credentials were sent.', flush=True)
         print('TLS verification code: ' + str(error.verify_code), flush=True)
         names = certificate_dns_names(os.environ['CPANEL_FTP_HOST'],
-                                      os.environ.get('CPANEL_FTP_PORT') or '21')
+                                      os.environ.get('CPANEL_FTP_PORT') or '21',
+                                      os.environ.get('CPANEL_FTP_TLS_HOST'))
         if names:
             print('Observed public certificate DNS names (not a trusted fallback): '
                   + ', '.join(names), flush=True)

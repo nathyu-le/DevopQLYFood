@@ -2,10 +2,12 @@
 """Check source release boundaries and reject unsafe/mismatched artifacts offline."""
 import importlib.util
 import io
+import ftplib
 from pathlib import Path
+import ssl
 import tempfile
 import urllib.error
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,3 +98,41 @@ with patch.object(deployer.urllib.request, 'urlopen', return_value=response(b'{"
     except deployer.SiteCheckError as failure:
         assert 'post-deploy revision' in str(failure)
 print('PASS: HTTP gates reject 403/404/503, invalid JSON/health and wrong revisions; logs contain only stage/status.')
+
+# A provider can route its connection alias to a service whose certificate uses
+# its established canonical name. Both TLS channels must verify that identity.
+identity = 'service.example.test'
+context = ssl.create_default_context()
+assert context.check_hostname and context.verify_mode == ssl.CERT_REQUIRED
+ftp = ftplib.FTP_TLS(context=context)
+with patch.object(ftp, 'connect') as connect:
+    deployer.connect_ftps_control(ftp, 'alias.example.test', 21, identity)
+    connect.assert_called_once_with('alias.example.test', 21)
+assert ftp.host == identity
+ftp.sock = Mock()
+with patch.object(ftp, 'voidcmd', return_value='234 Ready'), \
+     patch.object(ssl.SSLContext, 'wrap_socket', return_value=Mock()) as wrap:
+    ftp.auth()
+    assert wrap.call_args.kwargs['server_hostname'] == identity
+ftp._prot_p = True
+with patch.object(ftplib.FTP, 'ntransfercmd', return_value=(Mock(), 1)), \
+     patch.object(ssl.SSLContext, 'wrap_socket', return_value=Mock()) as wrap:
+    ftp.ntransfercmd('STOR fixture.txt')
+    assert wrap.call_args.kwargs['server_hostname'] == identity
+ftp.close()
+
+ftp = ftplib.FTP_TLS(context=context)
+ftp.sock = Mock()
+ftp.host = identity
+with patch.object(ftp, 'putcmd') as command, \
+     patch.object(ftp, 'getresp', return_value='234 Ready'), \
+     patch.object(ssl.SSLContext, 'wrap_socket',
+                  side_effect=ssl.SSLCertVerificationError('hostname mismatch')):
+    try:
+        ftp.login('fixture_user', 'fixture_password')
+        raise AssertionError('Invalid certificate accepted.')
+    except ssl.SSLCertVerificationError:
+        pass
+    assert [call.args[0] for call in command.call_args_list] == ['AUTH TLS']
+ftp.close()
+print('PASS: connection aliases preserve certificate verification on control/data channels; invalid TLS sends no credentials.')

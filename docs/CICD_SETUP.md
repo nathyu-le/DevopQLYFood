@@ -18,14 +18,15 @@ Staging chỉ chạy main, cần container-checks success. cPanel cần cả hai
 
 Trước lần deploy đầu, hosting phải có app + DB đã cấu hình, `config/config.local.php`, các thư mục app/public/config và health trả ok. Pipeline cập nhật source không thay việc cài mới hoặc chuyển database. Sao lưu source/config/DB ở nơi riêng trước khi chuyển môi trường.
 
-Tạo FTP account riêng, giới hạn đúng thư mục đồ án. Dùng **hostname dịch vụ thực tế có DNS và khớp SAN trong certificate**; tên FTP do giao diện gợi ý chưa chắc đã có bản ghi DNS. TLS phải xác minh được trước khi client gửi credentials.
+Tạo FTP account riêng, giới hạn đúng thư mục đồ án. Dùng địa chỉ dịch vụ thực tế có DNS. Nếu nhà cung cấp dùng alias kết nối khác tên trên chứng chỉ, cấu hình thêm `CPANEL_FTP_TLS_HOST` bằng danh tính dịch vụ đã biết và có trong SAN của certificate. Nếu không đặt, tên xác minh mặc định là `CPANEL_FTP_HOST`. Cả kênh điều khiển và truyền file đều xác minh chứng chỉ; không tự lấy tên trong log để đổi đích hoặc tắt TLS. TLS phải xác minh được trước khi client gửi credentials.
 
 Repo → Settings → Secrets and variables → Actions, dùng repository scope:
 
 | Loại | Tên | Nội dung |
 |---|---|---|
 | Variable | CPANEL_DEPLOY_ENABLED | true sau khi cấu hình xong; false để tắt deploy |
-| Variable | CPANEL_FTP_HOST | Hostname dịch vụ đã xác minh với certificate, không có https:// |
+| Variable | CPANEL_FTP_HOST | Địa chỉ kết nối hiện tại: ns22.dailysieure.com, không có https:// |
+| Variable | CPANEL_FTP_TLS_HOST | Danh tính TLS của dịch vụ hiện tại: 103-153-64-233.cprapid.com; chỉ dùng với đúng hosting đã xác minh |
 | Variable | CPANEL_FTP_PORT | 21 cho explicit FTPS của môi trường đang dùng |
 | Variable | CPANEL_FTP_ROOT | / khi FTP account đã giới hạn đúng thư mục DevopQLYFood |
 | Variable | CPANEL_BASE_URL | https://khotrick.org/DevopQLYFood/public/ |
