@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <section class="login-story">
         <a class="brand brand-light" href="login.php"><?= icon('leaf') ?><span>Bếp Nhà<span class="brand-sub">MENU MANAGER</span></span></a>
         <div><span class="eyebrow">MỖI MÓN ĂN, MỘT CÂU CHUYỆN</span><h1>Thực đơn gọn gàng.<br>Bếp luôn sẵn sàng.</h1><p>Một nơi để chăm chút món ăn, cập nhật giá và giữ thực đơn của quán luôn mới.</p></div>
-        <span class="story-foot">Bếp Nhà · Week 4 · Sẵn sàng bảo vệ</span>
+        <span class="story-foot">Quản lý thực đơn quán ăn</span>
     </section>
     <section class="login-form-panel">
         <span class="eyebrow">CHÀO MỪNG BẠN </span><h2>Vào bếp thôi.</h2><p class="muted">Đăng nhập để cập nhật món, giá và tình trạng phục vụ.</p>
