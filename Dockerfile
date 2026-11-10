@@ -14,6 +14,7 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/application.ini
 COPY app/ app/
 COPY public/ public/
 COPY config/config.example.php config/config.example.php
+COPY tools/preflight.php tools/preflight.php
 COPY docker/entrypoint.php /usr/local/bin/configure-container.php
 COPY docker/entrypoint.sh /usr/local/bin/application-entrypoint
 RUN chmod 755 /usr/local/bin/application-entrypoint

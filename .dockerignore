@@ -8,3 +8,5 @@
 !public/**
 !config/
 !config/config.example.php
+!tools/
+!tools/preflight.php

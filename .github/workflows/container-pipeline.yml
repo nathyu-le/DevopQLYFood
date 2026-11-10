@@ -44,6 +44,8 @@ jobs:
         run: python3 tests/verify_gate.py
       - name: Start Apache, PHP and MariaDB
         run: docker compose up -d --no-build --wait --wait-timeout 180
+      - name: Check a clean installation without exposing configuration
+        run: docker compose exec -T --user www-data app php tools/preflight.php
       - name: Test HTTP, database writes and volume persistence
         run: python3 tests/container_smoke.py
       - name: Check cPanel release boundaries
