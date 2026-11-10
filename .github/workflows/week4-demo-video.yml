@@ -1,0 +1,49 @@
+name: Week 4 narrated demo recording
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: week4-recording
+  cancel-in-progress: false
+jobs:
+  record-demo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      COMPOSE_PROJECT_NAME: devopqlyfood_video_ci
+      APP_IMAGE: devopqlyfood-video:${{ github.sha }}
+      APP_REVISION: ${{ github.sha }}
+      APP_PORT: '8080'
+      RUN_OPERATIONS_TESTS: '1'
+      DB_NAME: restaurant_menu_ci
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install recording tools from Ubuntu packages
+        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends espeak-ng ffmpeg
+      - name: Start a disposable synthetic environment
+        run: |
+          python3 tools/setup-containers.py
+          docker compose up -d --build --wait --wait-timeout 180
+      - name: Record verified demo with Vietnamese synthetic narration
+        run: node tools/record-final-demo.mjs
+      - name: Verify video duration and streams
+        run: |
+          ffprobe -v error -show_entries format=duration:stream=codec_type -of json week4-video/Week4_Demo_ThuyetMinh.mp4
+          python3 - <<'PY'
+          import json,subprocess
+          p=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration:stream=codec_type','-of','json','week4-video/Week4_Demo_ThuyetMinh.mp4']))
+          assert 300 <= float(p['format']['duration']) <= 600
+          assert {'video','audio'} <= {s['codec_type'] for s in p['streams']}
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: week4-demo-video
+          path: |
+            week4-video/Week4_Demo_ThuyetMinh.mp4
+            week4-video/recording-metadata.json
+          retention-days: 30
+          if-no-files-found: error
+      - name: Remove only the disposable video stack
+        if: always()
+        run: docker compose down --volumes --remove-orphans
