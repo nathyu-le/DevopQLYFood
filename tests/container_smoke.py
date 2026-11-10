@@ -72,7 +72,12 @@ def main():
         check(json.loads(body)['revision'] == os.environ['APP_REVISION'], 'running image has the expected commit revision')
         for path in ('config/config.local.php', 'database/schema.sql', '.secrets/admin_password', 'README.md'):
             check(request(path)[0] == 404, 'DocumentRoot excludes ' + path)
+        status, _, url = request('week4.php')
+        check(status == 200 and url.endswith('login.php'), 'Week 4 page requires an administrator session')
         csrf = login()
+        status, body, _ = request('week4.php')
+        check(status == 200 and 'Bảo vệ cuối kỳ' in body and os.environ['APP_REVISION'] in body,
+              'signed-in Week 4 page renders the deployed revision')
         fields = {'csrf': csrf, 'action': 'create', 'name': NAME, 'category': 'main', 'price': '45000', 'description': '<script>bad()</script>', 'is_available': '1'}
         check(request('index.php', {**fields, 'csrf': 'bad'})[0] == 403, 'invalid CSRF blocks a write')
         request('index.php', {**fields, 'price': '-1'})
