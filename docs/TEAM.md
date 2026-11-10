@@ -57,3 +57,9 @@ Tiếp nối vai trò Week 1 để chuẩn bị; bảng này là phân công rà
 Theo vai trò hiện có: Huy cần nắm luồng source/triển khai, nguồn metrics và cấu hình; Hải rà test alert và dữ liệu backup/restore; Tùng kiểm tra link/ảnh/log và chuẩn bị trình bày. Đây là trách nhiệm rà soát, không xác nhận từng người đã thực hiện các bước tự động trong CI.
 
 Nguồn ảnh là Chrome trên runner; tests và JSON do pipeline tạo. Nhóm ghi bổ sung đóng góp cá nhân sau khi làm thật. [Checklist Week 3](WEEK3_CHECKLIST.md) · [Minh chứng](../evidence/week3/README.md) · [Demo một người](WEEK3_DEMO.md).
+
+## Week 4 chuẩn bị bảo vệ cuối kỳ
+
+Giữ vai trò nhóm đã thống nhất: Huy phụ trách source/kiến trúc/cPanel/CI/CD/tài liệu; Hải phụ trách kiểm tra chức năng và đối chiếu dữ liệu; Tùng phụ trách tổng hợp minh chứng, video và chuẩn bị trình bày. Một người nói xuyên suốt theo lựa chọn nhóm; cả ba cần nắm phần được giao để trả lời Q&A.
+
+Bảng phân công là trách nhiệm rà soát, không thay cho xác nhận đóng góp cá nhân. Pipeline và tài liệu có hỗ trợ tự động; không tự gán thao tác runner hoặc commit do công cụ tạo thành việc từng thành viên đã làm thủ công. Nhóm xác nhận phần đọc hiểu, chạy lại và kết quả cá nhân thực sự trước khi nộp.

@@ -1,0 +1,51 @@
+{
+  "source_sha": "4b20e57e5e8d8fb94222fea256990f8643803068",
+  "run_id": 42861794294,
+  "run_url": "https://github.com/nathyu-le/DevopQLYFood/actions/runs/42861794294",
+  "jobs": [
+    {
+      "name": "container-checks",
+      "id": 129991833446,
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy-staging",
+      "id": 129992902519,
+      "conclusion": "success"
+    },
+    {
+      "name": "deploy-cpanel",
+      "id": 129994343366,
+      "conclusion": "success"
+    }
+  ],
+  "checks": {
+    "container_smoke": 19,
+    "operations_staging": 37,
+    "live_http_access": 14,
+    "preflight": "pass",
+    "interactive_demo": "pass, with MariaDB digest unchanged",
+    "client_regression": "pass"
+  },
+  "live_health": "ok",
+  "live_revision": "4b20e57e5e8d8fb94222fea256990f8643803068",
+  "week3_preserved_branch": "week3-preserved",
+  "week3_base_sha": "2c3b9dec0e5860fbadf2fdb33dba33d1ac77976d",
+  "week3_unchanged_files": 26,
+  "video": {
+    "run_id": 42860890403,
+    "source_sha": "b8953e15e0307d6b89a6e7aacbbfba24cece10d0",
+    "artifact_id": 13784688758,
+    "duration_seconds": 400,
+    "audio_video_streams_verified": true,
+    "narration": "Vietnamese synthetic voice",
+    "scope": "Public live login/revision then synthetic disposable Docker demo",
+    "local_playback_verified": false
+  },
+  "limits": [
+    "Provider OS firewall SSH and live DB policy unverified",
+    "External notifications and live backup cron unconfigured or unverified",
+    "No atomic whole-release switch or automated DB rollback",
+    "Live admin session not renewed; admin verification in disposable CI"
+  ]
+}

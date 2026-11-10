@@ -43,3 +43,43 @@ Các thực nghiệm dưới đây dùng Docker staging riêng, không dừng d�
 **Xác nhận:** CREATE TABLE bị từ chối nhưng các test CRUD, backup và restore vẫn qua; pipeline chỉ triển khai tiếp sau kết quả đó.
 
 Nguồn đối chiếu: [MariaDB entrypoint](https://github.com/MariaDB/mariadb-docker/blob/master/docker-entrypoint.sh), [MariaDB GRANT](https://mariadb.com/docs/server/reference/sql-statements/account-management-sql-statements/grant).
+
+# Bổ sung playbook Week 4
+
+## Sự cố 4 FTPS timeout và tên TLS không trùng alias
+
+**Triệu chứng thực tế ngày 04/11:** hai job container/staging qua, deploy-cpanel fail; TCP timeout trước đăng nhập. Sau khi đổi địa chỉ kết nối sang alias dịch vụ hiện tại, TLS báo hostname mismatch.
+
+**Xác minh:** tách kết nối TCP, TLS và đăng nhập; đối chiếu địa chỉ dịch vụ hosting đã biết với danh tính trong chứng chỉ. Không đọc hoặc in FTP password. [Run khôi phục 41785933275](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275) là mốc xác minh sau sửa.
+
+**Nguyên nhân:** địa chỉ kết nối cũ không còn là địa chỉ dịch vụ hiện tại; alias kết nối mới khác tên TLS của dịch vụ. Đây là hai tầng lỗi riêng, không phải mật khẩu sai.
+
+**Khắc phục:** dùng CPANEL_FTP_HOST để kết nối và CPANEL_FTP_TLS_HOST cho danh tính dịch vụ đã xác minh. Giữ ssl.create_default_context/check_hostname trên cả hai kênh; TLS phải qua trước USER/PASS. Không tắt verify hoặc tự chọn tên từ lỗi.
+
+**Xác nhận:** cả ba job qua, source SHA đúng ở version.php, health ok và các kiểm tra HTTP qua. Bộ tests/cpanel_release.py chứng minh TLS lỗi không gửi credentials.
+
+**Phòng tránh:** ghi riêng host kết nối và TLS identity, kiểm tra với provider khi đổi gói; không retry sai credentials vô hạn.
+
+## Sự cố 5 Database demo mất kết nối ngay trên cPanel
+
+**Triệu chứng thực nghiệm:** demo-health trả 503, DATABASE DEMO Mất kết nối, alert PENDING rồi FIRING; website chính vẫn dùng được.
+
+**Xác minh trực tiếp:** mở demo.php, tạo dữ liệu/backup trước rồi bấm 5 Tạo lỗi kết nối. Chờ hai mẫu, xem Nhật ký demo và health demo. Mở health.php chính để đối chiếu phạm vi. Không khẳng định MariaDB hosting đã dừng.
+
+**Nguyên nhân:** thao tác được cho phép đổi tên file SQLite thử từ demo.sqlite sang demo.sqlite.offline dưới khóa độc quyền; dịch vụ demo không mở được đường dẫn DB kỳ vọng. Đây là lỗi kết nối thật của dịch vụ thử, không phải banner mô phỏng.
+
+**Khắc phục:** bấm 6 Phục hồi kết nối để trả file về tên cũ, không tạo DB mới hoặc xóa backup. Có auto reconnect sau 180 giây nếu bỏ quên.
+
+**Xác nhận:** health demo 200, DB hoạt động, sau 2 mẫu tốt alert OK; bản ghi restore giữ đúng ID/tên/giá. tests/demo_smoke.py kiểm tra digest MariaDB trước/sau bằng nhau.
+
+**Phòng tránh:** phân biệt DB chính/DB thử, thao tác theo thứ tự, luôn kết thúc online; không áp dụng nút ngắt demo vào MariaDB live.
+
+## Sự cố 6 Click demo bị mất khi refresh đang chạy
+
+**Triệu chứng đã sửa:** người dùng bấm tạo dữ liệu nhưng nút dường như không chạy trong thời điểm polling GET, hoặc dữ liệu cũ ghi đè kết quả mới.
+
+**Xác minh:** tạo GET chờ trong test client, bấm action và kiểm tra POST vẫn được gửi; trả GET cũ sau POST để thử thứ tự phản hồi. [Commit 83c269e](https://github.com/nathyu-le/DevopQLYFood/commit/83c269e1513c1d5239e6182719ab95749577eac3).
+
+**Nguyên nhân:** action và polling từng dùng chung busy flag. **Khắc phục:** tách busy/refreshing, tăng generation sau action để bỏ phản hồi cũ. Download dùng form POST riêng với CSRF.
+
+**Xác nhận:** tests/demo_client.mjs qua; demo live đã chạy đủ backup/delete/restore và 503 → 200. **Phòng tránh:** giữ regression test trong pipeline; không khôi phục lại một cờ khóa chung.

@@ -70,8 +70,13 @@ Khi nộp checkpoint, ghi thêm commit SHA hoặc link commit trong chỉ mục 
 
 Nhóm tiếp tục cPanel cho website thật. Docker image deploy vào staging tạm, DB staging khác DB hosting; sau run stack tạm được dọn. [Runbook](CICD_SETUP.md) · [Bằng chứng](../evidence/week2/completion-2026-10-28.md).
 
-Ảnh đề Week 2 đã được đọc lại: không ghi phải chạy Docker ngay trên cPanel. Bộ đầu ra kỹ thuật Week 2 đã có minh chứng; nhóm cần đọc hiểu và trình bày đúng kiến trúc. Phần OS/user/SSH/firewall Week 1 còn thiếu giữ riêng; Week 3 đã có bộ source và minh chứng staging theo checklist riêng; Week 4 chưa thực hiện.
+Ảnh đề Week 2 đã được đọc lại: không ghi phải chạy Docker ngay trên cPanel. Bộ đầu ra kỹ thuật Week 2 đã có minh chứng; nhóm cần đọc hiểu và trình bày đúng kiến trúc. Phần OS/user/SSH/firewall Week 1 còn thiếu giữ riêng; Week 3 đã có bộ source và minh chứng staging theo checklist riêng; Week 4 được bổ sung riêng theo mục cập nhật cuối kỳ bên dưới.
 
 ## Cập nhật checkpoint Week 3
 
 Đã cập nhật source Week 3 lên cPanel bằng upload thủ công; kiểm tra lúc 11:20 ngày 04/11/2026 xác nhận health OK, revision d690bc0 và 7 kiểm tra đường dẫn HTTP đều qua. Đã xác minh dashboard, cập nhật số liệu, lọc log và tạo backup bằng phiên quản trị trên live lúc 11:34 ngày 04/11/2026. CPU/RAM live là số liệu OS có thể dùng chung, không phải quota riêng của tài khoản. Pipeline FTPS đã được khôi phục trong [run 41785933275](https://github.com/nathyu-le/DevopQLYFood/actions/runs/41785933275): cả ba job thành công; source `a0e5914`, health/revision và 7 kiểm tra HTTP đều qua. Xác minh TLS vẫn bật trên cả hai kênh FTP. [Minh chứng](../evidence/week3/README.md) · [Kịch bản](WEEK3_DEMO.md). Các mục hạ tầng live chưa xác minh được giữ riêng; không dùng ảnh cp1 cũ hoặc firewall runner để tự đánh dấu chúng đã hoàn tất.
+
+
+## Bổ sung cuối kỳ Week 4
+
+Week 4 được thêm riêng; giữ nguyên app/public đã có, kịch bản và checklist Week 3. Nhánh week3-preserved giữ source mốc 2c3b9de. [Hồ sơ cuối](../evidence/week4/README.md) và [checklist](WEEK4_CHECKLIST.md) phân biệt sản phẩm kỹ thuật với phần bảo vệ/nộp bài cần nhóm thực hiện. Không dùng cập nhật Week 4 để ghi đè lịch sử các tuần trước.

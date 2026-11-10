@@ -1,0 +1,116 @@
+{
+  "scope": "Source byte comparison, not a database backup",
+  "base_commit": "2c3b9dec0e5860fbadf2fdb33dba33d1ac77976d",
+  "preserved_branch": "week3-preserved",
+  "checked_at_utc": "2026-11-10T17:13:56.157779+00:00",
+  "all_existing_runtime_files_match": true,
+  "week4_runtime_additions": [
+    "public/week4.php"
+  ],
+  "files": [
+    {
+      "path": "app/operations.php",
+      "matches_week3": true
+    },
+    {
+      "path": "app/backup_lib.php",
+      "matches_week3": true
+    },
+    {
+      "path": "app/restore.php",
+      "matches_week3": true
+    },
+    {
+      "path": "app/demo_lib.php",
+      "matches_week3": true
+    },
+    {
+      "path": "app/bootstrap.php",
+      "matches_week3": true
+    },
+    {
+      "path": "app/backup.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/operations.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/ops-api.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/demo.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/version.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/demo-api.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/health.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/demo-health.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/logout.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/index.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/login.php",
+      "matches_week3": true
+    },
+    {
+      "path": "public/assets/operations.css",
+      "matches_week3": true
+    },
+    {
+      "path": "public/assets/operations.js",
+      "matches_week3": true
+    },
+    {
+      "path": "public/assets/demo.css",
+      "matches_week3": true
+    },
+    {
+      "path": "public/assets/app.css",
+      "matches_week3": true
+    },
+    {
+      "path": "public/assets/app.js",
+      "matches_week3": true
+    },
+    {
+      "path": "public/assets/demo.js",
+      "matches_week3": true
+    },
+    {
+      "path": "docs/WEEK3_DEMO.md",
+      "matches_week3": true
+    },
+    {
+      "path": "docs/WEEK3_CHECKLIST.md",
+      "matches_week3": true
+    },
+    {
+      "path": "docs/SECURITY.md",
+      "matches_week3": true
+    },
+    {
+      "path": "docs/BACKUP_RESTORE.md",
+      "matches_week3": true
+    }
+  ]
+}

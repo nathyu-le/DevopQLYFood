@@ -1,53 +1,42 @@
-# Week 4 — Final Demo & Troubleshooting
+# Week 4 Final Demonstration and Troubleshooting
 
-**Trạng thái: chưa thực hiện.** Đã đối chiếu ảnh đề chi tiết “DEVOPS FINAL PROJECT — WEEK 4: Final Demonstration & Troubleshooting Challenge” (`1000003655.jpg`), ngày 21/10/2026. Mục tiêu: **Production Deployment & Final Defense**. Điểm tối đa: **3,0/10**.
+Mục tiêu: Production Deployment and Final Defense. Hướng thực hiện: cPanel live, Docker staging tạm. Week 3 giữ nguyên để nhóm báo cáo riêng; Week 4 chỉ bổ sung. Nhánh `week3-preserved` trỏ đúng source trước khi bắt đầu Week 4.
 
-## Demo tổng thể
+## Đầu ra kỹ thuật và hồ sơ
 
-- [ ] Tích hợp đủ Week 1–3 trên cùng bản triển khai ổn định, kiểm tra các link truy cập.
-- [ ] Hoàn thiện deployment guide từ máy/server sạch, có bước hoặc script tái tạo được; ghi rõ cấu hình cần cấp riêng.
-- [ ] Demo end-to-end: thay đổi source → commit → build/test/deploy → ứng dụng cập nhật.
-- [ ] Demo thao tác thật với DB và dữ liệu bền vững.
-- [ ] Giải thích dashboard, logs, một cảnh báo đã kiểm thử và cấu hình bảo mật.
-- [ ] Chứng minh backup/restore bằng dữ liệu đối chiếu.
-- [ ] Thực hiện tình huống troubleshooting do giảng viên chọn, xác định nguyên nhân gốc và cách khắc phục.
-- [ ] Playbook tối thiểu **3 sự cố có thật hoặc thực nghiệm**, mỗi mục có triệu chứng, xác minh, nguyên nhân, khắc phục và phòng tránh.
-- [ ] Có video/ảnh/log dự phòng khi mạng hoặc môi trường demo gặp vấn đề.
+- [x] Trang Week 4 riêng, cùng ứng dụng đã có Week 1–3; không đổi giao diện hoặc logic demo Week 3.
+- [x] Kiến trúc cuối tách cPanel, Docker staging và SQLite thử; [sơ đồ](FINAL_ARCHITECTURE.md).
+- [x] Hướng dẫn cài từ source trên cPanel mới, config/DB/permissions/preflight và kiểm tra HTTP; [deployment guide](FINAL_DEPLOYMENT.md).
+- [x] Pipeline tự động từ source main đến cPanel, image staging đúng ID và post-deploy revision; [kết quả từng run](../evidence/week4/final-verification.md).
+- [x] Dashboard/log, HTTP auth/private paths, backup/restore và 503 → 200 được kiểm tra bằng các suite riêng, ghi đúng phạm vi.
+- [x] [Playbook](TROUBLESHOOTING.md) có 6 sự cố đã gặp hoặc thực nghiệm, gồm đủ triệu chứng/xác minh/nguyên nhân/khắc phục/phòng tránh.
+- [x] Báo cáo kỹ thuật theo cấu trúc paper; [Markdown](WEEK4_TECHNICAL_REPORT.md), bản Word 8 trang bàn giao riêng.
+- [x] Kịch bản Word một người: lời đọc, link, thao tác, kết quả và hỏi đáp; [bản nội dung repo](WEEK4_DEMO.md).
+- Release và tag của bản đóng mốc: [week4-final-v1.0.0](https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.0). Trạng thái phát hành được đối chiếu trực tiếp trên GitHub.
+- [x] Video dự phòng đã xuất 6 phút 40 giây, có audio/video, giọng máy và nhãn môi trường; [run/artifact](../evidence/week4/README.md). Chưa phát lại cục bộ do trình duyệt không tải được artifact; nhóm mở kiểm tra trước khi nộp.
 
-## Báo cáo và bảo vệ
+## Những việc chỉ hoàn tất tại buổi bảo vệ hoặc khi nhóm xác nhận
 
-- [ ] Báo cáo kỹ thuật có Abstract; Introduction; Architecture & Design; Implementation; Experiments & Evidence; Security/Reliability; Challenges; Conclusion; References.
-- [ ] Technical report theo cấu trúc paper, **6–10 trang là độ dài đề xuất** trong đề.
-- [ ] Video thuyết minh cuối kỳ **5–10 phút**.
-- [ ] README, cấu hình, sơ đồ hiện trạng và toàn bộ link evidence đã cập nhật.
-- [ ] Phân công và đóng góp đối chiếu được với công việc/commit/minh chứng; mỗi người giải thích được phần mình làm và sẵn sàng trả lời kỹ thuật.
-- [ ] Final repository có release/tag của phiên bản dùng để nộp và bảo vệ.
-- [ ] Chuẩn bị sửa nhỏ hoặc xử lý sự cố trực tiếp khi được yêu cầu.
-- [ ] Nộp đúng link/file và thời hạn do giảng viên thông báo.
+- [ ] Chạy commit mới trực tiếp trong buổi và chỉ revision/nội dung mới cho giảng viên.
+- [ ] Thực hiện tình huống giảng viên chọn và trả lời kỹ thuật.
+- [ ] Cả ba thành viên đọc hiểu, xác nhận đóng góp cá nhân và trình bày được phần được giao.
+- [ ] Nếu yêu cầu giọng thật của thành viên: quay/thay giọng thật cho video; không nhận giọng máy là giọng của nhóm.
+- [ ] Nộp link/file đúng hình thức và hạn do giảng viên thông báo.
 
-## Trình tự live demo theo đề
+## Giới hạn vẫn cần công bố
 
-| Thời lượng | Nội dung |
-|---|---|
-| 3 phút | Kiến trúc và trách nhiệm thành viên |
-| 5–7 phút | Cập nhật source → commit → pipeline → production app có phiên bản mới |
-| 3–5 phút | Monitoring, backup/restore và security |
-| 5–10 phút | Live troubleshooting challenge và Q&A; điều chỉnh theo sĩ số |
+Shared hosting không cung cấp quyền root cho nhóm; firewall OS/SSH và policy DB live chưa được xác minh tương đương tiêu chí hạ tầng Week 1. Không đánh dấu toàn bộ Week 1 hoàn tất vì đã có website hoặc UFW staging. Chưa có email/Slack, cron backup live được xác nhận hoặc rollback DB tự động. Snapshot dishes không là backup toàn tài khoản hosting. Trang demo SQLite không thay MariaDB chính.
 
-Video nộp 5–10 phút là sản phẩm riêng; không coi đó là tổng thời lượng của buổi bảo vệ trực tiếp.
+## Trình tự theo đề và rubric
 
-Tình huống luyện tập có thể là container stopped, sai biến môi trường, dịch vụ không truy cập được, database mất kết nối hoặc lỗi proxy nếu có dùng proxy. Đề không yêu cầu tác động vào một hệ thống production thực tế; thao tác trên môi trường demo/thử nghiệm phù hợp.
+3 phút kiến trúc/phân công; 5–7 phút source → commit → pipeline → website; 3–5 phút monitoring/backup/security; 5–10 phút troubleshooting và Q&A. Có thể trình bày vận hành trong lúc pipeline chạy. Video 5–10 phút là sản phẩm riêng.
 
-## Hồ sơ nộp và rubric
+| Tiêu chí | Điểm |
+|---|---:|
+| End-to-end hệ thống, pipeline và giám sát | 0,8 |
+| Troubleshooting, root cause và recovery | 0,8 |
+| Technical report | 0,6 |
+| Presentation, Q&A, đóng góp cá nhân | 0,8 |
+| Tổng | 3,0 |
 
-| Tiêu chí | Điểm theo đề | Sản phẩm / minh chứng |
-|---|---:|---|
-| End-to-end hệ thống chạy, pipeline và giám sát | 0,8 | Final repo + release/tag; architecture final; deployment/operations README; CI/CD, monitoring, backup/restore proof |
-| Troubleshooting: root cause và recovery | 0,8 | Playbook ≥3 entries và xử lý tình huống trực tiếp |
-| Technical report: thiết kế, minh chứng, đánh giá | 0,6 | Technical paper, đề xuất 6–10 trang |
-| Presentation, Q&A và đóng góp cá nhân | 0,8 | Video 5–10 phút, trình bày nhóm, giải thích phần phụ trách |
-| **Tổng** | **3,0** | Repo và các link nộp được kiểm tra quyền xem |
-
-## Nơi cập nhật
-
-Báo cáo dự kiến đặt trong `report/` khi tạo; video và chỉ mục demo nằm tại [evidence/week4/](../evidence/week4/README.md). Các bản cấu hình/source vẫn được cập nhật trong cùng repo. Ghi commit được dùng để bảo vệ để có thể xem lại phiên bản đó.
+Đánh giá thực tế do giảng viên quyết định; checklist hồ sơ không thay điểm hoặc xác nhận đã bảo vệ.
