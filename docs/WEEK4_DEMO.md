@@ -1,231 +1,187 @@
-# Kịch bản một người trình bày Week 4
+# Kịch bản trình bày và live demo Week 4
 
+Một người trình bày. Bố cục theo đúng bốn mục Nội dung trình bày và live demo của đề Week 4.
 
-Bản Word bàn giao riêng; trang Week 3 giữ nguyên.
+Bài trình bày gồm đúng bốn phần theo mục 3 của đề Week 4. Chỉ đọc lời ở nhãn NÓI và NÓI TIẾP. Đến LINK CHIẾU hoặc THAO TÁC thì dừng đọc để mở trang và bấm. CẦN THẤY là kết quả phải quan sát trước khi đọc tiếp.
 
+| Phần theo đề | Thời lượng | Điều phải chứng minh |
 
-Thuyết trình và demo Week 4
+|---|---|---|
 
-DevopQLYFood   Một người trình bày   Trình bày trực tiếp trên cPanel
+| 1 Kiến trúc và trách nhiệm thành viên | 3 phút | Luồng hệ thống và phần việc của Huy Hải Tùng |
 
-Cách dùng: chỉ đọc phần NÓI và NÓI TIẾP. Đến LINK CHIẾU hoặc THAO TÁC thì dừng đọc để mở trang và bấm. Chỉ nói kết quả sau khi thấy thật. Tổng 16–25 phút: kiến trúc 3 phút; commit đến website 5–7 phút; vận hành và backup 3–5 phút; thử thách và hỏi đáp 5–10 phút. Có thể rút gọn theo thời gian thầy giao.
+| 2 Demo cập nhật source code → pipeline → production app | 5–7 phút | Commit trong buổi và website thật có nội dung cùng revision mới |
 
-## Chuẩn bị trước khi trình bày
+| 3 Monitoring backup restore và security | 3–5 phút | Dashboard log dữ liệu sau restore và kiểm soát truy cập |
 
-Đăng nhập sẵn GitHub và tài khoản quản trị website. Mở các tab: README, kiến trúc cuối kỳ, trang Week 4, source week4.php, Actions, Dashboard, demo Week 3, health và version. Không chiếu màn hình nhập mật khẩu, GitHub Secrets hoặc config thật. Giữ file này ở điện thoại hoặc màn hình riêng.
+| 4 Live troubleshooting challenge và Q&A | 5–10 phút | Thầy chọn tình huống chẩn đoán nguyên nhân khắc phục và xác nhận |
 
-Trang Week 3 và file trình bày Week 3 vẫn giữ nguyên. Week 4 dùng thêm trang week4.php. Bài backup và tạo lỗi vẫn thao tác trên SQLite thử riêng của trang demo cũ, không gây lỗi MariaDB chính.
+### Chuẩn bị trước giờ báo cáo
 
-## 1 Mở đầu và giới thiệu kết quả
+Đăng nhập sẵn GitHub và website quản trị. Mở các tab: sơ đồ kiến trúc, trang Week 4, source week4.php, pipeline, Thực đơn, Dashboard và Demo trực tiếp. Các link cụ thể nằm ngay tại bước sử dụng trong bài.
 
-LINK CHIẾU  Repository và hồ sơ cuối kỳ
+Chuẩn bị tab sửa source: mở public/week4.php trên GitHub, bấm bút chì, tìm dòng id="release-note" và tăng số lần lên một. Giữ tab này, CHƯA commit. Đến phần 2 mới bấm Commit changes để thầy thấy cập nhật diễn ra trong buổi.
 
-https://github.com/nathyu-le/DevopQLYFood/
+Trang demo phải ở HTTP 200 và cảnh báo OK trước khi bắt đầu; nếu đang ngắt kết nối thì bấm 6 Phục hồi kết nối và chờ hai mẫu tốt. Đến phần 3 mới bấm 1 Tạo dữ liệu thử. Không mở mật khẩu, GitHub Secrets hoặc cấu hình thật trên màn chiếu.
 
-NÓI  Em chào thầy. Em đại diện nhóm gồm Lê Đình Nhật Huy, Nguyễn Phước Hải và Lê Quang Tùng trình bày Week 4 của đề tài quản lý thực đơn quán ăn, tên ứng dụng là Bếp Nhà. Trong tuần cuối, nhóm tích hợp ứng dụng, pipeline triển khai, giám sát, bảo mật và phục hồi thành một luồng demo thống nhất. Nhóm bổ sung hướng dẫn cài mới, báo cáo kỹ thuật, bản phát hành và playbook xử lý sự cố.
+Thời lượng đề là khung dự kiến. Run kiểm chứng ngày 11/11 mất khoảng 6 phút 16 giây riêng pipeline; thời gian mới có thể khác. Tập trước thao tác commit và đối chiếu để giảm thời gian chuyển tab. Không dùng run cũ để nhận là lần cập nhật vừa thực hiện.
 
-NÓI  Sau đây em trình bày kiến trúc và phân công, sau đó thay đổi một dòng source để chạy pipeline lên website. Tiếp theo em minh họa giám sát, backup và restore; cuối cùng là chẩn đoán một lỗi kết nối rồi xác nhận phục hồi.
+Week 4 tích hợp kết quả Week 1–3. Trang và file trình bày Week 3 được giữ riêng. Demo đang có nhãn Week 3 được dùng lại cho bài thử dữ liệu độc lập ngay trên cPanel.
 
-## 2 Giải thích kiến trúc và phân công
+## 1 Kiến trúc và trách nhiệm thành viên
 
-LINK CHIẾU  Sơ đồ kiến trúc cuối kỳ
+Thời lượng theo đề 3 phút. Trong phần này giải thích hệ thống và phân công; chưa tạo sự cố.
 
-https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/FINAL_ARCHITECTURE.md
+**NÓI** Em chào thầy. Em đại diện nhóm gồm Lê Đình Nhật Huy, Nguyễn Phước Hải và Lê Quang Tùng trình bày Week 4 của đề tài quản lý thực đơn quán ăn, ứng dụng Bếp Nhà. Tuần này nhóm tích hợp phần ứng dụng, CI/CD, giám sát, bảo mật và backup restore từ ba tuần đầu thành bản triển khai cuối kỳ. Nhóm cũng hoàn thiện hướng dẫn triển khai, báo cáo kỹ thuật và playbook xử lý sự cố.
 
-THAO TÁC  Chỉ sơ đồ trình duyệt → PHP cPanel → MariaDB; tiếp theo chỉ sơ đồ commit → kiểm tra → staging → FTPS → health và revision.
+**LINK CHIẾU** [Sơ đồ kiến trúc cuối kỳ](https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/FINAL_ARCHITECTURE.md)
 
-NÓI TIẾP  Người dùng truy cập website bằng HTTPS. PHP trên cPanel kiểm tra đăng nhập và dữ liệu, rồi dùng PDO để đọc hoặc ghi MariaDB. Dashboard và file log giúp quan sát vận hành. Một database SQLite riêng dành cho bài thử xóa dữ liệu và mất kết nối. Docker chạy ở staging tạm của GitHub Actions để kiểm thử; website cPanel chạy PHP trực tiếp.
+**THAO TÁC** Chỉ sơ đồ đầu: Trình duyệt → Web server và PHP trên cPanel → MariaDB thực đơn. Chỉ tiếp hai nhánh Private logs và backup, SQLite demo riêng. Sau đó chỉ sơ đồ commit → build test → staging → FTPS → health revision.
 
-NÓI  Theo phân công của nhóm, Huy phụ trách kiến trúc, ứng dụng, triển khai và tài liệu; Hải phụ trách kiểm tra chức năng, đối chiếu dữ liệu; Tùng phụ trách tổng hợp minh chứng và chuẩn bị demo. Một người trình bày xuyên suốt, các thành viên vẫn cần giải thích được phần được giao.
+**NÓI TIẾP** Website thật chạy PHP và MariaDB trên cPanel, người dùng truy cập bằng HTTPS. PHP xử lý đăng nhập, kiểm tra dữ liệu và dùng PDO để đọc ghi thực đơn. Dashboard cùng nhật ký hỗ trợ theo dõi sức khỏe ứng dụng và điều tra lỗi. Database SQLite riêng phục vụ bài thử xóa dữ liệu và mất kết nối ngay trên hosting; dữ liệu thử này tách khỏi MariaDB thực đơn.
 
-## 3 Thay đổi source ngay trong buổi demo
+**NÓI** Khi source được commit lên main, GitHub Actions build và kiểm tra ứng dụng trong Docker. Staging tải đúng image đã kiểm tra để chạy các bài thử dữ liệu và phục hồi. Khi các bước đạt yêu cầu, pipeline gửi source cùng commit lên cPanel bằng FTPS, rồi đối chiếu health và revision. Docker phục vụ môi trường thử; website cPanel chạy PHP trực tiếp.
 
-NÓI  Để chứng minh source mới đi đến website qua pipeline, em sẽ thay một dòng chữ riêng trên trang Week 4. Thay đổi này dễ quan sát, không đổi schema hoặc dữ liệu của ứng dụng. Em ghi nhận nội dung và revision hiện tại trước, rồi commit thay đổi.
+**NÓI** Theo phân công, Huy phụ trách kiến trúc, ứng dụng, triển khai và tài liệu. Hải phụ trách kiểm tra chức năng và đối chiếu dữ liệu. Tùng phụ trách tổng hợp minh chứng và chuẩn bị demo. Em trình bày xuyên suốt; các thành viên vẫn cần giải thích được phần phụ trách khi thầy hỏi.
 
-LINK CHIẾU  Trang Week 4 trên website
+**NÓI CHUYỂN PHẦN** Sau phần kiến trúc và phân công, em xin demo một cập nhật source đi qua pipeline rồi xuất hiện trên website thật.
 
-https://khotrick.org/DevopQLYFood/public/week4.php
+**CẦN ĐẠT** Thầy biết website chạy ở đâu, Docker dùng ở đâu, hai database khác nhau và trách nhiệm từng thành viên. Chuyển sang phần 2 sau khoảng ba phút.
 
-THAO TÁC  Bản bàn giao đang ghi “Mốc trình bày Week 4: lần 2”. Chỉ dòng này và Revision ở cuối trang. Trong buổi trình bày đổi lần 2 thành lần 3. Nếu đã tập và số đang khác, ghi nhớ số thực tế rồi đổi sang số kế tiếp; không cần đưa về lần 2.
+## 2 Demo cập nhật source code pipeline và production app
 
-LINK CHIẾU  Source chỉ dành cho trang Week 4
+Thời lượng theo đề 5–7 phút. Thực hiện theo thứ tự source → commit mới → pipeline → website thật. Phần xác nhận website tiếp ở trang sau.
 
-https://github.com/nathyu-le/DevopQLYFood/blob/main/public/week4.php
+**LINK CHIẾU** [Trang Week 4 trước cập nhật](https://khotrick.org/DevopQLYFood/public/week4.php)
 
-THAO TÁC  Trên GitHub bấm biểu tượng bút chì Edit this file. Dùng Ctrl+F tìm “Mốc trình bày Week 4:”. Chỉ đổi số lần hiện tại sang số tiếp theo trong dòng có id="release-note". Giữ nguyên dấu ngoặc, dấu nháy và cấu trúc PHP/HTML. Không sửa login.php hoặc demo.php của Week 3.
+**NÓI** Đây là bản đang phục vụ trên cPanel. Em sẽ tăng số lần trong dòng mốc trình bày để có thay đổi dễ nhìn thấy. Em ghi nhận nội dung và revision trước khi commit, sau đó đối chiếu lại khi pipeline triển khai xong.
 
-NÓI  Em chỉ thay nội dung hiển thị của trang cuối kỳ. Source đã được quản lý trong Git, vì vậy commit mới sẽ xác định chính xác thay đổi cần kiểm tra và triển khai. Không cần đăng nhập cPanel để chép file bằng tay trong bước cập nhật này.
+**THAO TÁC** Chỉ “Mốc trình bày Week 4: lần 2” và revision cuối trang. Nếu đã tập, đọc số thực tế đang hiện. Bản cập nhật sẽ dùng số kế tiếp, ví dụ lần 2 đổi thành lần 3.
 
-THAO TÁC  Bấm Commit changes. Nhập thông điệp “Update Week 4 presentation marker”. Chọn commit trực tiếp lên main nếu giao diện cho phép theo cấu hình repo hiện tại, rồi xác nhận Commit changes. Nếu repo yêu cầu PR, thực hiện quy trình PR được cấp thay vì bỏ bảo vệ nhánh. Ghi 7 ký tự đầu SHA commit mới.
+**LINK CHIẾU** [Source public week4 php trên GitHub](https://github.com/nathyu-le/DevopQLYFood/blob/main/public/week4.php)
 
-LINK CHIẾU  Pipeline triển khai cPanel
+**THAO TÁC** Chuyển sang tab sửa source đã chuẩn bị. Chỉ dòng id="release-note" cùng số mới. Nếu chưa chuẩn bị, bấm bút chì Edit this file, Ctrl+F tìm “Mốc trình bày Week 4:” và tăng số lên một. Giữ nguyên cấu trúc PHP và HTML.
 
-https://github.com/nathyu-le/DevopQLYFood/actions/workflows/container-pipeline.yml
+**NÓI** Thay đổi giao diện nhỏ này giúp đối chiếu chính xác nội dung trước và sau triển khai. Em sẽ commit lên main để pipeline tự kiểm tra rồi cập nhật hosting.
 
-THAO TÁC  Mở run vừa tạo có đúng thông điệp và SHA mới. Chỉ ba job container-checks, deploy-staging và deploy-cpanel. Không mở nhầm Source checks hoặc uptime monitor.
+**THAO TÁC** Bấm Commit changes. Nhập “Update Week 4 presentation marker”, chọn commit lên main theo quyền hiện có và xác nhận. Ghi lại bảy ký tự đầu SHA mới. Nếu nhánh yêu cầu PR thì dùng quy trình PR; không bỏ bảo vệ nhánh.
 
-NÓI TIẾP  Job đầu build image và chạy kiểm tra. Job thứ hai tải đúng image đã qua kiểm tra sang runner mới, so image ID rồi thử các tình huống dữ liệu và vận hành. Khi hai job đều qua, job cuối gửi gói source cùng commit lên hosting bằng FTPS. Cấu hình và database live được giữ riêng.
+**LINK CHIẾU** [Pipeline triển khai cPanel](https://github.com/nathyu-le/DevopQLYFood/actions/workflows/container-pipeline.yml)
 
-NÓI  Pipeline có thể mất vài phút. Em sẽ chỉ xác nhận website cập nhật sau khi job deploy hoàn tất và revision khớp commit. Nếu có lỗi, em mở đúng bước lỗi để chẩn đoán, không sửa trạng thái hoặc bỏ kiểm tra cho run thành công.
+**THAO TÁC** Mở run vừa xuất hiện, đối chiếu thông điệp commit và SHA. Chỉ ba job container-checks, deploy-staging và deploy-cpanel. Giữ trang run này để xem đến khi hoàn tất.
 
-Tiếp tục theo thứ tự mục 4 → 5 → 6 → 7 → 8. Trong lúc pipeline chạy, giải thích ba job ở trên. Không bấm tạo thêm run trùng nhau; chỉ chuyển sang phần xác nhận khi run của commit mới đã hoàn tất.
+**NÓI TIẾP** Job container-checks build image và chạy kiểm tra cú pháp, dữ liệu và hành vi ứng dụng. Job deploy-staging dùng lại đúng image để kiểm tra CRUD, dữ liệu qua recreate, backup restore và phục hồi sự cố. Job deploy-cpanel chỉ chạy sau các job cần thiết đã thành công, gửi gói source bằng FTPS có xác minh TLS. Cấu hình và database của hosting được giữ riêng.
 
-## 4 Xác nhận commit đã lên website
+**TRONG LÚC CHỜ** Chỉ tiến độ từng job và giải thích luồng trên. Không đọc trước rằng deploy đã thành công. Run mới phải có đủ kết quả rồi mới chuyển sang bước xác nhận ở trang sau. Nếu chậm hơn khung giờ, dùng hướng dẫn xử lý chậm ở cuối tài liệu.
 
-LINK CHIẾU  Run pipeline cuối kỳ đã kiểm tra
+### Xác nhận bản mới trên production app
 
-https://github.com/nathyu-le/DevopQLYFood/actions/runs/42946473380
+**THAO TÁC** Khi ba job của run mới success, mở deploy-cpanel và chỉ bước kiểm tra health cùng exact commit revision. Không dùng một run lịch sử thay cho run vừa tạo.
 
-THAO TÁC  Trong buổi demo phải dùng run của commit vừa tạo ở mục 3. Link trên là run bàn giao để tham khảo khi cần. Chờ cả ba job success. Mở deploy-cpanel, chỉ bước kiểm tra health và exact revision; tránh cuộn vào phần môi trường hoặc thông tin nhạy cảm.
+**NÓI** Pipeline của commit vừa tạo đã qua. Bây giờ em mở website thật để xác nhận nội dung và revision, vì màu xanh của pipeline cần được đối chiếu với bản đang phục vụ.
 
-NÓI TIẾP  Run đã qua kiểm tra và triển khai. Bước xác nhận còn lại là đối chiếu website thật. Em mở lại trang Week 4 và kiểm tra mã commit để tránh trường hợp pipeline thành công nhưng trình duyệt đang xem bản cũ hoặc nhầm môi trường.
+**LINK CHIẾU** [Phiên bản hiện tại trên cPanel](https://khotrick.org/DevopQLYFood/public/version.php)
 
-LINK CHIẾU  Đối chiếu phiên bản trên hosting
+**THAO TÁC** So revision trong JSON với SHA của run mới. Phải trùng commit đó; không lấy commit tài liệu mới nhất của main làm giá trị so sánh.
 
-https://khotrick.org/DevopQLYFood/public/version.php
+**LINK CHIẾU** [Trang Week 4 sau cập nhật](https://khotrick.org/DevopQLYFood/public/week4.php)
 
-THAO TÁC  So revision đầy đủ hoặc 7 ký tự đầu với SHA của run mới. Mở trang Week 4, tải lại Ctrl+R; dòng mốc phải đổi sang số vừa commit. Mở health chính bên dưới.
+**THAO TÁC** Tải lại trang bằng Ctrl+R. Chỉ dòng mốc đã chuyển sang số vừa commit, ví dụ lần 3, và revision cuối trang.
 
-LINK CHIẾU  Health của MariaDB chính
+**LINK CHIẾU** [Ứng dụng Thực đơn đang phục vụ](https://khotrick.org/DevopQLYFood/public/index.php)
 
-https://khotrick.org/DevopQLYFood/public/health.php
+**THAO TÁC** Mở trang Thực đơn. Chỉ ứng dụng chính tải thành công với dữ liệu hiện có và các chức năng quản lý. Không xóa món thật để minh họa ở bước này.
 
-CẦN THẤY  status là ok; version đúng commit mới; trang Week 4 có nội dung mới. Không chỉ dựa vào số thứ tự hoặc màu xanh của Actions.
+**LINK CHIẾU** [Health của ứng dụng và MariaDB chính](https://khotrick.org/DevopQLYFood/public/health.php)
 
-NÓI TIẾP  Nội dung mới và mã revision đều khớp commit. Health chính vẫn tốt, nên em có thể xác nhận luồng source, commit, kiểm thử và triển khai đến website đã hoàn tất. Pipeline không thay database hoặc file cấu hình riêng của hosting trong lần cập nhật này.
+**CẦN THẤY** Ba job của đúng commit mới success; version khớp SHA; mốc hiển thị đổi đúng số; trang Thực đơn mở được; health chính trả status ok.
 
-## Nếu pipeline chưa thành công
+**NÓI TIẾP** Website thật đã hiển thị nội dung mới và revision khớp commit. Trang Thực đơn vẫn truy cập được, health chính trả ok. Như vậy em đã chứng minh cập nhật source đi qua kiểm thử và pipeline để tới ứng dụng trên cPanel.
 
-THAO TÁC  Mở job đỏ → bước có dấu lỗi. Phân biệt build/test, kết nối FTPS, xác minh TLS và health sau deploy. Giữ nguyên dữ liệu. Nếu chỉ lỗi kết nối tạm và endpoint đã hoạt động lại, dùng Re-run failed jobs; nếu source sai thì sửa source bằng commit mới rồi để pipeline kiểm tra lại.
+**NÓI CHUYỂN PHẦN** Tiếp theo em trình bày monitoring, backup restore và các kiểm soát bảo mật trong khoảng ba đến năm phút.
 
-NÓI KHI CÓ LỖI  Hiện bước này chưa qua nên em chưa xác nhận triển khai thành công. Em sẽ dựa vào bước lỗi và thời điểm để xác định nguyên nhân, xử lý rồi đối chiếu lại health và revision. Bản đang phục vụ được ghi nhận theo revision thực tế, không suy ra từ commit mới nhất của repo.
+**NẾU BƯỚC NÀO CHƯA QUA** Dừng lời xác nhận thành công. Mở đúng job hoặc endpoint lỗi, nêu trạng thái thực tế rồi chẩn đoán theo phần 4. Không sửa REVISION tay hoặc bỏ test để làm run xanh.
 
-## Điểm cần giải thích khi thầy hỏi
+## 3 Monitoring backup restore và security
 
-Vì sao không cần Docker trên cPanel: Docker dùng cho kiểm thử và staging tạm; hosting nhận source PHP. Vì sao biết đúng image: hai job so cùng image ID và staging chạy no-build. Vì sao không đưa DB vào gói source: cập nhật chương trình và thay đổi dữ liệu cần hai kế hoạch riêng, tránh ghi đè cấu hình hoặc mất dữ liệu.
+Thời lượng theo đề 3–5 phút. Dự kiến một phút Dashboard và log, một đến hai phút backup restore, khoảng một phút bảo mật. Chưa bấm tạo lỗi kết nối ở phần này.
 
-## 5 Dashboard nhật ký và bảo mật
+**LINK CHIẾU** [Dashboard vận hành và nhật ký](https://khotrick.org/DevopQLYFood/public/operations.php)
 
-NÓI  Sau luồng triển khai, em chuyển sang vận hành. Mục tiêu là biết dịch vụ còn đọc được database hay không, quan sát tài nguyên theo thời gian và có nhật ký để điều tra khi xảy ra lỗi.
+**NÓI** Dashboard theo dõi CPU, RAM, kết nối database và độ trễ. Khi mở trang, dữ liệu được cập nhật mỗi năm giây. Trên shared hosting, số liệu hệ điều hành có thể dùng chung nên nhóm hiển thị rõ nguồn đo.
 
-LINK CHIẾU  Dashboard Vận hành
+**THAO TÁC** Chỉ DATABASE Hoạt động, CPU, RAM, nguồn đo và mẫu gần nhất. Cuộn tới Nhật ký ứng dụng; nhập http_request vào ô lọc, bấm Lọc, chỉ thời gian route status request ID của một dòng, rồi bấm Xóa lọc.
 
-https://khotrick.org/DevopQLYFood/public/operations.php
+**NÓI TIẾP** Log có thời gian và mã yêu cầu để đối chiếu khi lỗi. Cảnh báo hiện trên dashboard và nhật ký; nhóm chưa cấu hình gửi email hoặc Slack.
 
-THAO TÁC  Chỉ DATABASE Hoạt động, CPU, RAM và ĐỘ TRỄ DB. Chờ khoảng 5 giây, chỉ thời điểm mẫu gần nhất thay đổi và biểu đồ. Đọc nhãn nguồn CPU/RAM dưới ô, không tự gọi là quota hosting.
+**LINK CHIẾU** [Demo backup và restore với dữ liệu thử riêng](https://khotrick.org/DevopQLYFood/public/demo.php)
 
-NÓI TIẾP  Database đang hoạt động nghĩa là ứng dụng kết nối và đọc được bảng dishes. Độ trễ là thời gian probe thực tế. Khi mở trang, dashboard cập nhật mỗi năm giây. CPU và RAM có thể là số liệu hệ điều hành của máy chủ dùng chung, nên nhóm ghi rõ nguồn đo và không xem đó là tài nguyên riêng của tài khoản cPanel.
+**NÓI** Em dùng lại demo đã có từ Week 3 để thử trực tiếp trên cPanel. Database SQLite này tách khỏi MariaDB thực đơn. Em tạo dữ liệu, sao lưu, xóa rồi phục hồi để xác nhận backup dùng được.
 
-THAO TÁC  Cuộn đến Nhật ký ứng dụng. Nhập “http_request” vào ô Lọc sự kiện hoặc request ID, bấm Lọc. Chỉ thời gian, route, status và request ID của một dòng thật. Bấm Xóa lọc sau khi giải thích.
+**THAO TÁC** Bấm 1 Tạo dữ liệu thử, chỉ ID 1, Cơm gà demo Week 3, giá 45.000 đ. Bấm 2 Backup, chỉ số lượng một bản ghi và SHA256. Bấm Tải file backup, chỉ thông báo tải xuống. Bấm 3 Xóa dữ liệu thử và chỉ bảng trống. Cuối cùng bấm 4 Restore.
 
-NÓI TIẾP  Nhật ký có thời gian và mã yêu cầu để đối chiếu một request với sự cố. Bộ lọc giúp tìm đúng sự kiện; nhóm không ghi mật khẩu, nội dung biểu mẫu hoặc thông báo kết nối chứa credentials. Cảnh báo hiện ở dashboard và log; chưa cấu hình gửi email hoặc Slack.
+**CẦN THẤY** Dữ liệu từ có một bản ghi → bảng trống → có lại cùng ID tên giá. Ô DỮ LIỆU SAU RESTORE hiện KHỚP BACKUP; HTTP 200 và cảnh báo OK. File tải về là backup SQLite demo.
 
-LINK CHIẾU  Checklist bảo mật và cổng
+**NÓI TIẾP** Dữ liệu đã phục hồi khớp snapshot. Chương trình kiểm tra định dạng và SHA256 trước khi ghi, rồi đọc lại để đối chiếu. MariaDB chính có cơ chế backup riêng; bài thử này không được dùng để nhận đã restore toàn bộ hosting.
 
-https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/SECURITY.md
+**LINK CHIẾU** [Kiểm tra chặn đường dẫn ngoài public](https://khotrick.org/DevopQLYFood/database/schema.sql)
 
-THAO TÁC  Chỉ mục Secrets và HTTP, không mở cấu hình thật. Nếu cần minh họa chặn thư mục, mở link schema bên dưới; trình duyệt phải báo 403 hoặc 404, không hiển thị SQL.
+**THAO TÁC** Mở link schema; cần bị chặn 403 hoặc 404 và không hiện SQL. Không mở hoặc chiếu nội dung config thật.
 
-LINK CHIẾU  Kiểm tra đường dẫn ngoài public
+**NÓI TIẾP** Trang quản trị yêu cầu đăng nhập, thao tác ghi có CSRF, cấu hình và backup riêng không đưa vào gói deploy. Firewall hệ điều hành của cPanel do nhà cung cấp quản lý; kiểm tra đường dẫn HTTP này chỉ xác minh phạm vi ứng dụng.
 
-https://khotrick.org/DevopQLYFood/database/schema.sql
+**NÓI CHUYỂN PHẦN** Em đã trình bày monitoring, backup restore và security. Sau đây em mời thầy chọn tình huống cho phần live troubleshooting và hỏi đáp.
 
-NÓI TIẾP  Các trang quản trị cần đăng nhập; thao tác ghi có mã CSRF để kiểm tra phiên. Cấu hình thật và backup không nằm trong gói cập nhật. Thư mục riêng phải bị chặn qua HTTP. Firewall của máy chủ shared hosting do nhà cung cấp quản lý; UFW trong bài thử Docker là bằng chứng cho runner thử, không phải firewall cPanel.
+## 4 Live troubleshooting challenge và hỏi đáp
 
-NÓI  Sau đây em dùng trang demo riêng đã có từ Week 3 để thử phục hồi dữ liệu. Việc này được tách khỏi database thực đơn chính để thao tác trực tiếp mà không ảnh hưởng dữ liệu đang sử dụng.
+Thời lượng theo đề 5–10 phút, điều chỉnh theo thầy. Thầy chọn hoặc chấp thuận tình huống trước khi nhóm gây lỗi. Các bước dưới là nhánh thao tác nếu thầy chọn mất kết nối database thử.
 
-## 6 Backup xóa restore và đối chiếu
+**NÓI** Dạ, đến phần thử thách xử lý sự cố, em mời thầy chọn tình huống để nhóm kiểm tra trực tiếp. Môi trường demo riêng trên cPanel đang hỗ trợ thử mất kết nối database và phục hồi dữ liệu. Nhóm sẽ xác định triệu chứng, đối chiếu bằng chứng, tìm nguyên nhân, khắc phục rồi xác nhận lại dịch vụ.
 
-LINK CHIẾU  Demo trực tiếp được giữ nguyên từ Week 3
+**THAO TÁC** Dừng và chờ thầy giao tình huống. Chỉ đi tiếp nhánh dưới nếu thầy chọn hoặc đồng ý mất kết nối database thử. Nếu thầy chọn tình huống khác, dùng hướng dẫn ở trang sau; không tự đổi tình huống của thầy.
 
-https://khotrick.org/DevopQLYFood/public/demo.php
+**LINK CHIẾU** [Trang demo và nhật ký để chẩn đoán](https://khotrick.org/DevopQLYFood/public/demo.php)
 
-NÓI  Trang này sử dụng SQLite thử riêng ngay trên hosting. Các nút thực hiện thao tác thật với database thử. Em tạo một bản ghi, sao lưu, xóa, rồi phục hồi để kiểm tra dữ liệu có trở lại đúng không.
+**GÂY LỖI THEO TÌNH HUỐNG** Giữ bản ghi vừa restore. Bấm 5 Tạo lỗi kết nối; chờ khoảng 5–10 giây. Chỉ DATABASE DEMO Mất kết nối, HTTP thực tế 503 và cảnh báo PENDING rồi FIRING.
 
-THAO TÁC  Bấm 1 Tạo dữ liệu thử. Chỉ dòng ID 1, tên Cơm gà demo Week 3, giá 45.000 đ. Tiếp theo bấm 2 Backup. Chỉ thời gian backup, số lượng 1 bản ghi và SHA256.
+**NÓI** Triệu chứng là dịch vụ demo trả 503 và không truy cập được database thử. Em sẽ kiểm tra website chính để xác định phạm vi, rồi đối chiếu nhật ký theo thời điểm lỗi.
 
-NÓI TIẾP  Đây là dữ liệu trước khi xóa. Backup lưu một snapshot kèm thời điểm và mã toàn vẹn. Snapshot tồn tại chưa đủ kết luận có thể phục hồi, nên nhóm cần thực hiện tiếp thao tác xóa và đối chiếu dữ liệu sau restore.
+**LINK CHIẾU** [Đối chiếu health của website chính](https://khotrick.org/DevopQLYFood/public/health.php)
 
-THAO TÁC  Bấm Tải file backup để trình duyệt tải file. Chỉ thông báo tải xuống, không cần mở JSON. Sau đó bấm 3 Xóa dữ liệu thử, chỉ bảng trống và sự kiện xóa trong Nhật ký demo.
+**THAO TÁC** Xem status ok nếu đúng thực tế. Quay lại demo, cuộn Nhật ký demo trực tiếp; chỉ “Đã ngắt kết nối DB demo” và sự kiện “Cảnh báo đổi trạng thái” cùng thời điểm.
 
-NÓI TIẾP  File vừa tải là backup của database demo, không phải bản dump MariaDB chính. Dữ liệu thử hiện đã được xóa thật, nhưng kết nối vẫn có thể tốt. Vì vậy health tốt không đồng nghĩa mọi bản ghi nghiệp vụ vẫn còn đầy đủ.
+**NÓI TIẾP** Health chính vẫn ok trong khi demo lỗi, nên phạm vi nằm ở database thử. Log ghi nhận mất kết nối ngay sau thao tác ngắt. Thao tác thử đã đổi tên file SQLite, khiến dịch vụ không mở được đường dẫn database kỳ vọng. Đây là nguyên nhân của tình huống này; em sẽ trả file về đường dẫn đúng để phục hồi.
 
-THAO TÁC  Bấm 4 Restore. Chỉ cùng ID 1, tên món, giá 45.000 đ và ô DỮ LIỆU SAU RESTORE hiện KHỚP BACKUP. Cuộn nhẹ để chỉ sự kiện Restore khớp backup rồi quay lại các ô trạng thái.
+**KHẮC PHỤC** Bấm 6 Phục hồi kết nối. Chờ hai mẫu tốt, khoảng 5–10 giây. Chỉ HTTP 200, DATABASE DEMO Hoạt động, cảnh báo OK, log “Đã phục hồi kết nối” và bản ghi đã restore còn nguyên.
 
-NÓI TIẾP  Restore đã khôi phục cùng dữ liệu. Chương trình kiểm tra định dạng, lượt demo, số bản ghi và SHA256 trước khi ghi; sau đó đọc lại và đối chiếu toàn bộ trường trong giao dịch. Nếu snapshot sai hoặc hỏng, thao tác bị từ chối. Kết quả khớp backup là bằng chứng dữ liệu đã được phục hồi đúng trong bài thử.
+**NÓI TIẾP** Sau khắc phục, health demo trở lại 200, cảnh báo về OK và dữ liệu vẫn còn đúng. Em xác nhận dịch vụ cùng dữ liệu đã phục hồi. Để phòng tránh và xử lý nhanh, nhóm tách dữ liệu thử, sao lưu trước khi xóa và giữ log theo thời gian. Em xin mời thầy đặt câu hỏi thêm.
 
-NÓI  Đối với MariaDB thực đơn chính, dashboard có chức năng tạo backup riêng và giữ mười bốn snapshot mới nhất. Restore MariaDB chính dùng CLI với database thử và xác nhận tên, không đưa thao tác ghi đè dữ liệu thật thành một nút demo trên web. Snapshot dữ liệu dishes cũng không thay thế sao lưu toàn bộ tài khoản cPanel.
+**CẦN ĐẠT** Có tình huống được thầy chọn hoặc chấp thuận; chỉ được triệu chứng, phạm vi, log, nguyên nhân, cách sửa và bằng chứng phục hồi. Kết thúc ở HTTP 200 và OK. Nếu health chính cũng lỗi thì dừng kết luận phạm vi, xác minh sự cố thật trước.
 
-NÓI  Tiếp theo, em giữ bản ghi vừa phục hồi và thử một lỗi kết nối để minh họa quy trình phát hiện, chẩn đoán và xác nhận dịch vụ hoạt động lại.
+### Khi thầy chọn tình huống khác trong phần 4
 
-## 7 Thử thách lỗi kết nối và khắc phục
+**NẾU THẦY CHỌN MẤT DỮ LIỆU THỬ** Mở demo.php. Nếu chưa có snapshot hợp lệ thì tạo dữ liệu thử và backup trước. Sau khi thầy giao tình huống, bấm 3 Xóa dữ liệu thử. Chỉ bảng trống và log xóa; đối chiếu snapshot một bản ghi. Bấm 4 Restore, chỉ cùng ID tên giá và KHỚP BACKUP. Giải thích nguyên nhân là bản ghi thử bị xóa, health có thể vẫn 200; phục hồi dữ liệu phải được kiểm chứng riêng.
 
-LINK CHIẾU  Trang demo và nhật ký trực tiếp
+**NẾU THẦY CHỌN CONTAINER BIẾN MÔI TRƯỜNG HOẶC PROXY** Nêu đúng phạm vi: cPanel không có Docker daemon hoặc proxy riêng do nhóm quản lý. Trao đổi với thầy về môi trường thử phù hợp hoặc tình huống tương đương được chấp thuận. Chỉ dùng lệnh hay sửa cấu hình trong môi trường có quyền và đã chuẩn bị; không nhận demo SQLite là đã xử lý lỗi container hoặc proxy.
 
-https://khotrick.org/DevopQLYFood/public/demo.php
+**NÓI KHI CẦN XÁC ĐỊNH MÔI TRƯỜNG** Dạ website này chạy PHP trực tiếp trên shared hosting. Với lỗi thầy vừa chọn, em xin xác định môi trường nhóm được thao tác trước. Nếu thử trên cPanel, nhóm có thể thực hiện lỗi database độc lập; nếu cần container hoặc proxy thì cần môi trường thử tương ứng. Em sẽ trình bày đúng thao tác và kết quả thực tế trong phạm vi đó.
 
-NÓI  Để trình bày quy trình xử lý sự cố rõ ràng, nhóm chuẩn bị lỗi trên database thử độc lập. Em sẽ tạo lỗi, quan sát cảnh báo, đối chiếu health với log để xác định phạm vi và nguyên nhân, rồi phục hồi. Đây là bài luyện tập; trong phần thử thách em sẽ thực hiện tình huống thầy chọn trên môi trường được phép.
+### Câu trả lời ngắn khi thầy hỏi
 
-THAO TÁC  Bấm 5 Tạo lỗi kết nối. Chờ khoảng 5 đến 10 giây. Chỉ DATABASE DEMO Mất kết nối, HEALTH HTTP THỰC TẾ 503, cảnh báo PENDING rồi FIRING. Cuộn Nhật ký demo trực tiếp để chỉ sự kiện ngắt và đổi trạng thái.
+**VÌ SAO WEEK 4 DÙNG DEMO CÓ NHÃN WEEK 3** Dạ Week 4 yêu cầu tích hợp các tuần trước. Nhóm giữ nguyên thành phần Week 3 để dùng lại, bổ sung trang cập nhật và hồ sơ cuối kỳ riêng.
 
-NÓI TIẾP  Dịch vụ demo trả HTTP 503 thật. Sau hai mẫu lỗi, cảnh báo chuyển sang firing. Nhật ký cho thấy thời điểm ngắt kết nối xảy ra ngay trước cảnh báo. Bài thử đổi tên file SQLite nên ứng dụng không mở được đường dẫn database kỳ vọng. Đây là nguyên nhân của lỗi demo, không phải bằng chứng MariaDB hosting đã dừng.
+**VÌ SAO DEMO DÙNG SQLITE** Dạ ứng dụng chính dùng MariaDB. SQLite là database thử riêng để xóa và ngắt kết nối trực tiếp trên hosting mà không làm gián đoạn dữ liệu thực đơn.
 
-LINK CHIẾU  Đối chiếu health website chính
+**VÌ SAO CHƯA GỬI EMAIL CẢNH BÁO** Dạ hiện nhóm có banner, trạng thái cảnh báo và log. Email hoặc Slack chưa được cấu hình; nhóm ghi rõ phạm vi hiện có.
 
-https://khotrick.org/DevopQLYFood/public/health.php
+**NẾU PIPELINE CHẬM HOẶC THẤT BẠI** Dạ em chưa xác nhận deploy thành công. Em mở job đang chờ hoặc bước lỗi để xác minh. Nếu thầy đồng ý, em trình bày phần monitoring trong lúc chờ rồi quay lại đối chiếu đúng commit mới; không dùng run cũ thay cho kết quả lần này.
 
-THAO TÁC  Mở health chính, chỉ status ok. Quay lại tab demo. Bấm 6 Phục hồi kết nối, chờ 5 đến 10 giây; chỉ HTTP 200, DB Hoạt động, alert OK, dữ liệu đã restore vẫn còn và log phục hồi.
+### Kết thúc phần 4 và bài trình bày
 
-NÓI TIẾP  Website chính vẫn tốt, giúp giới hạn phạm vi sự cố vào database demo. Phục hồi trả file thử về đường dẫn đúng. Em xác nhận lại bằng HTTP 200, hai mẫu tốt đưa cảnh báo về OK và dữ liệu vẫn khớp backup. Như vậy việc khắc phục đã được kiểm tra ở cả dịch vụ và dữ liệu.
+**LINK CHIẾU** [Hồ sơ và checklist cuối kỳ](https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/WEEK4_CHECKLIST.md)
 
-NÓI  Để phòng tránh, nhóm tách dữ liệu thử, giữ backup trước khi xóa, lưu nhật ký và đưa dịch vụ về hoạt động sau bài thử. Nếu tiếp tục truy cập hoặc lấy mẫu, trang tự phục hồi khi đã quá ba phút; khi trình bày em vẫn chủ động phục hồi và kiểm tra.
+**THAO TÁC** Giữ demo ở HTTP 200 và OK. Khi thầy hỏi hồ sơ, mở checklist để chỉ báo cáo, deployment guide, playbook và release; không cần mở ảnh trong phần live demo.
 
-## Khi thầy chọn lỗi khác
+**NÓI** Nhóm đã trình bày kiến trúc và trách nhiệm thành viên; demo cập nhật source qua pipeline đến website; minh họa monitoring, backup restore và security. Phần thử thách vừa rồi đã được thực hiện theo tình huống thầy giao và kết quả quan sát thực tế. Nhóm xin kết thúc và cảm ơn thầy.
 
-NÓI  Dạ em sẽ xác định triệu chứng, phạm vi, thời điểm và thay đổi gần nhất trước. Sau đó em dùng health, logs và cấu hình tương ứng để kiểm chứng giả thuyết; sửa nguyên nhân rồi đọc lại health và dữ liệu. Em không tạo lỗi trên dịch vụ dùng chung của nhà cung cấp.
-
-DB/config sai: kiểm tra đúng config local, extension và quyền DB, giữ secrets kín. Container dừng: chỉ trên Docker thử, xem compose ps/logs rồi up dịch vụ, giữ volume. FTPS lỗi: xác định TCP/TLS/auth; giữ verify TLS. Proxy: hiện không có proxy riêng do nhóm cấu hình; chỉ xử lý trong môi trường thử có proxy thực tế, không nói đã thử nếu chưa làm.
-
-## 8 Bàn giao và kết thúc
-
-LINK CHIẾU  Hồ sơ Week 4 và kết quả kiểm tra
-
-https://github.com/nathyu-le/DevopQLYFood/tree/main/evidence/week4
-
-LINK CHIẾU  Bản phát hành cuối kỳ đã rà soát
-
-https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.1
-
-THAO TÁC  Chỉ release/tag, hướng dẫn cài mới, báo cáo kỹ thuật và playbook. Để trang demo kết thúc ở HTTP 200 và OK. Không cần mở ảnh hoặc artifact trong bài trình bày chính.
-
-NÓI TIẾP  Nhóm bàn giao source có tag, sơ đồ kiến trúc cuối, hướng dẫn cài từ đầu và vận hành, báo cáo kỹ thuật, video dự phòng và playbook. Các tình huống đã ghi gồm database không khả dụng, mất dữ liệu thử, quyền database vượt nhu cầu, lỗi FTPS và lỗi đồng thời ở giao diện demo. Mỗi mục có triệu chứng, xác minh, nguyên nhân, khắc phục và phòng tránh.
-
-NÓI  Qua buổi demo, nhóm đã minh họa chuỗi cập nhật từ commit đến website, theo dõi vận hành, phục hồi dữ liệu và xử lý một sự cố có đối chiếu. Các giới hạn còn lại là quyền hạ tầng shared hosting, chưa có gửi cảnh báo ngoài hệ thống và chưa có rollback nguyên tử toàn bộ release. Nhóm ghi rõ những điểm này trong báo cáo để tránh đánh đồng với phần đã kiểm chứng. Em xin kết thúc và sẵn sàng trả lời câu hỏi của thầy.
-
-## Câu trả lời ngắn chỉ dùng khi được hỏi
-
-## Vì sao dùng SQLite cho demo
-
-Dạ ứng dụng chính vẫn dùng MariaDB. SQLite chỉ là database thử riêng để bấm xóa và tạo lỗi trực tiếp trên cPanel; không thay kiến trúc dữ liệu chính.
-
-## Cảnh báo có gửi email không
-
-Dạ hiện có banner, trạng thái và log. Chưa cấu hình email hoặc Slack; nhóm không trình bày như đã có notification bên ngoài.
-
-## Vì sao hai mẫu lỗi mới cảnh báo
-
-Dạ giúp tránh một lần lỗi thoáng qua làm bật cảnh báo ngay. Sau hai mẫu tốt mới về OK. Khi mở trang, chu kỳ lấy mẫu là năm giây.
-
-## SHA256 có bảo mật backup không
-
-Dạ mã này giúp kiểm tra dữ liệu có thay đổi; không mã hóa và không thay thế phân quyền hoặc giữ bản sao riêng.
-
-## Thay source xong dữ liệu có mất không
-
-Dạ gói deploy không chứa database/config/var. DB giữ riêng. Thay schema vẫn cần backup và kế hoạch migration, không tự được giải quyết bằng gói cập nhật.
-
-## Nhóm đã tự cấu hình firewall cPanel chưa
-
-Dạ firewall OS và quyền root của shared hosting do provider quản lý. Nhóm kiểm tra HTTP access của app và có UFW trên runner thử; hai phạm vi này được ghi riêng.
-
-Video nộp 5 đến 10 phút là sản phẩm riêng, không phải toàn bộ thời lượng bảo vệ. Nếu dùng bản giọng máy bàn giao, giữ nhãn nguồn giọng và môi trường; nếu thầy yêu cầu thành viên tự thuyết minh, dùng kịch bản này để quay giọng thật, không nhận giọng máy là giọng của nhóm.
+Chỉ đọc câu xác nhận thử thách ở trên nếu đã thực hiện tình huống của thầy. Nếu chưa làm được hoặc chưa phục hồi, báo đúng bước còn vướng. Mọi thành viên vẫn cần sẵn sàng trả lời phần việc của mình.

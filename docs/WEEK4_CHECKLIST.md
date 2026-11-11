@@ -31,6 +31,8 @@ Shared hosting không cung cấp quyền root cho nhóm; firewall OS/SSH và pol
 
 ## Trình tự theo đề và rubric
 
+Kịch bản được căn chỉnh thành đúng bốn phần bên dưới: kiến trúc/phân công; cập nhật source qua pipeline đến production app; monitoring/backup/restore/security; tình huống troubleshooting do giảng viên chọn và hỏi đáp. Bản Word mới nhất vẫn giữ cùng tên; [nội dung đầy đủ](WEEK4_DEMO.md) và [mốc căn chỉnh tài liệu](../evidence/week4/presentation-alignment-2026-11-11.json). Đây là cập nhật kịch bản, không thay runtime hoặc file Week 3.
+
 3 phút kiến trúc/phân công; 5–7 phút source → commit → pipeline → website; 3–5 phút monitoring/backup/security; 5–10 phút troubleshooting và Q&A. Kịch bản Word đi tuần tự, chỉ xác nhận triển khai khi run của commit mới hoàn tất. Video 5–10 phút là sản phẩm riêng.
 
 | Tiêu chí | Điểm |

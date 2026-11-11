@@ -1,0 +1,19 @@
+{
+  "date_vietnam": "2026-11-11",
+  "scope": "Presentation document alignment only; no application or deployment changes",
+  "library_expected_previous_version": 1,
+  "main_sections": [
+    "## 1 Kiến trúc và trách nhiệm thành viên",
+    "## 2 Demo cập nhật source code pipeline và production app",
+    "## 3 Monitoring backup restore và security",
+    "## 4 Live troubleshooting challenge và hỏi đáp"
+  ],
+  "presentation_pages": 7,
+  "presentation_sha256": "a239e1ef868db1298cda54396217ed945481b80be7b914219ca110e71cc720c3",
+  "pipeline_timing_reference": {
+    "run_id": 42946473380,
+    "elapsed_seconds": 376
+  },
+  "week3_files_changed": [],
+  "technical_report_changed": false
+}
