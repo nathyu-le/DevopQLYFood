@@ -122,6 +122,15 @@ def main():
         compose('exec','-T','--user','www-data','app','php','app/backup.php','--keep=2');time.sleep(1.05)
     count=php('require "/var/www/html/app/backup_lib.php";echo json_encode(count(glob(backup_directory()."/menu-*.json")));')
     check(count==2,'retention removes only old managed snapshots and keeps two newest in the exercise')
+    # A valid pre-existing archive sorts after the next filename, as can also
+    # happen with random suffixes in one second. A future filename makes this
+    # regression deterministic without relying on timing or random bytes.
+    retained=php('require "/var/www/html/app/backup_lib.php";$dir=backup_directory();$seed=backup_create(2);$fixture=$dir."/menu-29991231-235959-ffffffff.json";rename($dir."/".$seed["file"],$fixture);$latest=backup_create(1);$summary=json_decode(file_get_contents(ops_directory()."/backup-latest.json"),true);echo json_encode(["latest"=>$latest,"exists"=>is_file($dir."/".$latest["file"]),"summary_matches"=>$summary===$latest,"count"=>count(glob($dir."/menu-*.json")),"fixture_removed"=>!is_file($fixture)]);')
+    check(retained['exists'] and retained['summary_matches'] and retained['count']==1 and retained['fixture_removed'],
+          'retention always preserves the newly returned snapshot even when an older filename sorts later')
+    retained_restore=compose('exec','-T','--user','www-data','app','php','app/restore.php','--file='+retained['latest']['file'],'--confirm-db='+os.environ['DB_NAME'])
+    check(json.loads(retained_restore.stdout)['verified'] and rows()==before,
+          'latest backup metadata names a usable snapshot that restores exact fixture rows')
     ddl=php(PHP_DB+'try{$p->exec("CREATE TABLE week3_forbidden_probe (id INT)");echo json_encode(false);}catch(PDOException $e){echo json_encode(true);}')
     check(ddl,'application database user cannot create schema objects')
     fallback=compose('exec','-T','--user','www-data','app','php','-d','open_basedir=/var/www/html','-r',

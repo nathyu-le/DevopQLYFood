@@ -77,6 +77,9 @@ function backup_create(int $keep = 14): array
         ops_write_json_atomic($directory . '/' . $name, $archive);
         $snapshots = array_values(array_filter(glob($directory . '/menu-*.json') ?: [], static fn(string $f): bool => is_file($f) && !is_link($f)));
         rsort($snapshots, SORT_STRING);
+        // The random suffix is not chronological within one second. Always
+        // retain the snapshot just written, including after a clock rollback.
+        $snapshots = array_values(array_unique(array_merge([$directory . '/' . $name], $snapshots)));
         foreach (array_slice($snapshots, $keep) as $old) { if (!is_link($old)) { unlink($old); } }
         ops_event('backup_created', ['row_count' => count($rows), 'sha256' => $digest]);
         $summary = ['file' => $name, 'row_count' => count($rows), 'sha256' => $digest, 'created_at' => $archive['created_at']];
