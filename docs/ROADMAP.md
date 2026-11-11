@@ -79,4 +79,4 @@ Nhóm tiếp tục cPanel cho website thật. Docker image deploy vào staging t
 
 ## Bổ sung cuối kỳ Week 4
 
-Week 4 được thêm riêng; giữ nguyên app/public đã có, kịch bản và checklist Week 3. Nhánh week3-preserved giữ source mốc 2c3b9de. [Hồ sơ cuối](../evidence/week4/README.md) và [checklist](WEEK4_CHECKLIST.md) phân biệt sản phẩm kỹ thuật với phần bảo vệ/nộp bài cần nhóm thực hiện. Không dùng cập nhật Week 4 để ghi đè lịch sử các tuần trước.
+Week 4 được thêm riêng; giữ nguyên giao diện/demo, kịch bản và checklist Week 3. Thư viện backup dùng chung được sửa lỗi retention trong đợt rà soát 11/11; xem hồ sơ Week 4. Nhánh week3-preserved giữ source mốc 2c3b9de. [Hồ sơ cuối](../evidence/week4/README.md) và [checklist](WEEK4_CHECKLIST.md) phân biệt sản phẩm kỹ thuật với phần bảo vệ/nộp bài cần nhóm thực hiện. Không dùng cập nhật Week 4 để ghi đè lịch sử các tuần trước.

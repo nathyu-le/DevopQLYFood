@@ -1,6 +1,6 @@
 # Cài mới và tái tạo bản cuối trên cPanel
 
-Hướng chính là cPanel PHP/MariaDB, không yêu cầu VPS hoặc Docker trên hosting. Dùng source của release `week4-final-v1.0.0`; nếu sửa trong buổi bảo vệ, ghi thêm SHA/run mới. Không lấy gói runtime cập nhật để thay cho toàn bộ source cài lần đầu.
+Hướng chính là cPanel PHP/MariaDB, không yêu cầu VPS hoặc Docker trên hosting. Dùng source của release `week4-final-v1.0.1`; nếu sửa trong buổi bảo vệ, ghi thêm SHA/run mới. Không lấy gói runtime cập nhật để thay cho toàn bộ source cài lần đầu.
 
 ## 1 Chuẩn bị một tài khoản hosting mới
 
@@ -9,7 +9,7 @@ Cần domain/SSL, PHP 8.2 trở lên, extensions pdo_mysql, pdo_sqlite, mbstring
 Tải source của tag từ trang Releases hoặc clone trên máy có Git:
 
 ```bash
-git clone --branch week4-final-v1.0.0 --depth 1 https://github.com/nathyu-le/DevopQLYFood.git
+git clone --branch week4-final-v1.0.1 --depth 1 https://github.com/nathyu-le/DevopQLYFood.git
 cd DevopQLYFood
 ```
 

@@ -1,0 +1,99 @@
+{
+  "audit_date": "2026-11-11",
+  "runtime_sha": "d46042c2f88d41f2422fcf6aee06546a498adf66",
+  "pipeline_run": 42946473380,
+  "pipeline_conclusion": "success",
+  "source_checks_run": 42946473483,
+  "jobs": {
+    "container-checks": 130280396555,
+    "deploy-staging": 130281042008,
+    "deploy-cpanel": 130281964928
+  },
+  "checks": {
+    "container_per_environment": 19,
+    "operations": 39,
+    "live_http_access": 14
+  },
+  "browser_public": {
+    "health": "ok",
+    "revision": "d46042c2f88d41f2422fcf6aee06546a498adf66"
+  },
+  "uptime": {
+    "run": 42921756810,
+    "attempt_1_status": 503,
+    "failed_probe_utc": "2026-11-10T23:15:06Z",
+    "attempt_2_conclusion": "success",
+    "root_cause": "not established"
+  },
+  "week3": {
+    "branch": "week3-preserved",
+    "base_sha": "2c3b9dec0e5860fbadf2fdb33dba33d1ac77976d",
+    "unchanged_files": [
+      "app/operations.php",
+      "app/restore.php",
+      "app/demo_lib.php",
+      "app/bootstrap.php",
+      "app/backup.php",
+      "public/operations.php",
+      "public/ops-api.php",
+      "public/demo.php",
+      "public/version.php",
+      "public/demo-api.php",
+      "public/health.php",
+      "public/demo-health.php",
+      "public/logout.php",
+      "public/index.php",
+      "public/login.php",
+      "public/assets/operations.css",
+      "public/assets/operations.js",
+      "public/assets/demo.css",
+      "public/assets/app.css",
+      "public/assets/app.js",
+      "public/assets/demo.js",
+      "docs/WEEK3_DEMO.md",
+      "docs/WEEK3_CHECKLIST.md",
+      "docs/SECURITY.md",
+      "docs/BACKUP_RESTORE.md"
+    ],
+    "bugfix_files": [
+      "app/backup_lib.php"
+    ],
+    "historical_manifest": "week3-preservation.json"
+  },
+  "documents": {
+    "presentation_pages": 7,
+    "report_pages": 8,
+    "presentation_unique_links": 14,
+    "report_unique_links": 8,
+    "all_pages_visually_inspected": true
+  },
+  "video": {
+    "run": 42860890403,
+    "artifact": 13784688758,
+    "revision": "b8953e15e0307d6b89a6e7aacbbfba24cece10d0",
+    "duration_seconds": 400,
+    "full_decode_exit_code": 0,
+    "chapter_frames_inspected": 10,
+    "audio_signal_present": true,
+    "narration": "Vietnamese synthetic voice",
+    "spoken_quality_listening_review": false
+  },
+  "live_admin_retested_this_audit": false,
+  "files": [
+    {
+      "name": "Thuyet_trinh_Week4_Tung_Buoc.docx",
+      "sha256": "c07c1f3588be9e5f582498e4768eceea4ad2986170ae23bc7e01cb4e9406c0c3",
+      "bytes": 45446
+    },
+    {
+      "name": "Bao_cao_ky_thuat_Week4_DevopQLYFood.docx",
+      "sha256": "c06ca15af621a05e2582cb88bc8f5d5f1e212c4a10b2c7b2372ae2a464a67fdf",
+      "bytes": 47789
+    },
+    {
+      "name": "Week4_Demo_ThuyetMinh.mp4",
+      "sha256": "e48c0103f7529d9f2509a235463ecc0ebba8f5e284e0c7f36d8fe12c6c1678c1",
+      "bytes": 3891341
+    }
+  ]
+}

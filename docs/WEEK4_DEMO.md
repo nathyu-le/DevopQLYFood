@@ -8,7 +8,7 @@ Thuyết trình và demo Week 4
 
 DevopQLYFood   Một người trình bày   Trình bày trực tiếp trên cPanel
 
-Cách dùng: chỉ đọc phần NÓI và NÓI TIẾP. Đến LINK CHIẾU hoặc THAO TÁC thì dừng đọc để mở trang và bấm. Chỉ nói kết quả sau khi thấy thật. Bài chính khoảng 16 đến 20 phút, phần thử thách và hỏi đáp thêm 5 đến 10 phút theo yêu cầu của thầy.
+Cách dùng: chỉ đọc phần NÓI và NÓI TIẾP. Đến LINK CHIẾU hoặc THAO TÁC thì dừng đọc để mở trang và bấm. Chỉ nói kết quả sau khi thấy thật. Tổng 16–25 phút: kiến trúc 3 phút; commit đến website 5–7 phút; vận hành và backup 3–5 phút; thử thách và hỏi đáp 5–10 phút. Có thể rút gọn theo thời gian thầy giao.
 
 ## Chuẩn bị trước khi trình bày
 
@@ -46,7 +46,7 @@ LINK CHIẾU  Trang Week 4 trên website
 
 https://khotrick.org/DevopQLYFood/public/week4.php
 
-THAO TÁC  Đọc dòng “Mốc trình bày Week 4: lần 1” hoặc nội dung hiện tại. Ghi nhớ số lần đang hiển thị. Chỉ Revision ở cuối trang. Nếu đã tập và đang là lần 2, trong lần này đổi thành lần 3; mỗi buổi chọn số mới để dễ phân biệt.
+THAO TÁC  Bản bàn giao đang ghi “Mốc trình bày Week 4: lần 2”. Chỉ dòng này và Revision ở cuối trang. Trong buổi trình bày đổi lần 2 thành lần 3. Nếu đã tập và số đang khác, ghi nhớ số thực tế rồi đổi sang số kế tiếp; không cần đưa về lần 2.
 
 LINK CHIẾU  Source chỉ dành cho trang Week 4
 
@@ -68,13 +68,13 @@ NÓI TIẾP  Job đầu build image và chạy kiểm tra. Job thứ hai tải �
 
 NÓI  Pipeline có thể mất vài phút. Em sẽ chỉ xác nhận website cập nhật sau khi job deploy hoàn tất và revision khớp commit. Nếu có lỗi, em mở đúng bước lỗi để chẩn đoán, không sửa trạng thái hoặc bỏ kiểm tra cho run thành công.
 
-Trong lúc chờ, có thể trình bày mục 5 và 6, rồi quay lại mục 4 để xác nhận. Nếu thầy muốn xem trọn pipeline trước, giải thích ba job và chờ kết quả, không bấm chạy nhiều run trùng nhau.
+Tiếp tục theo thứ tự mục 4 → 5 → 6 → 7 → 8. Trong lúc pipeline chạy, giải thích ba job ở trên. Không bấm tạo thêm run trùng nhau; chỉ chuyển sang phần xác nhận khi run của commit mới đã hoàn tất.
 
 ## 4 Xác nhận commit đã lên website
 
 LINK CHIẾU  Run pipeline cuối kỳ đã kiểm tra
 
-https://github.com/nathyu-le/DevopQLYFood/actions/runs/42861794294
+https://github.com/nathyu-le/DevopQLYFood/actions/runs/42946473380
 
 THAO TÁC  Trong buổi demo phải dùng run của commit vừa tạo ở mục 3. Link trên là run bàn giao để tham khảo khi cần. Chờ cả ba job success. Mở deploy-cpanel, chỉ bước kiểm tra health và exact revision; tránh cuộn vào phần môi trường hoặc thông tin nhạy cảm.
 
@@ -178,7 +178,7 @@ THAO TÁC  Mở health chính, chỉ status ok. Quay lại tab demo. Bấm 6 Ph�
 
 NÓI TIẾP  Website chính vẫn tốt, giúp giới hạn phạm vi sự cố vào database demo. Phục hồi trả file thử về đường dẫn đúng. Em xác nhận lại bằng HTTP 200, hai mẫu tốt đưa cảnh báo về OK và dữ liệu vẫn khớp backup. Như vậy việc khắc phục đã được kiểm tra ở cả dịch vụ và dữ liệu.
 
-NÓI  Để phòng tránh, nhóm tách dữ liệu thử, giữ backup trước khi xóa, lưu nhật ký và đưa dịch vụ về hoạt động sau bài thử. Trang có cơ chế tự phục hồi sau ba phút nếu bỏ quên, nhưng khi trình bày em vẫn chủ động phục hồi và kiểm tra.
+NÓI  Để phòng tránh, nhóm tách dữ liệu thử, giữ backup trước khi xóa, lưu nhật ký và đưa dịch vụ về hoạt động sau bài thử. Nếu tiếp tục truy cập hoặc lấy mẫu, trang tự phục hồi khi đã quá ba phút; khi trình bày em vẫn chủ động phục hồi và kiểm tra.
 
 ## Khi thầy chọn lỗi khác
 
@@ -192,9 +192,9 @@ LINK CHIẾU  Hồ sơ Week 4 và kết quả kiểm tra
 
 https://github.com/nathyu-le/DevopQLYFood/tree/main/evidence/week4
 
-LINK CHIẾU  Bản phát hành cuối kỳ
+LINK CHIẾU  Bản phát hành cuối kỳ đã rà soát
 
-https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.0
+https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.1
 
 THAO TÁC  Chỉ release/tag, hướng dẫn cài mới, báo cáo kỹ thuật và playbook. Để trang demo kết thúc ở HTTP 200 và OK. Không cần mở ảnh hoặc artifact trong bài trình bày chính.
 

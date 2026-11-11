@@ -8,7 +8,7 @@ Website quản lý thực đơn quán ăn dùng PHP và MySQL/MariaDB. Một rep
 
 [Trang Week 4 riêng](https://khotrick.org/DevopQLYFood/public/week4.php) · [Hồ sơ cuối kỳ](evidence/week4/README.md) · [Báo cáo](docs/WEEK4_TECHNICAL_REPORT.md) · [Checklist](docs/WEEK4_CHECKLIST.md).
 
-Week 3 giữ nguyên để tiếp tục báo cáo: [demo cũ](https://khotrick.org/DevopQLYFood/public/demo.php), [kịch bản Week 3](docs/WEEK3_DEMO.md), [source đóng mốc](https://github.com/nathyu-le/DevopQLYFood/tree/week3-preserved). Week 4 thêm trang và tài liệu riêng, không đổi logic app/demo đã có. [Kiến trúc cuối](docs/FINAL_ARCHITECTURE.md) · [Cài mới](docs/FINAL_DEPLOYMENT.md) · [Vận hành](docs/OPERATIONS.md) · [Kịch bản Week 4](docs/WEEK4_DEMO.md) · [Kết quả kiểm chứng](evidence/week4/final-verification.md).
+Week 3 giữ nguyên để tiếp tục báo cáo: [demo cũ](https://khotrick.org/DevopQLYFood/public/demo.php), [kịch bản Week 3](docs/WEEK3_DEMO.md), [source đóng mốc](https://github.com/nathyu-le/DevopQLYFood/tree/week3-preserved). Week 4 thêm trang và tài liệu riêng. Đợt rà soát 11/11 sửa lỗi giữ backup mới trong thư viện dùng chung; giao diện và luồng demo Week 3 không đổi. [Kiến trúc cuối](docs/FINAL_ARCHITECTURE.md) · [Cài mới](docs/FINAL_DEPLOYMENT.md) · [Vận hành](docs/OPERATIONS.md) · [Kịch bản Week 4](docs/WEEK4_DEMO.md) · [Rà soát 11/11](evidence/week4/audit-2026-11-11.md).
 
 Các mục bên dưới là lịch sử checkpoint Week 1–3. Việc trình bày, xác nhận đóng góp cá nhân và nộp bài do nhóm thực hiện; phần hạ tầng live chưa xác minh vẫn được ghi rõ.
 

@@ -22,7 +22,7 @@ Chức năng nghiệp vụ gồm đăng nhập quản trị, thêm, xem, tìm ki
 
 Website: https://khotrick.org/DevopQLYFood/public/  Repository: https://github.com/nathyu-le/DevopQLYFood/
 
-Mốc kiểm chứng source: 4b20e57e5e8d8fb94222fea256990f8643803068; run: https://github.com/nathyu-le/DevopQLYFood/actions/runs/42861794294. Trạng thái và phạm vi từng kiểm tra nằm tại evidence/week4/final-verification.md. Các run tài liệu không nhất thiết đổi revision website vì workflow bỏ qua thay đổi chỉ ở docs/evidence/Markdown.
+Source đã kiểm chứng: d46042c2f88d41f2422fcf6aee06546a498adf66. Tag week4-final-v1.0.1 có thể chứa thêm commit chỉ sửa hồ sơ sau source này; version.php phải khớp source runtime, không suy từ SHA mới nhất của main. Kết quả và lần gián đoạn uptime được ghi tại evidence/week4/audit-2026-11-11.md.
 
 ## Tổ chức báo cáo
 
@@ -60,7 +60,7 @@ Luồng live bắt đầu từ trình duyệt qua HTTPS đến web server và PH
 
 Sơ đồ cuối trong docs/FINAL_ARCHITECTURE.md thể hiện riêng topology live và thứ tự triển khai. Dữ liệu MariaDB trên hosting không chuyển sang staging tự động. App staging chỉ bind loopback 8080; database không publish port 3306 ra host. Docker volumes giữ database và trạng thái qua recreate, nhưng stack CI được dọn sau khi lưu kết quả vì là dữ liệu thử.
 
-Thiết kế demo tách biệt giúp trình bày trực tiếp trên cPanel: SQLite đặt trong var/classroom-demo, không dùng MariaDB chính. Snapshot có demo_id, định dạng riêng, số bản ghi và SHA256. Chỉ fixture theo schema được cho phép. Thao tác disconnect đổi tên file dưới khóa độc quyền; khi đường dẫn không có, health demo trả 503. Reconnect trả file lại và giữ nguyên dữ liệu. Hai mẫu tốt/lỗi điều khiển trạng thái cảnh báo; auto reconnect 180 giây giảm nguy cơ bỏ quên lỗi.
+Thiết kế demo tách biệt giúp trình bày trực tiếp trên cPanel: SQLite đặt trong var/classroom-demo, không dùng MariaDB chính. Snapshot có demo_id, định dạng riêng, số bản ghi và SHA256. Chỉ fixture theo schema được cho phép. Disconnect đổi tên file dưới khóa độc quyền; khi đường dẫn không có, health demo trả 503. Reconnect trả file lại và giữ dữ liệu. Hai mẫu tốt/lỗi điều khiển cảnh báo. Auto reconnect khi đã quá 180 giây cần request hoặc polling tiếp theo, không phải daemon chạy nền.
 
 Đây là hai loại phục hồi khác nhau: MariaDB dishes backup bằng CLI hoặc nút dashboard, restore guarded vào DB thử; SQLite demo phục vụ bài trình bày có thể tải file và restore qua POST. Không dùng kết quả SQLite để khẳng định đã restore toàn bộ hosting hoặc user grants. Tách ranh giới này giúp giữ tính chính xác của minh chứng.
 
@@ -110,9 +110,9 @@ Thực nghiệm dùng DB riêng và fixture tổng hợp, không xóa dữ liệ
 | Client race | Click action vẫn POST khi GET đang chờ; GET cũ không ghi đè phản hồi mới |
 | FTPS và release | Đúng revision, gói loại secrets; invalid TLS không gửi credentials; live routes đúng trạng thái |
 
-Container smoke có 17 kiểm tra ở bộ gốc; số kiểm tra cụ thể của run mới lấy từ log tương ứng, không cộng số lượng từ các suite để tạo một chỉ số chất lượng chung. Preflight mới xác minh cấu hình sạch trong image đã build. Trên cPanel, health và revision được đọc công khai sau deploy; kiểm tra admin live cần session hợp lệ. Việc CI đăng nhập staging không tự chứng minh session quản trị live hiện tại.
+Run 42946473380 có 19 container checks ở mỗi môi trường, 39 operations checks và 14 HTTP access checks trên cPanel. Hai kiểm tra mới xác minh retention giữ snapshot vừa tạo và metadata trỏ đúng file có thể restore, kể cả khi tên file cũ xếp sau. Không cộng các suite thành một chỉ số chất lượng chung. Admin được kiểm tra trong staging; phiên admin live hiện tại chưa được đăng nhập lại trong đợt rà soát này.
 
-Video dự phòng dùng giọng máy có nhãn và môi trường được công bố: đầu video là login/revision công khai của cPanel, tiếp theo là thao tác trên synthetic staging. Không có credentials, OS metrics riêng hay dữ liệu MariaDB thật trong video. Kịch bản chính hướng dẫn thao tác trực tiếp trên cPanel. Nếu giảng viên yêu cầu thành viên tự thuyết minh, cần ghi lại giọng thật; không gán video tự động cho thành viên.
+Video 400 giây là checkpoint b8953e1: đầu là login/revision công khai của cPanel, sau đó demo dữ liệu tổng hợp trên staging; có nhãn môi trường và giọng máy. Rà soát 11/11 giải mã toàn bộ file không lỗi, kiểm tra hình của 10 chương và tín hiệu audio. Chưa đánh giá phát âm bằng nghe trực tiếp; nhóm nghe duyệt trước khi nộp. Kịch bản chính thao tác live. Nếu thầy yêu cầu tự thuyết minh, cần quay giọng thật; không gán giọng máy cho thành viên.
 
 Nhóm chưa đo tải đồng thời, RTO/RPO cam kết hoặc uptime dài hạn theo SLA. Khoảng chờ 5–10 giây trong kịch bản là hướng dẫn theo chu kỳ mẫu của demo, không phải số đo phục hồi production. Đánh giá cuối dựa trên bằng chứng trong run và kết quả quan sát tại buổi bảo vệ.
 
@@ -137,7 +137,7 @@ Một bài học quan trọng là kiểm tra hành vi thực tế. Source có d�
 
 ## 7 Conclusion và hướng phát triển
 
-Đồ án tổ chức được một ứng dụng thực đơn với source có phiên bản, luồng CI/CD đến cPanel, kiểm tra độc lập trên Docker, dashboard/log/cảnh báo và thực nghiệm sao lưu phục hồi. Week 4 bổ sung hướng dẫn cài mới, tài liệu vận hành, playbook và kịch bản bảo vệ. Trang Week 4 được thêm riêng; source và tài liệu Week 3 được giữ để tiếp tục báo cáo checkpoint đó.
+Đồ án tổ chức được ứng dụng thực đơn, CI/CD đến cPanel, Docker staging, dashboard/log/cảnh báo và thử nghiệm sao lưu phục hồi. Week 4 bổ sung hồ sơ và trang riêng. Giao diện, demo và tài liệu Week 3 được giữ; nhánh week3-preserved đóng mốc gốc. Đợt rà soát sửa riêng lỗi retention trong thư viện backup dùng chung, không thay quy trình trình bày Week 3.
 
 Giới hạn còn lại gồm hạ tầng cPanel do provider quản lý; chưa xác minh firewall/root/SSH live theo tiêu chí hạ tầng ban đầu; chưa có gửi cảnh báo ngoài dashboard; lấy mẫu phụ thuộc request và scheduler; backup snapshot dishes chưa bao phủ toàn tài khoản; upload source chưa chuyển nguyên tử hoặc tự rollback DB. Độ bền và tính sẵn sàng production cần thêm vận hành dài hạn, off-site backup, diễn tập phục hồi và phép đo hiệu năng trước khi cam kết.
 
@@ -146,27 +146,27 @@ Giới hạn còn lại gồm hạ tầng cPanel do provider quản lý; chưa x
 ## References
 
 1 Repository và source của đồ án
-https://github.com/nathyu-le/DevopQLYFood/
+[https://github.com/nathyu-le/DevopQLYFood/](https://github.com/nathyu-le/DevopQLYFood/)
 
 2 Run kiểm chứng cuối kỳ
-https://github.com/nathyu-le/DevopQLYFood/actions/runs/42861794294
+[https://github.com/nathyu-le/DevopQLYFood/actions/runs/42946473380](https://github.com/nathyu-le/DevopQLYFood/actions/runs/42946473380)
 
 3 Hướng dẫn cài mới và kiến trúc trong repo
-https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/FINAL_DEPLOYMENT.md
+[https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/FINAL_DEPLOYMENT.md](https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/FINAL_DEPLOYMENT.md)
 
 4 GitHub Actions Deployment environments
-https://docs.github.com/en/actions/concepts/workflows-and-actions/deployment-environments
+[https://docs.github.com/en/actions/concepts/workflows-and-actions/deployment-environments](https://docs.github.com/en/actions/concepts/workflows-and-actions/deployment-environments)
 
 5 Docker Compose Secrets
-https://docs.docker.com/compose/how-tos/use-secrets/
+[https://docs.docker.com/compose/how-tos/use-secrets/](https://docs.docker.com/compose/how-tos/use-secrets/)
 
 6 cPanel Manage My Databases
-https://docs.cpanel.net/cpanel/databases/manage-my-databases/
+[https://docs.cpanel.net/cpanel/databases/manage-my-databases/](https://docs.cpanel.net/cpanel/databases/manage-my-databases/)
 
 7 PHP PDO Transactions
-https://www.php.net/manual/en/pdo.transactions.php
+[https://www.php.net/manual/en/pdo.transactions.php](https://www.php.net/manual/en/pdo.transactions.php)
 
 8 Playbook và minh chứng theo môi trường
-https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/TROUBLESHOOTING.md
+[https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/TROUBLESHOOTING.md](https://github.com/nathyu-le/DevopQLYFood/blob/main/docs/TROUBLESHOOTING.md)
 
 Tài liệu chính thức được đối chiếu trong tháng 11/2026. Mô tả hiện thực và kết quả dựa trên source cùng các run của đồ án; tài liệu nhà cung cấp dùng để giải thích cơ chế, không thay thế minh chứng triển khai của nhóm.

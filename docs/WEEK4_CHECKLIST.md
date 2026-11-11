@@ -9,11 +9,13 @@ Mục tiêu: Production Deployment and Final Defense. Hướng thực hiện: cP
 - [x] Hướng dẫn cài từ source trên cPanel mới, config/DB/permissions/preflight và kiểm tra HTTP; [deployment guide](FINAL_DEPLOYMENT.md).
 - [x] Pipeline tự động từ source main đến cPanel, image staging đúng ID và post-deploy revision; [kết quả từng run](../evidence/week4/final-verification.md).
 - [x] Dashboard/log, HTTP auth/private paths, backup/restore và 503 → 200 được kiểm tra bằng các suite riêng, ghi đúng phạm vi.
-- [x] [Playbook](TROUBLESHOOTING.md) có 6 sự cố đã gặp hoặc thực nghiệm, gồm đủ triệu chứng/xác minh/nguyên nhân/khắc phục/phòng tránh.
+- [x] [Playbook](TROUBLESHOOTING.md) có 7 sự cố đã gặp hoặc thực nghiệm, gồm đủ triệu chứng/xác minh/nguyên nhân/khắc phục/phòng tránh.
 - [x] Báo cáo kỹ thuật theo cấu trúc paper; [Markdown](WEEK4_TECHNICAL_REPORT.md), bản Word 8 trang bàn giao riêng.
 - [x] Kịch bản Word một người: lời đọc, link, thao tác, kết quả và hỏi đáp; [bản nội dung repo](WEEK4_DEMO.md).
-- Release và tag của bản đóng mốc: [week4-final-v1.0.0](https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.0). Trạng thái phát hành được đối chiếu trực tiếp trên GitHub.
-- [x] Video dự phòng đã xuất 6 phút 40 giây, có audio/video, giọng máy và nhãn môi trường; [run/artifact](../evidence/week4/README.md). Chưa phát lại cục bộ do trình duyệt không tải được artifact; nhóm mở kiểm tra trước khi nộp.
+- Release và tag của bản đóng mốc: [week4-final-v1.0.1](https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.1). Trạng thái phát hành được đối chiếu trực tiếp trên GitHub.
+- [x] Video dự phòng đã xuất 6 phút 40 giây, có audio/video, giọng máy và nhãn môi trường; [run/artifact](../evidence/week4/README.md). Rà soát 11/11 đã giải mã toàn bộ file không lỗi, kiểm tra ảnh của 10 chương và tín hiệu audio; nhóm nghe lại phát âm trước khi nộp.
+
+Bản sửa 11/11: giữ snapshot vừa tạo khi retention chạy, kể cả tên file cũ xếp sau; thêm hai kiểm tra restore/metadata. Nhánh Week 3 gốc không thay đổi. [Kết quả rà soát](../evidence/week4/audit-2026-11-11.md).
 
 ## Những việc chỉ hoàn tất tại buổi bảo vệ hoặc khi nhóm xác nhận
 
@@ -29,7 +31,7 @@ Shared hosting không cung cấp quyền root cho nhóm; firewall OS/SSH và pol
 
 ## Trình tự theo đề và rubric
 
-3 phút kiến trúc/phân công; 5–7 phút source → commit → pipeline → website; 3–5 phút monitoring/backup/security; 5–10 phút troubleshooting và Q&A. Có thể trình bày vận hành trong lúc pipeline chạy. Video 5–10 phút là sản phẩm riêng.
+3 phút kiến trúc/phân công; 5–7 phút source → commit → pipeline → website; 3–5 phút monitoring/backup/security; 5–10 phút troubleshooting và Q&A. Kịch bản Word đi tuần tự, chỉ xác nhận triển khai khi run của commit mới hoàn tất. Video 5–10 phút là sản phẩm riêng.
 
 | Tiêu chí | Điểm |
 |---|---:|

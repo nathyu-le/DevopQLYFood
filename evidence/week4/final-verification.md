@@ -1,4 +1,6 @@
-# Kiểm chứng cuối kỳ Week 4
+# Kiểm chứng cuối kỳ Week 4 — checkpoint 10/11
+
+> Hồ sơ lịch sử của bản v1.0.0. Kết quả hiện tại và bản sửa retention: [rà soát 11/11](audit-2026-11-11.md). Manifest 26 file bên dưới chỉ mô tả checkpoint gốc.
 
 Source được kiểm tra và triển khai: **4b20e57e5e8d8fb94222fea256990f8643803068**.
 

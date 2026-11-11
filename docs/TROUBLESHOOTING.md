@@ -68,7 +68,7 @@ Nguồn đối chiếu: [MariaDB entrypoint](https://github.com/MariaDB/mariadb-
 
 **Nguyên nhân:** thao tác được cho phép đổi tên file SQLite thử từ demo.sqlite sang demo.sqlite.offline dưới khóa độc quyền; dịch vụ demo không mở được đường dẫn DB kỳ vọng. Đây là lỗi kết nối thật của dịch vụ thử, không phải banner mô phỏng.
 
-**Khắc phục:** bấm 6 Phục hồi kết nối để trả file về tên cũ, không tạo DB mới hoặc xóa backup. Có auto reconnect sau 180 giây nếu bỏ quên.
+**Khắc phục:** bấm 6 Phục hồi kết nối để trả file về tên cũ, không tạo DB mới hoặc xóa backup. Khi đã quá 180 giây, request/poll tiếp theo kích hoạt auto reconnect; không có daemon phục hồi độc lập.
 
 **Xác nhận:** health demo 200, DB hoạt động, sau 2 mẫu tốt alert OK; bản ghi restore giữ đúng ID/tên/giá. tests/demo_smoke.py kiểm tra digest MariaDB trước/sau bằng nhau.
 
@@ -83,3 +83,17 @@ Nguồn đối chiếu: [MariaDB entrypoint](https://github.com/MariaDB/mariadb-
 **Nguyên nhân:** action và polling từng dùng chung busy flag. **Khắc phục:** tách busy/refreshing, tăng generation sau action để bỏ phản hồi cũ. Download dùng form POST riêng với CSRF.
 
 **Xác nhận:** tests/demo_client.mjs qua; demo live đã chạy đủ backup/delete/restore và 503 → 200. **Phòng tránh:** giữ regression test trong pipeline; không khôi phục lại một cờ khóa chung.
+
+## Sự cố 7 Metadata backup mới nhất trỏ vào file đã bị retention xóa
+
+**Triệu chứng tìm thấy khi rà soát 11/11:** tạo nhiều backup sát nhau có thể trả filename nhưng file không còn sau khi cắt retention; backup-latest.json vẫn ghi filename đó. Không kết luận đã có người dùng live gặp lỗi này khi chưa có log tương ứng.
+
+**Xác minh:** trong DB staging `_ci`, đặt một snapshot hợp lệ có tên xếp sau snapshot sẽ tạo, gọi backup_create(1), rồi kiểm tra file được trả về tồn tại, metadata khớp, số file là một và restore khớp toàn bộ fixture. Tên fixture tương lai làm bài kiểm tra xác định, không cần chờ trúng hậu tố ngẫu nhiên.
+
+**Nguyên nhân:** tên chỉ có độ chính xác giây và hậu tố ngẫu nhiên. Sắp giảm dần theo tên không bảo đảm giữ file vừa tạo khi cùng giây hoặc đồng hồ lùi.
+
+**Khắc phục:** dưới khóa backup hiện có, ưu tiên file vừa ghi vào đầu danh sách rồi giữ đủ số bản đã cấu hình; không đổi archive format hoặc dữ liệu DB. Triển khai qua cùng pipeline, không sửa metadata bằng tay để che file thiếu.
+
+**Xác nhận:** hai regression checks mới qua, tổng 39 operations checks; [run 42946473380](https://github.com/nathyu-le/DevopQLYFood/actions/runs/42946473380), source d46042c. Metadata trỏ đúng file có thể restore, bản ghi/timestamps khớp.
+
+**Phòng tránh:** luôn kiểm tra snapshot trả về còn tồn tại và dùng được sau retention; không chỉ đếm số file hoặc test các lần tạo cách nhau hơn một giây. Giữ snapshot ngoài hosting và diễn tập restore định kỳ.

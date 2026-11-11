@@ -1,6 +1,6 @@
 # Hồ sơ cuối kỳ Week 4
 
-Mốc source cuối kỳ và kết quả pipeline được ghi tại [final-verification.md](final-verification.md). Chỉ ghi thành công khi run, health và revision được đối chiếu.
+Kết quả hiện tại: [rà soát ngày 11/11](audit-2026-11-11.md). [final-verification.md](final-verification.md) giữ checkpoint ban đầu ngày 10/11. Chỉ ghi thành công khi run, health và revision được đối chiếu.
 
 ## Link trình bày trực tiếp
 
@@ -8,7 +8,7 @@ Mốc source cuối kỳ và kết quả pipeline được ghi tại [final-veri
 - [Health chính](https://khotrick.org/DevopQLYFood/public/health.php) và [revision](https://khotrick.org/DevopQLYFood/public/version.php)
 - [Dashboard](https://khotrick.org/DevopQLYFood/public/operations.php) và [demo riêng](https://khotrick.org/DevopQLYFood/public/demo.php), cần login
 - [Pipeline cập nhật source](https://github.com/nathyu-le/DevopQLYFood/actions/workflows/container-pipeline.yml)
-- [Bản phát hành cuối](https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.0)
+- [Bản phát hành cuối](https://github.com/nathyu-le/DevopQLYFood/releases/tag/week4-final-v1.0.1)
 
 ## Tài liệu bàn giao
 
@@ -22,4 +22,4 @@ Các artifact cũ có retention; chạy lại workflow nếu đã hết hạn. K
 
 [Run video 42860890403](https://github.com/nathyu-le/DevopQLYFood/actions/runs/42860890403), artifact **week4-demo-video**, file **Week4_Demo_ThuyetMinh.mp4**, 400 giây (6 phút 40 giây), có video và audio. Giọng Việt tạo tự động, không phải giọng thành viên. Đầu video là login/revision công khai của cPanel; phần thao tác dùng dữ liệu tổng hợp trên Docker staging tạm và có nhãn môi trường. Không có OS metrics hoặc dữ liệu MariaDB live.
 
-Artifact đã được workflow xác minh định dạng/thời lượng và upload thành công. Trình duyệt của phiên làm việc không tải được artifact về nên chưa kiểm tra phát lại cục bộ; nhóm mở file trước khi dùng làm bản nộp. GitHub yêu cầu đăng nhập để tải artifact và retention là 30 ngày; lưu bản sao riêng khi tải. Khi thầy yêu cầu thành viên tự thuyết minh, dùng kịch bản Word để quay giọng thật.
+Đợt rà soát 11/11 đã tải artifact qua GitHub connector, giải mã toàn bộ audio/video không lỗi và kiểm tra 10 khung hình theo 10 chương. Video 400 giây, có tín hiệu audio; chưa đánh giá chất lượng phát âm bằng nghe trực tiếp. Nhóm nghe lại trước khi dùng làm bản nộp. GitHub yêu cầu đăng nhập để tải artifact và retention là 30 ngày; lưu bản sao riêng khi tải. Khi thầy yêu cầu thành viên tự thuyết minh, dùng kịch bản Word để quay giọng thật.
